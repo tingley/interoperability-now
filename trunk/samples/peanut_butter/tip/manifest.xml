@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+ <?xml version="1.0" encoding="UTF-8"?>
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
 <Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -95,6 +95,7 @@
       </PackageObject>
         <File OrderId="??">
           <FileType>Unknown</FileType>
+          <Localizable>No</Localizable>
           <FilePath>resources/290px-PeanutButter.jpg</FilePath>
         </File>
       </PackageObject>
