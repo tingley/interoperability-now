@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dx="urn:xliff-doc-extensions" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://www.xml-intl.com/docs/xliff-core-1.2-transitional.xsd">
+<!-- <xliff version='1.2' xmlns='urn:oasis:names:tc:xliff:document:1.2' xmlns:dx='http://www.interoperability-now.org/schema/dx'> -->
+<file datatype="html" original="../reference/Peanut_Butter.html" source-language="en-US" target-language="fr-FR" xml:space="preserve" dx:allow-tu-merge="yes">
+	<header>
+		<skl>
+			<external-file href="Peanut_Butter.html.skl"/>
+		</skl>
+		<tool tool-id="1" tool-name="MyTMserver" tool-version="v2.0.1" tool-company="Acme Rocketry Corporation" />
+		<note from="Chase Tingley" dx:modified-at="20110304T14:22:00Z">The English source for this document is from Wikipedia: http://en.wikipedia.org/wiki/Peanut_butter.  I have stripped down the document significantly, both in content and to some extent in formatting.</note>
+	</header>
+
+	<body>
+		<group id="1">
+			<trans-unit id="1">
+				<source>Peanut butter - Wikipedia, the free encyclopedia</source>
+				<target state="new"></target>
+			</trans-unit>
+			</group>
+		<group id="2">
+			<trans-unit id="2">
+				<source>From Wikipedia, the free encyclopedia</source>
+				<target state="new"></target>
+			</trans-unit>
+			</group>
+		<group id="3">
+			<trans-unit id="3">
+				<source>Jump to: <g id="1" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Peanut_butter#mw-head&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;" ctype="link">navigation</g>, <g id="2" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Peanut_butter#p-search&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;" ctype="link">search</g></source>
+				<target state="new"></target>
+			</trans-unit>
+			</group>
+		<group id="4">
+			<trans-unit id="4">
+				<source>"Smooth" peanut butter in a jar.</source>
+				<target state="new"></target>
+			</trans-unit>
+			</group>
+		<group id="5">
+			<trans-unit id="5">
+				<source><g id="3" ctype="bold" dx:orig-markup-open="&lt;b&gt;" dx:orig-markup-close="&lt;/b&gt;">Peanut butter</g> is a food paste made primarily from ground <g id="4" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Dry_roasting&quot; title=&quot;Dry roasting&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">dry roasted</g> <g id="5" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Peanut&quot; title=&quot;Peanut&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">peanuts</g>, popular in the <g id="6" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Philippines&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">Philippines</g>, <g id="7" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/North_America&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">North America</g>, the <g id="8" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Netherlands&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">Netherlands</g> and the <g id="9" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/United_Kingdom&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">United Kingdom</g>. </source>
+				<target state="new"></target>
+			</trans-unit>
+			<trans-unit id="6">
+				<source>It is mainly used as a <g id="10" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Sandwich&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">sandwich</g> <g id="11" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Spread_(food)&quot; title=&quot;Spread (food)&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">spread</g>, sometimes in combination as in the <g id="12" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Peanut_butter_and_jelly_sandwich&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">peanut butter and jelly sandwich</g>.</source>
+				<target state="new"></target>
+			</trans-unit>
+			<trans-unit id="7">
+				<source>The United States<g id="13" ctype="x-other" dx:orig-markup-open="&lt;sup id=&quot;cite_ref-0&quot; class=&quot;reference&quot;&gt;" dx:orig-markup-close="&lt;/sup&gt;"><g id="14" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Peanut_butter#cite_note-0&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;"><g id="15" ctype="x-other" dx:orig-markup-open="&lt;span&gt;" dx:orig-markup-close="&lt;/span&gt;">[</g>1<g id="16" ctype="x-other" dx:orig-markup-open="&lt;span&gt;" dx:orig-markup-close="&lt;/span&gt;">]</g></g></g> and China are leading exporters of peanut butter.
+			</source>
+			<target state="new">
+			</target>
+			</trans-unit>
+			<trans-unit id="8">
+				<source>Other nuts are used as the basis for similar <g id="17" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Nut_butter&quot; title=&quot;Nut butter&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">nut butters</g>.</source>
+				<target state="new">
+				</target>
+			</trans-unit>
+		</group>
+		<group id="6">
+			<trans-unit id="9">
+				<source>January 24 is National Peanut Butter Day in the <g id="18" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/United_States&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;">United States</g>.</source>
+				<target state="new">
+				</target>
+			</trans-unit>
+			<trans-unit id="10">
+				<source><g id="19" ctype="x-other" dx:orig-markup-open="&lt;sup id=&quot;cite_ref-1&quot; class=&quot;reference&quot;&gt;" dx:orig-markup-close="&lt;/sup&gt;"><g id="20" ctype="link" dx:orig-markup-open="&lt;a href=&quot;http://en.wikipedia.org/wiki/Peanut_butter#cite_note-1&quot;&gt;" dx:orig-markup-close="&lt;/a&gt;"><g id="21" ctype="x-other" dx:orig-markup-open="&lt;span&gt;" dx:orig-markup-close="&lt;/span&gt;">[</g>2<g id="22" ctype="x-other" dx:orig-markup-open="&lt;span&gt;" dx:orig-markup-close="&lt;/span&gt;">]</g></g></g>
+</source>
+				<target state="new">
+				</target>
+			</trans-unit>
+		</group>
+	</body>
+</file>
+</xliff>

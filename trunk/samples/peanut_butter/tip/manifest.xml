@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!-- Need to get real schema location (host in google code?) and schema
+   - version. -->
+<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="file:/Users/sca/Documents/USA/Interoperability/Package/tip.xsd"
+    Version="mk31">
+  <GlobalDescriptor>
+    <!-- We need to specify semantics for generating these, whether it
+       - be a GUID algorithm or something else. -->
+    <UniquePackageID>12345</UniquePackageID>
+    <!-- Is ReferencePackageID a required element if there is no reference
+       - package? Should it be blank?  etc. -->
+    <ReferencePackageID></ReferencePackageID>
+    <PackageCreator>
+      <Name>Welocalize</Name>
+      <!-- I still think this should be a real URL - allows ports, etc -->
+      <ID>w01.welocalize.com</ID>
+      <Tool>
+        <!-- Also think this should be a URL -->
+        <ID>/GlobalSight/GlobalSight/9.0</ID> 
+      </Tool>
+      <CommunicationPath> 
+        <!-- This is probably too limiting - need a way, for instance, 
+           - to upload back to server? But we can expand it later.  -->
+        <CommunicationType>FTP</CommunicationType>
+        <FTPSettings>
+        <URL>ftp.welocalize.com</URL>
+        <UserName>username</UserName>
+        <Password>password</Password>
+        <Dir>/upload/</Dir>
+        </FTPSettings>
+        <!-- For example, something like this. 
+           - This assumes user can provide own login credentials.
+           - (Note GlobalSight doesn't support anything like this right now.)
+        <URLSettings>
+          <URL>http://w01.welocalize.com/globalsight/jobs?id=100&action=upload</URL>
+        </URLSettings>
+        -->
+     </CommunicationPath>
+    </PackageCreator>
+    <!-- I don't like having to specify the endpoint -->
+    <PackageRecipient> 
+      <Name>*</Name>
+        <ID>*</ID>
+      <!-- I also don't like have to specify this -->
+      <Tool> 
+        <ID>*</ID>
+      </Tool>
+    </PackageRecipient>
+    <Action>
+      <Task>
+        <Type>Translate</Type>
+        <SourceLanguage>en-US</SourceLanguage>
+        <TargetLanguage>fr-FR</TargetLanguage>
+      </Task>
+    </Action>
+  </GlobalDescriptor>
+  <!-- Semantics of the SortId and OrderId fields don't seem to be specified.
+     - They are left blank for now. -->
+  <PackageObjects>
+    <!-- Note that SectionNames are capitalized in the spec, but the
+       - corresponding directories are all lower-case.  We should 
+       - standardize on one or the other. -->
+    <PackageObjectSection SectionName="Bilingual">
+     <!-- This is a bilingual file.  Where should it go? -->
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>XLIFF:doc:1</FileType>
+          <FilePath>Peanut_Butter.xlf</FilePath>
+        </File>
+      </PackageObject>
+    </PackageObjectSection>
+    <PackageObjectSection SectionName="Input">
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <Localizable>No</Localizable>
+          <FilePath>Peanut_Butter.html.skl</FilePath>
+        </File>
+      </PackageObject>
+      <PackageObject SortId="??">
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <Localizable>No</Localizable>
+          <FilePath>resources/20px-Padlock-silver.svg.png</FilePath>
+        </File>
+      </PackageObject>
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <Localizable>No</Localizable>
+          <FilePath>resources/load.php</FilePath>
+        </File>
+      </PackageObject>
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <FilePath>resources/290px-PeanutButter.jpg</FilePath>
+        </File>
+      </PackageObject>
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <Localizable>No</Localizable>
+          <FilePath>resources/load(1).php</FilePath>
+        </File>
+      </PackageObject>
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <Localizable>No</Localizable>
+          <FilePath>resources/magnify-clip.png</FilePath>
+        </File>
+      </PackageObject>
+    </PackageObjectSection>
+    <PackageObjectSection SectionName="Reference">
+      <PackageObject SortId="??">
+        <File OrderId="??">
+          <FileType>Unknown</FileType>
+          <FilePath>Peanut_Butter.html</FilePath>
+        </File>
+        </PackageObject>
+    </PackageObjectSection>
+  </PackageObjects>
+</Manifest>
