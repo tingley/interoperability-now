@@ -6,22 +6,34 @@
     Version="mk31">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
-       - be a GUID algorithm or something else. -->
+       - be a GUID algorithm or something else. 
+       Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
+       -->
     <UniquePackageID>12345</UniquePackageID>
     <!-- Is ReferencePackageID a required element if there is no reference
-       - package? Should it be blank?  etc. -->
+       - package? Should it be blank?  etc. 
+    Chase & Sven: we'll take this out and send back the original package/manifest with potentially added information -->
     <ReferencePackageID></ReferencePackageID>
     <PackageCreator>
       <Name>Welocalize</Name>
-      <!-- I still think this should be a real URL - allows ports, etc -->
+      <!-- I still think this should be a real URL - allows ports, etc. 
+      Sven & Chase: Yes, use URLs -->
       <ID>w01.welocalize.com</ID>
       <Tool>
-        <!-- Also think this should be a URL -->
+        <!-- Also think this should be a URL 
+        Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
         <ID>/GlobalSight/GlobalSight/9.0</ID> 
       </Tool>
       <CommunicationPath> 
         <!-- This is probably too limiting - need a way, for instance, 
-           - to upload back to server? But we can expand it later.  -->
+           - to upload back to server? But we can expand it later.  
+           Chase & Sven:
+           Have three subnodes: FTP, email, REST
+           only URLs are transmitted, to credentials
+           
+           AI for tools: cache credentials
+           
+           -->
         <CommunicationType>FTP</CommunicationType>
         <FTPSettings>
         <URL>ftp.welocalize.com</URL>
@@ -38,11 +50,15 @@
         -->
      </CommunicationPath>
     </PackageCreator>
-    <!-- I don't like having to specify the endpoint -->
+    <!-- I don't like having to specify the endpoint 
+    Chase & Sven: keep this out for now
+    -->
     <PackageRecipient> 
       <Name>*</Name>
         <ID>*</ID>
-      <!-- I also don't like have to specify this -->
+      <!-- I also don't like have to specify this 
+      Chase & Sven: keep this out for now
+      -->
       <Tool> 
         <ID>*</ID>
       </Tool>
@@ -50,9 +66,43 @@
     <Action>
       <Task>
         <Type>Translate</Type>
+        <!--
+          Chase & Sven:
+            <xs:enumeration value="Translate"/>
+            <xs:enumeration value="Review"/>
+            <xs:enumeration value="QA"/>
+            
+            later:
+            <xs:enumeration value="Quote"/>
+        -->
+        <!-- 
+        Chase & Sven: which locale definition will we use? (especially for things like "international Spanish"
+       follow Yves article on this (AI for Sven to refer to it) 
+        -->
         <SourceLanguage>en-US</SourceLanguage>
+        <!-- Chase & Sven: Finalize the decission to have this bilingual only -->
         <TargetLanguage>fr-FR</TargetLanguage>
+        
+        <!-- Chase & Sven: 
+        Add Comment here
+        -->
       </Task>
+      <!--
+      Chase & Sven: This would be the place where the returning package would have a "response" element, so a package with a response element can be identified clearly as a returned package
+     <Reponse>
+             <Type>Reject</Type>
+                <SourceLanguage>sv-SE</SourceLanguage>
+                <TargetLanguage>en-AU</TargetLanguage>
+            </Reponse> 
+            
+            Response Type:
+            <xs:enumeration value="Failure"/>
+            <xs:enumeration value="Completed"/>      
+     -->
+       <!-- 
+       Chase & Sven:
+        Add Comment here
+        -->
     </Action>
   </GlobalDescriptor>
   <!-- Semantics of the SortId and OrderId fields don't seem to be specified.
@@ -60,22 +110,36 @@
   <PackageObjects>
     <!-- Note that SectionNames are capitalized in the spec, but the
        - corresponding directories are all lower-case.  We should 
-       - standardize on one or the other. -->
+       - standardize on one or the other. 
+       Chase & Sven: We'll use lower case in all uses (directory names, section names, etc.
+       -->
     <PackageObjectSection SectionName="Bilingual">
      <!-- This is a bilingual file.  Where should it go? -->
       <PackageObject SortId="??">
+        <!-- Chase & Sven: remove OrderID -->
         <File OrderId="??">
           <FileType>XLIFF:doc:1</FileType>
           <FilePath>Peanut_Butter.xlf</FilePath>
+          <!-- 
+          Chase & Sven: add a processed status 
+          -->
         </File>
       </PackageObject>
     </PackageObjectSection>
+    
+    <!-- Chase & Sven:
+      The resulting package manifest.xml should 100% represent the content of the returned package, meaning, that files should be represented as beeing in "Output" rather than "Input". 
+    
+    -->
+    
     <PackageObjectSection SectionName="Input">
       <PackageObject SortId="??">
         <File OrderId="??">
           <FileType>Unknown</FileType>
           <Localizable>No</Localizable>
           <FilePath>Peanut_Butter.html.skl</FilePath>
+          <!-- Chase & Sven optional -->
+          <Description>   </Description>
         </File>
       </PackageObject>
       <PackageObject SortId="??">
