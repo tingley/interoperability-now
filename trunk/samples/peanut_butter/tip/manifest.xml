@@ -1,71 +1,30 @@
- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
-<Manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="file:/Users/sca/Documents/USA/Interoperability/Package/tip.xsd"
-    Version="mk31">
+<TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="TIPManifest-1-0.xsd" version="1.0">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
        Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
        -->
-    <UniquePackageID>12345</UniquePackageID>
-    <!-- Is ReferencePackageID a required element if there is no reference
-       - package? Should it be blank?  etc. 
-    Chase & Sven: we'll take this out and send back the original package/manifest with potentially added information -->
-    <ReferencePackageID></ReferencePackageID>
+    <UniquePackageID>12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
     <PackageCreator>
-      <Name>Welocalize</Name>
-      <!-- I still think this should be a real URL - allows ports, etc. 
-      Sven & Chase: Yes, use URLs -->
-      <ID>w01.welocalize.com</ID>
-      <Tool>
+      <CreatorName>Welocalize</CreatorName>
+      <CreatorID>http://w01.welocalize.com/globalsight</CreatorID>
+      <CreatorUpdate>2011-05-09T22:45:00</CreatorUpdate>
+      <ContributorTool>
         <!-- Also think this should be a URL 
         Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
-        <ID>/GlobalSight/GlobalSight/9.0</ID> 
-      </Tool>
-      <CommunicationPath> 
-        <!-- This is probably too limiting - need a way, for instance, 
-           - to upload back to server? But we can expand it later.  
-           Chase & Sven:
-           Have three subnodes: FTP, email, REST
-           only URLs are transmitted, to credentials
-           
-           AI for tools: cache credentials
-           
-           -->
-        <CommunicationType>FTP</CommunicationType>
-        <FTPSettings>
-        <URL>ftp.welocalize.com</URL>
-        <UserName>username</UserName>
-        <Password>password</Password>
-        <Dir>/upload/</Dir>
-        </FTPSettings>
-        <!-- For example, something like this. 
-           - This assumes user can provide own login credentials.
-           - (Note GlobalSight doesn't support anything like this right now.)
-        <URLSettings>
-          <URL>http://w01.welocalize.com/globalsight/jobs?id=100&action=upload</URL>
-        </URLSettings>
-        -->
-     </CommunicationPath>
+        <ToolName>GlobalSight 9.0</ToolName>
+        <ToolID>http://www.globalsight.com</ToolID>
+        <ToolVersion>9.0</ToolVersion>
+      </ContributorTool>
+      <Communication>FTP</Communication>
     </PackageCreator>
-    <!-- I don't like having to specify the endpoint 
-    Chase & Sven: keep this out for now
-    -->
-    <PackageRecipient> 
-      <Name>*</Name>
-        <ID>*</ID>
-      <!-- I also don't like have to specify this 
-      Chase & Sven: keep this out for now
-      -->
-      <Tool> 
-        <ID>*</ID>
-      </Tool>
-    </PackageRecipient>
-    <Action>
-      <Task>
-        <Type>Translate</Type>
+    <OrderAction>
+      <OrderTask>
+        <TaskType>Translate</TaskType>
         <!--
           Chase & Sven:
             <xs:enumeration value="Translate"/>
@@ -86,7 +45,7 @@
         <!-- Chase & Sven: 
         Add Comment here
         -->
-      </Task>
+      </OrderTask>
       <!--
       Chase & Sven: This would be the place where the returning package would have a "response" element, so a package with a response element can be identified clearly as a returned package
      <Reponse>
@@ -103,28 +62,23 @@
        Chase & Sven:
         Add Comment here
         -->
-    </Action>
+    </OrderAction>
   </GlobalDescriptor>
   <!-- Semantics of the SortId and OrderId fields don't seem to be specified.
      - They are left blank for now. -->
   <PackageObjects>
-    <!-- Note that SectionNames are capitalized in the spec, but the
+    <!-- Note that sectionnames are capitalized in the spec, but the
        - corresponding directories are all lower-case.  We should 
        - standardize on one or the other. 
        Chase & Sven: We'll use lower case in all uses (directory names, section names, etc.
        -->
-    <PackageObjectSection SectionName="Bilingual">
-     <!-- This is a bilingual file.  Where should it go? -->
-      <PackageObject SortId="??">
-        <!-- Chase & Sven: remove OrderID -->
-        <File OrderId="??">
-          <FileType>XLIFF:doc:1</FileType>
-          <FilePath>Peanut_Butter.xlf</FilePath>
-          <!-- 
-          Chase & Sven: add a processed status 
-          -->
-        </File>
-      </PackageObject>
+    <PackageObjectSection sectionname="Bilingual">
+      <ObjectSequence>1</ObjectSequence>
+      <ObjectFile>
+        <Type>XLIFF</Type>
+        <LocationPath>Peanut_Butter.xlf</LocationPath>
+        <Localizable>Yes</Localizable>
+      </ObjectFile>
     </PackageObjectSection>
     
     <!-- Chase & Sven:
@@ -132,59 +86,47 @@
     
     -->
     
-    <PackageObjectSection SectionName="Input">
-      <PackageObject SortId="??">
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <Localizable>No</Localizable>
-          <FilePath>Peanut_Butter.html.skl</FilePath>
-          <!-- Chase & Sven optional -->
-          <Description>   </Description>
-        </File>
-      </PackageObject>
-      <PackageObject SortId="??">
-      <PackageObject SortId="??">
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <Localizable>No</Localizable>
-          <FilePath>resources/20px-Padlock-silver.svg.png</FilePath>
-        </File>
-      </PackageObject>
-      <PackageObject SortId="??">
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <Localizable>No</Localizable>
-          <FilePath>resources/load.php</FilePath>
-        </File>
-      </PackageObject>
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <Localizable>No</Localizable>
-          <FilePath>resources/290px-PeanutButter.jpg</FilePath>
-        </File>
-      </PackageObject>
-      <PackageObject SortId="??">
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <Localizable>No</Localizable>
-          <FilePath>resources/load(1).php</FilePath>
-        </File>
-      </PackageObject>
-      <PackageObject SortId="??">
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <Localizable>No</Localizable>
-          <FilePath>resources/magnify-clip.png</FilePath>
-        </File>
-      </PackageObject>
+    <PackageObjectSection sectionname="Input">
+      <ObjectSequence>1</ObjectSequence>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>Peanut_Butter.html.skl</LocationPath>
+        <Localizable>No</Localizable>
+        <!-- Descriptions are now optional -->
+      </ObjectFile>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
+        <Localizable>No</Localizable>
+      </ObjectFile>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>resources/load.php</LocationPath>
+        <Localizable>No</Localizable>
+      </ObjectFile>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
+        <Localizable>No</Localizable>
+      </ObjectFile>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>resources/load(1).php</LocationPath>
+        <Localizable>No</Localizable>
+      </ObjectFile>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>resources/magnify-clip.png</LocationPath>
+        <Localizable>No</Localizable>
+      </ObjectFile>
     </PackageObjectSection>
-    <PackageObjectSection SectionName="Reference">
-      <PackageObject SortId="??">
-        <File OrderId="??">
-          <FileType>Unknown</FileType>
-          <FilePath>Peanut_Butter.html</FilePath>
-        </File>
-        </PackageObject>
+    <PackageObjectSection sectionname="Reference">
+      <ObjectSequence>1</ObjectSequence>
+      <ObjectFile>
+        <Type>Unknown</Type>
+        <LocationPath>Peanut_Butter.html</LocationPath>
+        <Localizable>No</Localizable>
+      </ObjectFile>
     </PackageObjectSection>
   </PackageObjects>
-</Manifest>
+</TIPManifest>
