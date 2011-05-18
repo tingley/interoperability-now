@@ -2,7 +2,7 @@
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
 <TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-0.xsd" version="1.0">
+    xsi:noNamespaceSchemaLocation="TIPManifest-1-1.xsd" version="1.1">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
@@ -64,20 +64,12 @@
         -->
     </OrderAction>
   </GlobalDescriptor>
-  <!-- Semantics of the SortId and OrderId fields don't seem to be specified.
-     - They are left blank for now. -->
   <PackageObjects>
-    <!-- Note that sectionnames are capitalized in the spec, but the
-       - corresponding directories are all lower-case.  We should 
-       - standardize on one or the other. 
-       Chase & Sven: We'll use lower case in all uses (directory names, section names, etc.
-       -->
-    <PackageObjectSection sectionname="Bilingual">
+    <PackageObjectSection sectionname="bilingual">
       <ObjectSequence>1</ObjectSequence>
-      <ObjectFile>
+      <ObjectFile localizable="yes">
         <Type>XLIFF</Type>
         <LocationPath>Peanut_Butter.xlf</LocationPath>
-        <Localizable>Yes</Localizable>
       </ObjectFile>
     </PackageObjectSection>
     
@@ -86,46 +78,39 @@
     
     -->
     
-    <PackageObjectSection sectionname="Input">
+    <PackageObjectSection sectionname="input">
       <ObjectSequence>1</ObjectSequence>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>Peanut_Butter.html.skl</LocationPath>
-        <Localizable>No</Localizable>
         <!-- Descriptions are now optional -->
       </ObjectFile>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
-        <Localizable>No</Localizable>
       </ObjectFile>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>resources/load.php</LocationPath>
-        <Localizable>No</Localizable>
       </ObjectFile>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
-        <Localizable>No</Localizable>
       </ObjectFile>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>resources/load(1).php</LocationPath>
-        <Localizable>No</Localizable>
       </ObjectFile>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>resources/magnify-clip.png</LocationPath>
-        <Localizable>No</Localizable>
       </ObjectFile>
     </PackageObjectSection>
-    <PackageObjectSection sectionname="Reference">
+    <PackageObjectSection sectionname="reference">
       <ObjectSequence>1</ObjectSequence>
-      <ObjectFile>
+      <ObjectFile localizable="no">
         <Type>Unknown</Type>
         <LocationPath>Peanut_Butter.html</LocationPath>
-        <Localizable>No</Localizable>
       </ObjectFile>
     </PackageObjectSection>
   </PackageObjects>
