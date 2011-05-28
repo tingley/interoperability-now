@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Created:       2011-05-06 joerg     -->
+<!-- Last edited:   2011-05-16 joerg     -->
+<!-- Amendments:    2011-05-16 Attribute sectionname gots values starting with a lower case character -->
+<!--                           Introducing attribute localizable for ObjectFile and removing the Localizable element -->
+<!--                           Changing version attribute to 1.1 -->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+           XML Schema of the TIP Manifest. The Manifest specifies the entire content of an
+           Interoperability Package.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="TIPManifest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="GlobalDescriptor" type="GlobalDescriptor">
+                    <xs:annotation xml:lang="en">
+                        <xs:documentation xml:lang="en">The GlobalDescriptor identifies the package with a
+                            unique UUID, and contains information on the creator of the package as well
+                            as the order action associated with the package.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="PackageObjects" type="PackageObjectSet">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">PackageObjects contains all objects that are necessary
+                            to fulfill the associated order action plus objects which might additionally support
+                            this action.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="version" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:enumeration value="1.1" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="GlobalDescriptor">
+        <xs:sequence>
+            <xs:element name="UniquePackageID">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">The UniquePackageID is a fully qualified UUID of the form:
+                        ace950d0-73d8-417d-a5c0-b70c2974f244 or
+                        ace950d073d8417da5c0b70c2974f244 or
+                        {ace950d073d8417da5c0b70c2974f244}.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:minLength value="32" />
+                        <xs:maxLength value="36" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="PackageCreator" type="PackageCreator">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">PackageCreator contains the credentials of the organization
+                        that has generated the package and the tool that was used for the creation
+                        operation as well as the intended communication type.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="OrderAction" type="OrderAction">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">OrderAction identifies the task that is associated with
+                        the package, and a response that details the result of the action.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PackageCreator">
+        <xs:sequence>
+            <xs:element name="CreatorName" type="xs:string" />
+            <xs:element name="CreatorID" type="xs:anyURI" />
+            <xs:element name="CreatorUpdate" type="xs:dateTime" />
+            <xs:element name="ContributorTool" type="ContributorTool">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">ContributorTool identifies the tool that
+                        created the package with name, identifier, and version.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="Communication">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="EMAIL" />
+                        <xs:enumeration value="FTP" />
+                        <xs:enumeration value="REST" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrderAction">
+        <xs:sequence>
+            <xs:element name="OrderTask" type="OrderTask">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">OrderTask identifies the type of task, and
+                        the source and target language for the task.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="OrderResponse" type="OrderResponse" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">OrderResponse contains information on the
+                        success or failure of the task (message), and includes the responser's
+                        credentials with name, identifier, and a date/time stamp.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ContributorTool">
+        <xs:sequence>
+            <xs:element name="ToolName" type="xs:string" />
+            <xs:element name="ToolID" type="xs:anyURI" />
+            <xs:element name="ToolVersion" type="xs:decimal" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrderTask">
+        <xs:sequence>
+            <xs:element name="TaskType">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Translate" />
+                        <xs:enumeration value="Review" />
+                        <xs:enumeration value="QA" />
+                        <xs:enumeration value="Quote" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SourceLanguage" type="xs:language" />
+            <xs:element name="TargetLanguage" type="xs:language" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrderResponse">
+        <xs:sequence>
+            <xs:element name="ResponseName" type="xs:string" />
+            <xs:element name="ResponseID" type="xs:anyURI" />
+            <xs:element name="ResponseUpdate" type="xs:dateTime" />
+            <xs:element name="ResponseMessage">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Success" />
+                        <xs:enumeration value="Failure" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PackageObjectSet">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">PackageObjectSet contains the accompanying resources that
+                represent the neccessary objects to fulfill the task associated with the order action.
+                These resources (PackageObjects) are organized in sections (PackageObjectSection) which
+                are categorized by a specific section name through an obligatory attribute.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="PackageObjectSection" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="PackageObject">
+                            <xs:attribute name="sectionname" type="SectionName" use="required" />
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PackageObject">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A PackageObject is defined by its ObjectSequence which
+                is related to the task of the order action, and the associated ObjectFiles.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ObjectSequence">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                        <xs:minInclusive value="1" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="ObjectFile" type="ObjectFile" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="ObjectFile">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">An ObjectFile is the actual resource that is employed by
+                the task specified as order action. The resource is identified by its Type with default being
+                UNKNOWN, LocationPath which is either a Windows or a Unix style relative path expression, an
+                optional Description, and an optinal attribute localizable which is either "yes" or "no").
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Type" type="xs:string" default="Unknown" />
+            <xs:element name="LocationPath" type="xs:string" />
+            <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="localizable" type="xs:string" default="no" />
+    </xs:complexType>
+    <xs:simpleType name="SectionName">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="bilingual" />
+            <xs:enumeration value="input" />
+            <xs:enumeration value="output" />
+            <xs:enumeration value="tm" />
+            <xs:enumeration value="term" />
+            <xs:enumeration value="reference" />
+            <xs:enumeration value="workflow" />
+            <xs:enumeration value="metrics" />
+            <xs:enumeration value="guides" />
+            <xs:enumeration value="attachment" />
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>
