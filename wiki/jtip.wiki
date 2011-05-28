@@ -11,7 +11,7 @@
 
 The source for `jtip` is located in the [http://code.google.com/p/interoperability-now/source/browse/#svn%2Ftrunk%2Ftip%2Fjtip tip/jtip] directory.
 
-`jtip` uses the [http://maven.apache.org/ Maven] build system.  You will need to [http://maven.apache.org/download.html download and install] Maven in order to compile the code.  
+`jtip` uses the [http://maven.apache.org/ Maven] build system.  You will need to [http://maven.apache.org/download.html download and install] Maven in order to compile the code.  (You will also need Java 1.5 or later to compile and run the code.)
 
 Once you have maven installed, you can run the following to compile the code, build the jtip JAR, and run unittests:
 {{{
