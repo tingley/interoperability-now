@@ -26,3 +26,10 @@ The `jtip` JAR will be built in the `target` directory.
 java -cp target/jtip-0.11-snapshot.jar com.globalsight.tip.samples.TIPExplode [tip-package] [target-directory]
 }}}
 There is also a linux wrapper for this in `bin/tipexplode`.
+
+= javadoc =
+The situation is not great right now.  You can build it with Maven:
+{{{
+mvn javadoc:javadoc
+}}}
+Most things are undocumented; luckily, the API itself is very simple.  
