@@ -6,7 +6,7 @@
 <!--                           Changing version attribute to 1.1 -->
 <!--                2011-05-29 Additonal comment section ResponseComment added to OrderResponse -->
 <!--                           ContributorTool added to OrderResponse                           -->
-<!--                           Changing version attribute to 1.2 ->
+<!--                           Changing version attribute to 1.2 -->
 <!--                2011-05-30 Eliminating BOM -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
