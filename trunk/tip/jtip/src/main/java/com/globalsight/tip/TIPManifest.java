@@ -219,7 +219,7 @@ public class TIPManifest {
     }
     
     void validate(Document dom) throws SAXException, IOException {
-        InputStream is = getClass().getResourceAsStream("/TIPManifest-1-1.xsd");
+        InputStream is = getClass().getResourceAsStream("/TIPManifest-1-2.xsd");
         SchemaFactory factory = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
         Schema schema = factory.newSchema(new StreamSource(is));
         // need an error handler
