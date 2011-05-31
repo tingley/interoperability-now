@@ -26,7 +26,7 @@ public class TestTIPPackage {
     
     @Test
     public void testPackageLoad() throws Exception {
-        TIPPackage tip = getSamplePackage();
+        TIPPackage tip = getSamplePackage("data/test_package.zip");
         TestTIPManifest.verifySampleManifest(tip.getManifest());
         TIPManifest manifest = tip.getManifest();
         TIPObjectSection biSection = 
@@ -44,7 +44,7 @@ public class TestTIPPackage {
     @Test
     public void testPackageSave() throws Exception {
         // Load the package, save it out to a zip file, read it back.
-        TIPPackage tip = getSamplePackage();
+        TIPPackage tip = getSamplePackage("data/test_package.zip");
         File temp = File.createTempFile("tiptest", ".zip");
         OutputStream os = new BufferedOutputStream(new FileOutputStream(temp));
         tip.save(os);
@@ -60,8 +60,26 @@ public class TestTIPPackage {
     }
     
     @Test
+    public void testResponsePackage() throws Exception {
+        TIPPackage tip = getSamplePackage("data/test_response_package.zip");
+        TestTIPManifest.verifySampleResponseManifest(tip.getManifest());
+        File temp = File.createTempFile("tiptest", ".zip");
+        OutputStream os = new BufferedOutputStream(new FileOutputStream(temp));
+        tip.save(os);
+        os.close();
+        TIPPackage roundtrip  = TIPPackage.createFromStream(
+                new BufferedInputStream(new FileInputStream(temp)));
+        roundtrip.open();
+        TestTIPManifest.verifySampleResponseManifest(roundtrip.getManifest());
+        verifyPackageParts(tip, roundtrip);
+        temp.delete();
+        assertTrue("Could not clean up package", tip.close());
+        assertTrue("Could not clean up pacakge", roundtrip.close());
+    }
+    
+    @Test
     public void testPackageSaveToDirectory() throws Exception {
-        TIPPackage tip = getSamplePackage();        
+        TIPPackage tip = getSamplePackage("data/test_package.zip");        
         File dir = FileUtil.createTempDir("tiptest");
         System.out.println("Using dir " + dir);
         tip.saveToDirectory(dir);
@@ -76,9 +94,9 @@ public class TestTIPPackage {
                    FileUtil.recursiveDelete(dir));
     }
     
-    private TIPPackage getSamplePackage() throws Exception {
+    private TIPPackage getSamplePackage(String path) throws Exception {
         InputStream is = 
-            getClass().getResourceAsStream("data/test_package.zip");
+            getClass().getResourceAsStream(path);
         TIPPackage tip = TIPPackage.createFromStream(is);
         tip.open();
         return tip;

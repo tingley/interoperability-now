@@ -51,6 +51,7 @@ public class TIPManifest {
     private TIPTaskType taskType;
     private String sourceLanguage;
     private String targetLanguage;
+    private TIPResponse response;
     private Map<TIPObjectSectionType, List<TIPObjectSection>> objectSections = 
         new EnumMap<TIPObjectSectionType, 
                     List<TIPObjectSection>>(TIPObjectSectionType.class);    
@@ -96,42 +97,59 @@ public class TIPManifest {
     }
     
     private void loadDescriptor(Element descriptor) {
-        packageId = getTextContent(
-                getFirstChildByName(descriptor, UNIQUE_PACKAGE_ID));
+        packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
         loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
         loadAction(getFirstChildByName(descriptor, ORDER_ACTION));
     }
     
     private void loadCreator(Element creator) {
-        creatorName = getTextContent(
-                getFirstChildByName(creator, Creator.NAME));
-        creatorId = getTextContent(
-                getFirstChildByName(creator, Creator.ID));
+        creatorName = getChildTextByName(creator, Creator.NAME);
+        creatorId = getChildTextByName(creator, Creator.ID);
         creatorUpdate = 
             loadDate(getFirstChildByName(creator, Creator.UPDATE));
-        communication = getTextContent(
-                getFirstChildByName(creator, Creator.COMMUNICATION));
+        communication = getChildTextByName(creator, Creator.COMMUNICATION);
         contributorTool = loadContributorTool(
                 getFirstChildByName(creator, CONTRIBUTOR_TOOL));
     }
     
     private void loadAction(Element action) {
         loadTask(getFirstChildByName(action, ORDER_TASK));
-        // TODO: handle response if it exists
+        Element responseEl = getFirstChildByName(action, ORDER_RESPONSE);
+        if (responseEl != null) {
+            response = loadResponse(responseEl);
+        }
     }
     
     private void loadTask(Element task) {
-        String rawType = getTextContent(
-                getFirstChildByName(task, OrderTask.TYPE));
+        String rawType = getChildTextByName(task, OrderTask.TYPE);
         taskType = TIPTaskType.fromValue(rawType);
         if (taskType == null) {
             throw new IllegalStateException("Invalid task type '" + rawType + 
                                             "'");
         }
-        sourceLanguage = getTextContent(
-                getFirstChildByName(task, OrderTask.SOURCE_LANGUAGE));
-        targetLanguage = getTextContent(
-                getFirstChildByName(task, OrderTask.TARGET_LANGUAGE));
+        sourceLanguage = getChildTextByName(task, OrderTask.SOURCE_LANGUAGE);
+        targetLanguage = getChildTextByName(task, OrderTask.TARGET_LANGUAGE);
+    }
+    
+    private TIPResponse loadResponse(Element responseEl) {
+        TIPResponse response = new TIPResponse();
+        response.setName(getChildTextByName(responseEl, OrderResponse.NAME));
+        response.setId(getChildTextByName(responseEl, OrderResponse.ID));
+        response.setComment(getChildTextByName(responseEl, 
+                            OrderResponse.COMMENT));
+        String rawDate = getChildTextByName(responseEl, OrderResponse.UPDATE);
+        response.setUpdate(DateUtil.parseTIPDate(rawDate));
+        String rawMessage = getChildTextByName(responseEl, 
+                            OrderResponse.MESSAGE);
+        TIPResponse.Message msg = TIPResponse.Message.fromValue(rawMessage);
+        if (msg == null) {
+            throw new IllegalArgumentException(
+                    "Invalid ResponseMessage value: " + msg);
+        }
+        response.setMessage(msg);
+        response.setTool(loadContributorTool(
+                getFirstChildByName(responseEl, CONTRIBUTOR_TOOL)));
+        return response;
     }
     
     private Date loadDate(Element dateNode) {
@@ -140,12 +158,9 @@ public class TIPManifest {
     
     private TIPTool loadContributorTool(Element toolEl) {
         TIPTool tool = new TIPTool();
-        tool.setName(getTextContent(
-                getFirstChildByName(toolEl, ContributorTool.NAME)));
-        tool.setId(getTextContent(
-                getFirstChildByName(toolEl, ContributorTool.ID)));
-        tool.setVersion(getTextContent(
-                getFirstChildByName(toolEl, ContributorTool.VERSION)));
+        tool.setName(getChildTextByName(toolEl, ContributorTool.NAME));
+        tool.setId(getChildTextByName(toolEl, ContributorTool.ID));
+        tool.setVersion(getChildTextByName(toolEl, ContributorTool.VERSION));
         return tool;
     }
     
@@ -169,8 +184,7 @@ public class TIPManifest {
             throw new IllegalStateException("Invalid sectionname: '" + 
                                             sectionName + "'");
         }
-        String rawSequence = getTextContent(
-                getFirstChildByName(section, OBJECT_SEQUENCE));
+        String rawSequence = getChildTextByName(section, OBJECT_SEQUENCE);
         try {
             objectSection.setObjectSequence(Integer.valueOf(rawSequence));
         }
@@ -199,10 +213,8 @@ public class TIPManifest {
             throw new IllegalStateException("Invalid yes/no value: '" + 
                                             rawLocalizable + "'");
         }
-        object.setType(getTextContent(getFirstChildByName(file, 
-                        ObjectFile.TYPE)));
-        object.setPath(getTextContent(
-                       getFirstChildByName(file, ObjectFile.LOCATION_PATH)));
+        object.setType(getChildTextByName(file, ObjectFile.TYPE));
+        object.setPath(getChildTextByName(file, ObjectFile.LOCATION_PATH));
         return object;
     }
 
@@ -300,6 +312,18 @@ public class TIPManifest {
         this.targetLanguage = targetLanguage;
     }
 
+    /**
+     * Return the response object, or null if this is a task-only manifest.
+     * @return response, or null
+     */
+    public TIPResponse getResponse() {
+        return response;
+    }
+    
+    public void setResponse(TIPResponse response) {
+        this.response = response;
+    }
+    
     /**
      * Return a collection of all object sections with a given type.  
      * @param type section type

@@ -38,24 +38,49 @@ public class TestTIPManifest {
     }
     
     @Test
+    public void testResponseManifest() throws Exception {
+        TIPManifest manifest = new TIPManifest(null);
+        manifest.loadFromStream(getClass()
+                .getResourceAsStream("data/peanut_butter_response.xml"));
+        verifySampleResponseManifest(manifest);
+        TIPManifest roundtrip = roundtripManifest(manifest);
+        verifySampleResponseManifest(roundtrip);
+    }
+    
+    @SuppressWarnings("serial")
+    @Test
     public void testNewManifest() throws Exception {
         TIPManifest manifest = TIPManifest.newManifest(null);
         manifest.setCreatorName("Test");
         manifest.setCreatorId("Test Testerson");
-        manifest.setCreatorUpdate(new Date());
+        Date date = getDate(2011, 3, 14, 6, 55, 11);
+        manifest.setCreatorUpdate(date);
         manifest.setCommunication("FTP");
-        manifest.setContributorTool(
-                new TIPTool("TestTool", "urn:test", "1.0"));
+        TIPTool tool = new TIPTool("TestTool", "urn:test", "1.0");
+        manifest.setContributorTool(tool);
         manifest.setTaskType(TIPTaskType.TRANSLATE);
         manifest.setSourceLanguage("en-US");
         manifest.setTargetLanguage("jp-JP");
         // Add a section
+        final TIPObjectFile file = 
+            new TIPObjectFile("XLIFF", "test.xlf", true);
         TIPObjectSection section = 
             manifest.addObjectSection(TIPObjectSectionType.BILINGUAL);
         section.setObjectSequence(10);
-        section.addObject(new TIPObjectFile("XLIFF", "test.xlf", true));
+        section.addObject(file);
         TIPManifest roundtrip = roundtripManifest(manifest);
-        // TODO: compare manifest and roundtrip
+        assertEquals("Test", roundtrip.getCreatorName());
+        assertEquals("Test Testerson", roundtrip.getCreatorId());
+        assertEquals(date, roundtrip.getCreatorUpdate());
+        assertEquals("FTP", roundtrip.getCommunication());
+        assertEquals(tool, roundtrip.getContributorTool());
+        assertEquals(TIPTaskType.TRANSLATE, roundtrip.getTaskType());
+        assertEquals("en-US", roundtrip.getSourceLanguage());
+        assertEquals("jp-JP", roundtrip.getTargetLanguage());
+        expectObjectSection(roundtrip, TIPObjectSectionType.BILINGUAL, 10, 
+                new ArrayList<TIPObjectFile>() {{
+                    add(file);
+                }});
     }
     
     private TIPManifest roundtripManifest(TIPManifest src) throws Exception {
@@ -73,11 +98,8 @@ public class TestTIPManifest {
                      manifest.getPackageId());
         assertEquals("Test Company", manifest.getCreatorName());
         assertEquals("http://127.0.0.1/test", manifest.getCreatorId());
-        Calendar c = GregorianCalendar.getInstance();
-        c.setTimeInMillis(0); // Zero out the ms field or comparison may fail!
-        c.set(2011, 4, 9, 22, 45, 0); // note 0-indexed month
-        Date d = c.getTime();
-        assertEquals(d, manifest.getCreatorUpdate());
+        assertEquals(getDate(2011, 4, 9, 22, 45, 0), 
+                manifest.getCreatorUpdate());
         assertEquals("FTP", manifest.getCommunication());
         assertEquals(new TIPTool("TestTool", 
                 "http://interoperability-now.org/", "1.0"), 
@@ -114,6 +136,32 @@ public class TestTIPManifest {
                     add(new TIPObjectFile("Unknown", 
                             "Peanut_Butter.html", false));
                 }});
+    }
+    
+    static void verifySampleResponseManifest(TIPManifest manifest) {
+        // First sample all the normal fields
+        verifySampleManifest(manifest);
+        // Then verify the response
+        TIPResponse response = manifest.getResponse();
+        assertNotNull(response);
+        assertEquals("Test Testerson", response.getName());
+        assertEquals("http://interoperability-now.org", response.getId());
+        assertEquals(getDate(2011, 4, 18, 19, 3, 15), response.getUpdate()); 
+        assertEquals(TIPResponse.Message.SUCCESS, response.getMessage());
+        assertEquals(new TIPTool("Test Workbench", 
+                "http://interoperability-now.org", "2.0"), response.getTool());
+        assertEquals("", response.getComment());
+    }
+    
+    /**
+     * This follows the Calendar.set() parameter conventions.  
+     * Note that month is zero-indexed!
+     */
+    private static Date getDate(int y, int mon, int d, int h, int min, int s) {
+        Calendar c = GregorianCalendar.getInstance();
+        c.setTimeInMillis(0); // Zero out the ms field or comparison may fail!
+        c.set(y, mon, d, h, min, s); // note 0-indexed month
+        return c.getTime();
     }
     
     private static void expectObjectSection(TIPManifest manifest,

@@ -21,7 +21,7 @@ public class TIPObjectFile {
     
     TIPObjectFile() { }
 
-    TIPObjectFile(String type, String path, boolean localizable) {
+    public TIPObjectFile(String type, String path, boolean localizable) {
         this.type = type;
         this.path = path;
         this.localizable = localizable;
