@@ -2,7 +2,7 @@
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
 <TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-1.xsd" version="1.1">
+    xsi:noNamespaceSchemaLocation="TIPManifest-1-2.xsd" version="1.2">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
@@ -47,11 +47,16 @@
         -->
       </OrderTask>
       <OrderResponse>
-        <ResponseName>Hypothetical Translation Workbench</ResponseName>
-        <ResponseID>http://interoperability-now.org</ResponseID>
+        <ResponseName>Joe the Freelance Translator</ResponseName>
+        <ResponseID>http://joestranslations.biz</ResponseID>
         <ResponseUpdate>2011-05-18T19:03:15</ResponseUpdate>
         <ResponseMessage>Success</ResponseMessage>
-        <!-- We need a coment here, etc. -->
+        <ResponseComment></ResponseComment>
+        <ContributorTool>
+          <ToolName>Kilgray MemoQ Standard Edition</ToolName>
+          <ToolID>http://www.kilgray.com</ToolID>
+          <ToolVersion>6.0</ToolVersion>
+        </ContributorTool>
       </OrderResponse>
     </OrderAction>
   </GlobalDescriptor>
