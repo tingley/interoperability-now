@@ -1,7 +1,5 @@
 package com.globalsight.tip;
 
-import java.util.Date;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -47,7 +45,6 @@ class ManifestDOMBuilder {
         return descriptor;
     }
     
-    // TODO: this is not printing the right date format
     Element makePackageCreator() {
         Element creator = document.createElement(PACKAGE_CREATOR);
         appendElementChildWithText(document, 
@@ -76,7 +73,9 @@ class ManifestDOMBuilder {
     Element makeOrderAction() {
         Element action = document.createElement(ORDER_ACTION);
         action.appendChild(makeOrderTask());
-        // TODO: handle response if it exists
+        if (manifest.getResponse() != null) {
+            action.appendChild(makeOrderResponse());
+        }
         return action;
     }
     
@@ -89,6 +88,28 @@ class ManifestDOMBuilder {
         appendElementChildWithText(document, task, 
                 OrderTask.TARGET_LANGUAGE, manifest.getTargetLanguage());
         return task;
+    }
+    
+    Element makeOrderResponse() {
+        Element el = document.createElement(ORDER_RESPONSE);
+        TIPResponse response = manifest.getResponse();
+        appendElementChildWithText(document, el, OrderResponse.NAME,
+                response.getName());
+        appendElementChildWithText(document, el, OrderResponse.ID,
+                response.getId());
+        appendElementChildWithText(document, el, OrderResponse.UPDATE,
+                DateUtil.writeTIPDate(response.getUpdate()));
+        appendElementChildWithText(document, el, OrderResponse.MESSAGE,
+                response.getMessage().getValue());
+        if (response.getComment() != null) {
+            appendElementChildWithText(document, el, OrderResponse.COMMENT,
+                    response.getComment());
+        }
+        else {
+            appendElementChild(document, el, OrderResponse.COMMENT);
+        }
+        el.appendChild(makeContributorTool(response.getTool()));
+        return el;
     }
     
     Element makePackageObjects() {

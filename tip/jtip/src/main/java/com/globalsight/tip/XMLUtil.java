@@ -43,6 +43,19 @@ class XMLUtil {
         return node.getTextContent().trim();
     }
     
+    /**
+     * Equivalent to getTextContent(getFirstChildByName(e, n)), with
+     * a null check.
+     * 
+     * @param parent parent element
+     * @param name child element name
+     * @return
+     */
+    public static String getChildTextByName(Element parent, String name) {
+        Element e = getFirstChildByName(parent, name);
+        return (e != null) ? getTextContent(e) : null;
+    }
+    
     public static Element appendElementChild(Document doc, Element parent, 
                                              String name) {
         Element el = doc.createElement(name);

@@ -31,11 +31,20 @@ interface TIPConstants {
 
     // OrderAction fields
     public static final String ORDER_TASK = "OrderTask";
+    public static final String ORDER_RESPONSE = "OrderResponse";
     
     static class OrderTask {
         public static final String TYPE = "TaskType";
         public static final String SOURCE_LANGUAGE = "SourceLanguage";
         public static final String TARGET_LANGUAGE = "TargetLanguage";
+    }
+    
+    static class OrderResponse {
+        public static final String NAME = "ResponseName";
+        public static final String ID = "ResponseID";
+        public static final String UPDATE = "ResponseUpdate";
+        public static final String MESSAGE = "ResponseMessage";
+        public static final String COMMENT = "ResponseComment";
     }
     
     // PackageObjects
