@@ -235,7 +235,6 @@
             <xs:enumeration value="reference" />
             <xs:enumeration value="workflow" />
             <xs:enumeration value="metrics" />
-            <xs:enumeration value="guides" />
             <xs:enumeration value="attachment" />
         </xs:restriction>
     </xs:simpleType>
