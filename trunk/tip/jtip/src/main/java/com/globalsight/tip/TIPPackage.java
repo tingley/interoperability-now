@@ -8,16 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
-
-import org.xml.sax.SAXException;
-
-// TODO
-// - thrown own exceptions
 public class TIPPackage {
 
     private PackageSource packageSource;
@@ -62,37 +54,44 @@ public class TIPPackage {
     /**
      * Write this package to an output stream as a ZIP archive
      * @param outputStream
-     * @throws IOException
-     * @throws ParserConfigurationException 
-     * @throws TransformerException 
-     * @throws SAXException 
+     * @throws TIPException if there is a problem saving the package
      */
-    // TODO: exceptions!
-    public void save(OutputStream outputStream) throws IOException, SAXException, TransformerException, ParserConfigurationException {
+    public void save(OutputStream outputStream) throws TIPException {
         // XXX What if this has no backing on disk?
         ZipOutputStream zos = new ZipOutputStream(outputStream);
-        
-        // Write out the manifest
-        zos.putNextEntry(new ZipEntry(MANIFEST));
-        manifest.saveToStream(zos);
-        zos.closeEntry();
 
-        // For some reason writing the zip stream out within another
-        // zip stream gives me strange zip corruption errors.  Write
-        // pobjects.zip out to a temp file and copy it over.
-        File temp = writeObjectsToFile();
-        
-        // Now write out all the parts as an inner archive
-        zos.putNextEntry(new ZipEntry(INSECURE_OBJECTS_FILE));
-        FileUtil.copyFileToStream(temp, zos);
-        zos.closeEntry();
-        
-        zos.flush();
-        zos.close();
-        temp.delete();
+        try {
+            // Write out the manifest
+            zos.putNextEntry(new ZipEntry(MANIFEST));
+            manifest.saveToStream(zos);
+            zos.closeEntry();
+    
+            // For some reason writing the zip stream out within another
+            // zip stream gives me strange zip corruption errors.  Write
+            // pobjects.zip out to a temp file and copy it over.
+            File temp = writeObjectsToFile();
+            
+            // Now write out all the parts as an inner archive
+            zos.putNextEntry(new ZipEntry(INSECURE_OBJECTS_FILE));
+            FileUtil.copyFileToStream(temp, zos);
+            zos.closeEntry();
+            
+            zos.flush();
+            zos.close();
+            temp.delete();
+        }
+        catch (Exception e) {
+            throw new TIPException(e);
+        }
     }
     
-    public void saveToDirectory(File outputDirectory) throws IOException, SAXException, TransformerException, ParserConfigurationException {
+    /**
+     * Write the contents of this package to a directory on disk. 
+     * @param outputDirectory top-level directory to contain the package.
+     *        This directory should be empty.
+     * @throws TIPException
+     */
+    public void saveToDirectory(File outputDirectory) throws TIPException {
         if (!outputDirectory.exists()) {
             if (!outputDirectory.mkdir()) {
                 throw new IllegalArgumentException("Directory " + 
@@ -105,28 +104,33 @@ public class TIPPackage {
                     outputDirectory + " is not a directory");
         }
         
-        FileOutputStream manifestStream = new FileOutputStream(
-                new File(outputDirectory, MANIFEST));
-        manifest.saveToStream(manifestStream);
-        manifestStream.close();
-        
-        for (TIPObjectSection section : manifest.getObjectSections()) {
-            for (TIPObjectFile objFile : section.getObjectFiles()) {
-                // TODO: convert path separators
-                String path = section.getObjectSectionType().getValue() + 
-                    File.separator + objFile.getPath();
-                File file = new File(outputDirectory, path);
-                File parent = file.getParentFile();
-                if (!parent.exists()) {
-                    if (!parent.mkdirs()) {
-                        throw new IllegalStateException(
-                                "Can't create directory " + parent);
+        try {
+            FileOutputStream manifestStream = new FileOutputStream(
+                    new File(outputDirectory, MANIFEST));
+            manifest.saveToStream(manifestStream);
+            manifestStream.close();
+            
+            for (TIPObjectSection section : manifest.getObjectSections()) {
+                for (TIPObjectFile objFile : section.getObjectFiles()) {
+                    // TODO: convert path separators
+                    String path = section.getObjectSectionType().getValue() + 
+                        File.separator + objFile.getPath();
+                    File file = new File(outputDirectory, path);
+                    File parent = file.getParentFile();
+                    if (!parent.exists()) {
+                        if (!parent.mkdirs()) {
+                            throw new IllegalStateException(
+                                    "Can't create directory " + parent);
+                        }
                     }
+                    InputStream is = objFile.getInputStream();
+                    FileUtil.copyStreamToFile(is, file);
+                    is.close();
                 }
-                InputStream is = objFile.getInputStream();
-                FileUtil.copyStreamToFile(is, file);
-                is.close();
             }
+        }
+        catch (Exception e) {
+            throw new TIPException(e);
         }
     }
     
@@ -167,9 +171,14 @@ public class TIPPackage {
         zos.flush();
     }
 
-    public void open() throws IOException {
-        packageSource.open();
-        loadManifest();
+    public void open() throws TIPException {
+        try {
+            packageSource.open();
+            loadManifest();
+        }
+        catch (IOException e) {
+            throw new TIPException(e);
+        }
     }
     
     /**
@@ -179,12 +188,17 @@ public class TIPPackage {
      * @return true if this succeeds, false is some resources could
      *         not be released
      */
-    public boolean close() throws IOException {
-        manifest = null;
-        return packageSource.close();
+    public boolean close() throws TIPException {
+        try {
+            manifest = null;
+            return packageSource.close();
+        }
+        catch (IOException e) {
+            throw new TIPException(e);
+        }
     }
         
-    void loadManifest() throws IOException {
+    void loadManifest() throws TIPException {
         File manifestFile = getPackageFile(MANIFEST);
         if (!manifestFile.exists() || manifestFile.isDirectory()) {
             throw new RuntimeException("Invalid manifest file");
@@ -194,8 +208,7 @@ public class TIPPackage {
             manifest.loadFromStream(new FileInputStream(manifestFile));
         }
         catch (Exception e) {
-            // TODO: fix 
-            throw new RuntimeException(e);
+            throw new TIPException(e);
         }
     }
     
@@ -207,6 +220,5 @@ public class TIPPackage {
     File getPackageObjectFile(String path) {
         return packageSource.getPackageObjectFile(path);
     }
-    
     
 }
