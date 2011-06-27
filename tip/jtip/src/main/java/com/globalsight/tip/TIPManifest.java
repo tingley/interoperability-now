@@ -20,7 +20,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -69,34 +68,41 @@ public class TIPManifest {
         return manifest;
     }
     
-    void saveToStream(OutputStream saveStream) 
-            throws IOException, SAXException, TransformerException, 
-                   ParserConfigurationException {
-        Document document = new ManifestDOMBuilder(this).makeDocument();
-        validate(document);
-        TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer = factory.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-        transformer.transform(new DOMSource(document), new StreamResult(saveStream));
+    void saveToStream(OutputStream saveStream) throws TIPException { 
+        try {
+            Document document = new ManifestDOMBuilder(this).makeDocument();
+            validate(document);
+            TransformerFactory factory = TransformerFactory.newInstance();
+            Transformer transformer = factory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(
+                    "{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(new DOMSource(document), 
+                    new StreamResult(saveStream));
+        }
+        catch (Exception e) {
+            throw new TIPException(e);
+        }
     }
     
-    // TODO: exceptions, of course
     // XXX This should blow away any existing settings 
-    void loadFromStream(InputStream manifestStream) throws SAXException, IOException, ParserConfigurationException {
+    void loadFromStream(InputStream manifestStream) 
+                throws TIPValidationException, IOException, ParserConfigurationException {
         Document document = parse(manifestStream);
         validate(document);
         loadManifest(document);
     }    
     
-    private void loadManifest(Document document) {
+    private void loadManifest(Document document) 
+                            throws TIPValidationException {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
         loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS));
     }
     
-    private void loadDescriptor(Element descriptor) {
+    private void loadDescriptor(Element descriptor) 
+                            throws TIPValidationException {
         packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
         loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
         loadAction(getFirstChildByName(descriptor, ORDER_ACTION));
@@ -112,7 +118,7 @@ public class TIPManifest {
                 getFirstChildByName(creator, CONTRIBUTOR_TOOL));
     }
     
-    private void loadAction(Element action) {
+    private void loadAction(Element action) throws TIPValidationException {
         loadTask(getFirstChildByName(action, ORDER_TASK));
         Element responseEl = getFirstChildByName(action, ORDER_RESPONSE);
         if (responseEl != null) {
@@ -120,18 +126,19 @@ public class TIPManifest {
         }
     }
     
-    private void loadTask(Element task) {
+    private void loadTask(Element task) throws TIPValidationException {
         String rawType = getChildTextByName(task, OrderTask.TYPE);
         taskType = TIPTaskType.fromValue(rawType);
         if (taskType == null) {
-            throw new IllegalStateException("Invalid task type '" + rawType + 
+            throw new TIPValidationException("Invalid task type '" + rawType + 
                                             "'");
         }
         sourceLanguage = getChildTextByName(task, OrderTask.SOURCE_LANGUAGE);
         targetLanguage = getChildTextByName(task, OrderTask.TARGET_LANGUAGE);
     }
     
-    private TIPResponse loadResponse(Element responseEl) {
+    private TIPResponse loadResponse(Element responseEl) 
+                                throws TIPValidationException {
         TIPResponse response = new TIPResponse();
         response.setName(getChildTextByName(responseEl, OrderResponse.NAME));
         response.setId(getChildTextByName(responseEl, OrderResponse.ID));
@@ -143,7 +150,7 @@ public class TIPManifest {
                             OrderResponse.MESSAGE);
         TIPResponse.Message msg = TIPResponse.Message.fromValue(rawMessage);
         if (msg == null) {
-            throw new IllegalArgumentException(
+            throw new TIPValidationException(
                     "Invalid ResponseMessage value: " + msg);
         }
         response.setMessage(msg);
@@ -164,7 +171,8 @@ public class TIPManifest {
         return tool;
     }
     
-    private void loadPackageObjects(Element parent) {
+    private void loadPackageObjects(Element parent) 
+                            throws TIPValidationException {
         // parse all the sections
         NodeList children = 
             parent.getElementsByTagName(PACKAGE_OBJECT_SECTION);
@@ -175,21 +183,22 @@ public class TIPManifest {
         }
     }
     
-    private TIPObjectSection loadPackageObjectSection(Element section) {
+    private TIPObjectSection loadPackageObjectSection(Element section) 
+                    throws TIPValidationException {
         TIPObjectSection objectSection = new TIPObjectSection();
         String sectionName = section.getAttribute(ATTR_SECTION_NAME);
         objectSection.setObjectSectionType(
                 TIPObjectSectionType.fromValue(sectionName));
         if (objectSection.getObjectSectionType() == null) {
-            throw new IllegalStateException("Invalid sectionname: '" + 
-                                            sectionName + "'");
+            throw new TIPValidationException("Invalid sectionname: '" + 
+                                             sectionName + "'");
         }
         String rawSequence = getChildTextByName(section, OBJECT_SEQUENCE);
         try {
             objectSection.setObjectSequence(Integer.valueOf(rawSequence));
         }
         catch (NumberFormatException e) {
-            throw new IllegalStateException("Invalid sequence number: '" + 
+            throw new TIPValidationException("Invalid sequence number: '" + 
                     rawSequence + "'");
         }
         NodeList children = section.getElementsByTagName(OBJECT_FILE);
@@ -199,7 +208,8 @@ public class TIPManifest {
         return objectSection;
     }
     
-    private TIPObjectFile loadObjectFile(Element file) {
+    private TIPObjectFile loadObjectFile(Element file) 
+                            throws TIPValidationException {
         TIPObjectFile object = new TIPObjectFile();
         object.setPackage(tipPackage);
         String rawLocalizable = file.getAttribute(ObjectFile.ATTR_LOCALIZABLE);
@@ -210,7 +220,7 @@ public class TIPManifest {
             object.setLocalizable(false);
         }
         else {
-            throw new IllegalStateException("Invalid yes/no value: '" + 
+            throw new TIPValidationException("Invalid yes/no value: '" + 
                                             rawLocalizable + "'");
         }
         object.setType(getChildTextByName(file, ObjectFile.TYPE));
@@ -218,26 +228,37 @@ public class TIPManifest {
         return object;
     }
 
-    Document parse(InputStream is) throws ParserConfigurationException, SAXException, IOException {
+    Document parse(InputStream is) throws ParserConfigurationException, 
+                                    TIPValidationException, IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             return builder.parse(is);
         }
+        catch (SAXException e) {
+            throw new TIPValidationException(e);
+        }
         finally {
             is.close();
         }
     }
     
-    void validate(Document dom) throws SAXException, IOException {
-        InputStream is = getClass().getResourceAsStream("/TIPManifest-1-2.xsd");
-        SchemaFactory factory = SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
-        Schema schema = factory.newSchema(new StreamSource(is));
-        // need an error handler
-        Validator validator = schema.newValidator();
-        validator.validate(new DOMSource(dom));
-        is.close();
+    void validate(Document dom) throws TIPValidationException {
+        try {
+            InputStream is = 
+                getClass().getResourceAsStream("/TIPManifest-1-2.xsd");
+            SchemaFactory factory = 
+                SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new StreamSource(is));
+            // need an error handler
+            Validator validator = schema.newValidator();
+            validator.validate(new DOMSource(dom));
+            is.close();
+        }
+        catch (Exception e) {
+            throw new TIPValidationException(e);
+        }
     }
 
     public String getPackageId() {
