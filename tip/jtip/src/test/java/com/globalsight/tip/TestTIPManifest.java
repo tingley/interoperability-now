@@ -65,8 +65,7 @@ public class TestTIPManifest {
         final TIPObjectFile file = 
             new TIPObjectFile("XLIFF", "test.xlf", true);
         TIPObjectSection section = 
-            manifest.addObjectSection(TIPObjectSectionType.BILINGUAL);
-        section.setObjectSequence(10);
+            manifest.addObjectSection(TIPObjectSectionType.BILINGUAL, 10);
         section.addObject(file);
         TIPManifest roundtrip = roundtripManifest(manifest);
         assertEquals("Test", roundtrip.getCreatorName());
@@ -157,7 +156,7 @@ public class TestTIPManifest {
      * This follows the Calendar.set() parameter conventions.  
      * Note that month is zero-indexed!
      */
-    private static Date getDate(int y, int mon, int d, int h, int min, int s) {
+    static Date getDate(int y, int mon, int d, int h, int min, int s) {
         Calendar c = GregorianCalendar.getInstance();
         c.setTimeInMillis(0); // Zero out the ms field or comparison may fail!
         c.set(y, mon, d, h, min, s); // note 0-indexed month

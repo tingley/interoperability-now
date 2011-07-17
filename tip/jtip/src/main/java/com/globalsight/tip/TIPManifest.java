@@ -186,6 +186,7 @@ public class TIPManifest {
     private TIPObjectSection loadPackageObjectSection(Element section) 
                     throws TIPValidationException {
         TIPObjectSection objectSection = new TIPObjectSection();
+        objectSection.setPackage(tipPackage);
         String sectionName = section.getAttribute(ATTR_SECTION_NAME);
         objectSection.setObjectSectionType(
                 TIPObjectSectionType.fromValue(sectionName));
@@ -367,9 +368,12 @@ public class TIPManifest {
         return merged;
     }
     
-    public TIPObjectSection addObjectSection(TIPObjectSectionType type) {
+    public TIPObjectSection addObjectSection(TIPObjectSectionType type, 
+                                             int objectSequence) {
         TIPObjectSection section = new TIPObjectSection();
+        section.setPackage(tipPackage);
         section.setObjectSectionType(type);
+        section.setObjectSequence(objectSequence);
         objectSections.get(type).add(section);
         return section;
     }

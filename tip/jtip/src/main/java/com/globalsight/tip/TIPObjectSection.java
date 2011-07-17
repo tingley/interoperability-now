@@ -11,7 +11,7 @@ import java.util.Collection;
  */
 // TODO eventually factor out TIPObject from TIPObjectFile
 public class TIPObjectSection {
-
+    private TIPPackage tip;
     private TIPObjectSectionType type;
     private int sequence;
     Collection<TIPObjectFile> objects = new ArrayList<TIPObjectFile>();
@@ -20,6 +20,14 @@ public class TIPObjectSection {
     
     public TIPObjectSectionType getObjectSectionType() {
         return type;
+    }
+    
+    void setPackage(TIPPackage tip) {
+        this.tip = tip;
+    }
+    
+    TIPPackage getPackage() {
+        return tip;
     }
     
     public void setObjectSectionType(TIPObjectSectionType type) {
@@ -38,9 +46,11 @@ public class TIPObjectSection {
         return objects;
     }
     
-    public void addObject(TIPObjectFile object) {
+    public TIPObjectFile addObject(TIPObjectFile object) {
         objects.add(object);
+        object.setPackage(tip);
         object.setSection(this);
+        return object;
     }
     
     @Override
