@@ -8,6 +8,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
@@ -17,6 +23,7 @@ class FileUtil {
     /**
      * Create a temporary directory.  The directory will be 
      * deleted when the JVM exits.
+     * @param prefix prefix for the temp directory
      * @return temporary directory
      * @throws IOException on IOError
      * @throws IllegalStateException if the directory (somehow) already exists
@@ -105,6 +112,25 @@ class FileUtil {
         }
         if (!file.delete()) {
             success = false;
+        }
+        return success;
+    }
+    
+    /**
+     * Create a file, including all parent directories.
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static boolean recursiveCreate(File file) throws IOException {
+        boolean success = true;
+
+        File parent = file.getParentFile();
+        if (parent != null && !parent.exists()) {
+            success = parent.mkdirs();
+        }
+        if (success) {
+            success = file.createNewFile();
         }
         return success;
     }

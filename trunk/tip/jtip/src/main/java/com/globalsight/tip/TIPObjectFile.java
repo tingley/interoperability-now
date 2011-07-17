@@ -64,7 +64,14 @@ public class TIPObjectFile {
                 new FileInputStream(getFilePath()));
     }
 
-    public OutputStream getOutputStream() throws IOException {
+    public OutputStream getOutputStream() throws IOException, TIPException {
+        File f = getFilePath();
+        if (!f.exists()) {
+            if (!FileUtil.recursiveCreate(f)) {
+                throw new TIPException(
+                        "Unable to open resource for writing: " + path);
+            }
+        }
         return new BufferedOutputStream(
                 new FileOutputStream(getFilePath()));
     }

@@ -14,6 +14,17 @@ class FilePackageSource extends PackageSource {
         this.packageDir = packageDir;
     }
     
+    protected FilePackageSource() {
+    }
+    
+    protected void setPackageDir(File packageDir) {
+        this.packageDir = packageDir;
+    }
+    
+    protected File getPackageDir() {
+        return packageDir;
+    }
+    
     @Override
     File getPackageFile(String path) {
         return new File(packageDir, path);

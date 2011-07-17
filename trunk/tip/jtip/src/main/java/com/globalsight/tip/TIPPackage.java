@@ -24,6 +24,20 @@ public class TIPPackage {
     static final String SECURE_OBJECTS_FILE = "pobjects.sec";
     
     /**
+     * Create a new empty TIPPackage.
+     * 
+     * XXX The problem here is that the open semantics don't work right.
+     * 
+     * @return new TIPPackage
+     */
+    public static TIPPackage newPackage() throws TIPException {
+        TIPPackage tipPackage = new TIPPackage(new TempFilePackageSource());
+        tipPackage.manifest = TIPManifest.newManifest(tipPackage);
+        tipPackage.open();
+        return tipPackage;
+    }
+    
+    /**
      * Create a new TIPPackage object from a byte stream.  The data 
      * must be ZIP-encoded.  The TIPPackage will be expanded to disk
      * and backed by a set of temporary files.
@@ -31,11 +45,15 @@ public class TIPPackage {
      * @param inputStream
      * @return new TIPPackage
      */
-    public static TIPPackage createFromStream(InputStream inputStream) {
-        return new TIPPackage(new StreamPackageSource(inputStream));
+    public static TIPPackage openFromStream(InputStream inputStream) 
+                throws TIPException {
+        TIPPackage tip = new TIPPackage(new StreamPackageSource(inputStream));
+        tip.open();
+        return tip;
     }
 
-    public static TIPPackage createFromDirectory(File directory) {
+    public static TIPPackage openFromDirectory(File directory) 
+                throws TIPException {
         if (!directory.exists()) {
             throw new IllegalArgumentException(
                     "Directory " + directory + " does not exist");
@@ -44,7 +62,9 @@ public class TIPPackage {
             throw new IllegalArgumentException(
                     "Not a directory: " + directory);
         }
-        return new TIPPackage(new FilePackageSource(directory));
+        TIPPackage tip = new TIPPackage(new FilePackageSource(directory));
+        tip.open();
+        return tip;
     }
     
     public TIPManifest getManifest() {
@@ -171,7 +191,7 @@ public class TIPPackage {
         zos.flush();
     }
 
-    public void open() throws TIPException {
+    void open() throws TIPException {
         try {
             packageSource.open();
             loadManifest();
@@ -199,6 +219,9 @@ public class TIPPackage {
     }
         
     void loadManifest() throws TIPException {
+        if (manifest != null) {
+            return;
+        }
         File manifestFile = getPackageFile(MANIFEST);
         if (!manifestFile.exists() || manifestFile.isDirectory()) {
             throw new RuntimeException("Invalid manifest file");

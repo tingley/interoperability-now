@@ -27,8 +27,7 @@ public class TIPExplode {
         File targetDir = prepareTargetDirectory(args[1]);
         
         InputStream is = new BufferedInputStream(new FileInputStream(tipFile));
-        TIPPackage tip = TIPPackage.createFromStream(is);
-        tip.open();
+        TIPPackage tip = TIPPackage.openFromStream(is);
         is.close();
         tip.saveToDirectory(targetDir);
         tip.close();

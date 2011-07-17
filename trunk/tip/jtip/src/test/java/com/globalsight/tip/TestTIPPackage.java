@@ -2,6 +2,7 @@ package com.globalsight.tip;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,6 +11,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.UUID;
 
 import org.junit.*;
 
@@ -49,11 +51,10 @@ public class TestTIPPackage {
         OutputStream os = new BufferedOutputStream(new FileOutputStream(temp));
         tip.save(os);
         os.close();
-        TIPPackage roundtrip  = TIPPackage.createFromStream(
+        TIPPackage roundtrip  = TIPPackage.openFromStream(
                 new BufferedInputStream(new FileInputStream(temp)));
-        roundtrip.open();
         TestTIPManifest.verifySampleManifest(roundtrip.getManifest());
-        verifyPackageParts(tip, roundtrip);
+        comparePackageParts(tip, roundtrip);
         temp.delete();
         assertTrue("Could not clean up package", tip.close());
         assertTrue("Could not clean up pacakge", roundtrip.close());
@@ -67,15 +68,54 @@ public class TestTIPPackage {
         OutputStream os = new BufferedOutputStream(new FileOutputStream(temp));
         tip.save(os);
         os.close();
-        TIPPackage roundtrip  = TIPPackage.createFromStream(
+        TIPPackage roundtrip  = TIPPackage.openFromStream(
                 new BufferedInputStream(new FileInputStream(temp)));
-        roundtrip.open();
         TestTIPManifest.verifySampleResponseManifest(roundtrip.getManifest());
-        verifyPackageParts(tip, roundtrip);
+        comparePackageParts(tip, roundtrip);
         temp.delete();
         assertTrue("Could not clean up package", tip.close());
         assertTrue("Could not clean up pacakge", roundtrip.close());
     }
+    
+    @Test
+    public void testNewPackage() throws Exception {
+        TIPPackage tip = TIPPackage.newPackage();
+        TIPManifest manifest = tip.getManifest();
+        manifest.setCommunication("FTP");
+        manifest.setContributorTool(new TIPTool("jtip", 
+                "http://code.google.com/p/interoperability-now", "0.12"));
+        manifest.setCreatorId("testid");
+        manifest.setCreatorName("testname");
+        // TODO: there should be some sort of date automatically
+        manifest.setCreatorUpdate(
+                TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12));
+        manifest.setPackageId(UUID.randomUUID().toString());
+        manifest.setSourceLanguage("en-US");
+        manifest.setTargetLanguage("fr-FR");
+        manifest.setTaskType(TIPTaskType.TRANSLATE);
+                
+        TIPObjectSection inputSection = 
+            manifest.addObjectSection(TIPObjectSectionType.INPUT, 1);
+        TIPObjectFile f1 = inputSection.addObject(new TIPObjectFile("text", "test1.txt", true));
+        OutputStream os = f1.getOutputStream();
+        FileUtil.copyStreamToStream(
+                new ByteArrayInputStream("test".getBytes("UTF-8")), os);
+        os.close();
+        
+        File temp = File.createTempFile("tiptest", ".zip");
+        os = new FileOutputStream(temp);
+        tip.save(os);
+        os.close();
+        TIPPackage roundTrip = 
+            TIPPackage.openFromStream(new FileInputStream(temp));
+        assertNotNull(roundTrip);
+        compareManifestMetadata(manifest, roundTrip.getManifest());
+        comparePackageParts(tip, roundTrip);        
+        temp.delete();
+        tip.close();
+    }
+    
+    
     
     @Test
     public void testPackageSaveToDirectory() throws Exception {
@@ -83,10 +123,9 @@ public class TestTIPPackage {
         File dir = FileUtil.createTempDir("tiptest");
         System.out.println("Using dir " + dir);
         tip.saveToDirectory(dir);
-        TIPPackage roundtrip = TIPPackage.createFromDirectory(dir);
-        roundtrip.open();
+        TIPPackage roundtrip = TIPPackage.openFromDirectory(dir);
         TestTIPManifest.verifySampleManifest(roundtrip.getManifest());
-        verifyPackageParts(tip, roundtrip);
+        comparePackageParts(tip, roundtrip);
         assertTrue("Could not clean up package", tip.close());
         assertTrue("Could not clean up package", roundtrip.close());
         // Cleanup our temp directory
@@ -97,14 +136,28 @@ public class TestTIPPackage {
     private TIPPackage getSamplePackage(String path) throws Exception {
         InputStream is = 
             getClass().getResourceAsStream(path);
-        TIPPackage tip = TIPPackage.createFromStream(is);
-        tip.open();
-        return tip;
+        return TIPPackage.openFromStream(is);
     }
     
-    private void verifyPackageParts(TIPPackage p1, TIPPackage p2) throws Exception {
+    // Doesn't compare object sections or objects
+    private void compareManifestMetadata(TIPManifest m1, TIPManifest m2) throws Exception {
+        assertEquals(m1.getCommunication(), m2.getCommunication());
+        assertEquals(m1.getContributorTool(), m2.getContributorTool());
+        assertEquals(m1.getCreatorId(), m2.getCreatorId());
+        assertEquals(m1.getCreatorName(), m2.getCreatorName());
+        assertEquals(m1.getCreatorUpdate(), m2.getCreatorUpdate());
+        assertEquals(m1.getPackageId(), m2.getPackageId());
+        assertEquals(m1.getTaskType(), m2.getTaskType());
+        assertEquals(m1.getResponse(), m2.getResponse());
+    }
+    
+    private void comparePackageParts(TIPPackage p1, TIPPackage p2) throws Exception {
         TIPManifest m1 = p1.getManifest();
         TIPManifest m2 = p2.getManifest();
+        assertNotNull(m1);
+        assertNotNull(m2);
+        assertNotNull(m1.getObjectSections());
+        assertNotNull(m2.getObjectSections());
         // XXX Again, this cheats slightly by assuming a particular order
         assertEquals(m1.getObjectSections().size(), 
                      m2.getObjectSections().size());
