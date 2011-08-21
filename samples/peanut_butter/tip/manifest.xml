@@ -2,7 +2,7 @@
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
 <TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-2.xsd" version="1.2">
+    xsi:noNamespaceSchemaLocation="TIPManifest-1-3.xsd" version="1.3">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
@@ -66,8 +66,7 @@
   </GlobalDescriptor>
   <PackageObjects>
     <PackageObjectSection sectionname="bilingual">
-      <ObjectSequence>1</ObjectSequence>
-      <ObjectFile localizable="yes">
+      <ObjectFile localizable="yes" sequence="1">
         <Type>XLIFF</Type>
         <LocationPath>Peanut_Butter.xlf</LocationPath>
       </ObjectFile>
@@ -79,38 +78,30 @@
     -->
     
     <PackageObjectSection sectionname="input">
-      <ObjectSequence>1</ObjectSequence>
-      <ObjectFile localizable="no">
+      <ObjectFile localizable="no" sequence="1">
         <Type>Unknown</Type>
         <LocationPath>Peanut_Butter.html.skl</LocationPath>
         <!-- Descriptions are now optional -->
       </ObjectFile>
-      <ObjectFile localizable="no">
+      <ObjectFile localizable="no" sequence="2">
         <Type>Unknown</Type>
         <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
       </ObjectFile>
-      <ObjectFile localizable="no">
+      <ObjectFile localizable="no" sequence="3">
         <Type>Unknown</Type>
         <LocationPath>resources/load.php</LocationPath>
       </ObjectFile>
-      <ObjectFile localizable="no">
+      <ObjectFile localizable="no" sequence="4">
         <Type>Unknown</Type>
         <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
       </ObjectFile>
-      <ObjectFile localizable="no">
+      <ObjectFile localizable="no" sequence="5">
         <Type>Unknown</Type>
         <LocationPath>resources/load(1).php</LocationPath>
       </ObjectFile>
-      <ObjectFile localizable="no">
+      <ObjectFile localizable="no" sequence="6">
         <Type>Unknown</Type>
         <LocationPath>resources/magnify-clip.png</LocationPath>
-      </ObjectFile>
-    </PackageObjectSection>
-    <PackageObjectSection sectionname="reference">
-      <ObjectSequence>1</ObjectSequence>
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>Peanut_Butter.html</LocationPath>
       </ObjectFile>
     </PackageObjectSection>
   </PackageObjects>
