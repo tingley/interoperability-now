@@ -12,7 +12,7 @@
     <PackageCreator>
       <CreatorName>Welocalize</CreatorName>
       <CreatorID>http://w01.welocalize.com/globalsight</CreatorID>
-      <CreatorUpdate>2011-05-09T22:45:00</CreatorUpdate>
+      <CreatorUpdate>2011-05-09T22:45:00Z</CreatorUpdate>
       <ContributorTool>
         <!-- Also think this should be a URL 
         Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
@@ -50,7 +50,7 @@
         <ResponseReferenceId>12345-abc-6789-aslkjd-19193la-as9911</ResponseReferenceId>
         <ResponseName>Joe the Freelance Translator</ResponseName>
         <ResponseID>http://joestranslations.biz</ResponseID>
-        <ResponseUpdate>2011-05-18T19:03:15</ResponseUpdate>
+        <ResponseUpdate>2011-05-18T19:03:15Z</ResponseUpdate>
         <ResponseMessage>Success</ResponseMessage>
         <ResponseComment></ResponseComment>
         <ContributorTool>
