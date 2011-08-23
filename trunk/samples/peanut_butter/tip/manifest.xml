@@ -12,7 +12,7 @@
     <PackageCreator>
       <CreatorName>Welocalize</CreatorName>
       <CreatorID>http://w01.welocalize.com/globalsight</CreatorID>
-      <CreatorUpdate>2011-05-09T22:45:00</CreatorUpdate>
+      <CreatorUpdate>2011-05-09T22:45:00Z</CreatorUpdate>
       <ContributorTool>
         <!-- Also think this should be a URL 
         Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
