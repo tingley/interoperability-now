@@ -25,7 +25,7 @@ public class TestTIPManifest {
         TIPManifest manifest = new TIPManifest(null);
         manifest.loadFromStream(getClass()
                         .getResourceAsStream("data/peanut_butter.xml"));
-        verifySampleManifest(manifest);
+        verifyRequestManifest(manifest);
     }
     
     @Test
@@ -34,7 +34,7 @@ public class TestTIPManifest {
         manifest.loadFromStream(getClass()
                         .getResourceAsStream("data/peanut_butter.xml"));
         TIPManifest roundtrip = roundtripManifest(manifest);
-        verifySampleManifest(roundtrip);
+        verifyRequestManifest(roundtrip);
     }
     
     @Test
@@ -65,7 +65,7 @@ public class TestTIPManifest {
         final TIPObjectFile file = 
             new TIPObjectFile("XLIFF", "test.xlf", true);
         TIPObjectSection section = 
-            manifest.addObjectSection(TIPObjectSectionType.BILINGUAL, 10);
+            manifest.addObjectSection(TIPObjectSectionType.BILINGUAL);
         section.addObject(file);
         TIPManifest roundtrip = roundtripManifest(manifest);
         assertEquals("Test", roundtrip.getCreatorName());
@@ -91,10 +91,19 @@ public class TestTIPManifest {
         return roundtrip;
     }
     
+    
+    static void verifyRequestManifest(TIPManifest manifest) {
+        verifySampleManifest(manifest, 
+                    "12345-abc-6789-aslkjd-19193la-as9911");
+    }
+    
+    static void verifyResponseManifest(TIPManifest manifest) {
+        verifySampleManifest(manifest, "84983-zzz-0091-alpppq-184903b-aj1239");
+    }
+    
     @SuppressWarnings("serial")
-    static void verifySampleManifest(TIPManifest manifest) {
-        assertEquals("12345-abc-6789-aslkjd-19193la-as9911", 
-                     manifest.getPackageId());
+    static void verifySampleManifest(TIPManifest manifest, String packageId) {
+        assertEquals(packageId, manifest.getPackageId());
         assertEquals("Test Company", manifest.getCreatorName());
         assertEquals("http://127.0.0.1/test", manifest.getCreatorId());
         assertEquals(getDate(2011, 4, 9, 22, 45, 0), 
@@ -130,16 +139,11 @@ public class TestTIPManifest {
                     add(new TIPObjectFile("Unknown", 
                             "resources/magnify-clip.png", false));
                 }});
-        expectObjectSection(manifest, TIPObjectSectionType.REFERENCE, 1,
-                new ArrayList<TIPObjectFile>() {{
-                    add(new TIPObjectFile("Unknown", 
-                            "Peanut_Butter.html", false));
-                }});
     }
     
     static void verifySampleResponseManifest(TIPManifest manifest) {
         // First sample all the normal fields
-        verifySampleManifest(manifest);
+        verifyResponseManifest(manifest);
         // Then verify the response
         TIPResponse response = manifest.getResponse();
         assertNotNull(response);
@@ -172,7 +176,6 @@ public class TestTIPManifest {
         assertEquals(1, sections.size());
         TIPObjectSection section = sections.iterator().next();
         assertNotNull(section);
-        assertEquals(objectSequence, section.getObjectSequence());
         assertEquals(type, section.getObjectSectionType());
         expectObjectFiles(files, 
                 new ArrayList<TIPObjectFile>(section.getObjectFiles()));        

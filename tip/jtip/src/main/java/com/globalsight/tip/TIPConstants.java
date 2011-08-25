@@ -40,6 +40,7 @@ interface TIPConstants {
     }
     
     static class OrderResponse {
+        public static final String REFERENCE_ID = "ResponseReferenceId";
         public static final String NAME = "ResponseName";
         public static final String ID = "ResponseID";
         public static final String UPDATE = "ResponseUpdate";

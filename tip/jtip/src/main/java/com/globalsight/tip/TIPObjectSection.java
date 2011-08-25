@@ -34,14 +34,6 @@ public class TIPObjectSection {
         this.type = type;
     }
     
-    public int getObjectSequence() {
-        return sequence;
-    }
-    
-    public void setObjectSequence(int sequence) {
-        this.sequence = sequence;
-    }
-    
     public Collection<TIPObjectFile> getObjectFiles() {
         return objects;
     }
@@ -68,7 +60,6 @@ public class TIPObjectSection {
         }
         TIPObjectSection s = (TIPObjectSection)o;
         return type.equals(s.getObjectSectionType()) && 
-                    sequence == s.getObjectSequence() &&
                     objects.equals(s.getObjectFiles());
     }
     

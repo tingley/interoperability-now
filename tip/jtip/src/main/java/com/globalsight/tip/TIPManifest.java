@@ -194,14 +194,6 @@ public class TIPManifest {
             throw new TIPValidationException("Invalid sectionname: '" + 
                                              sectionName + "'");
         }
-        String rawSequence = getChildTextByName(section, OBJECT_SEQUENCE);
-        try {
-            objectSection.setObjectSequence(Integer.valueOf(rawSequence));
-        }
-        catch (NumberFormatException e) {
-            throw new TIPValidationException("Invalid sequence number: '" + 
-                    rawSequence + "'");
-        }
         NodeList children = section.getElementsByTagName(OBJECT_FILE);
         for (int i = 0; i < children.getLength(); i++) {
             objectSection.addObject(loadObjectFile((Element)children.item(i)));
@@ -248,7 +240,7 @@ public class TIPManifest {
     void validate(Document dom) throws TIPValidationException {
         try {
             InputStream is = 
-                getClass().getResourceAsStream("/TIPManifest-1-2.xsd");
+                getClass().getResourceAsStream("/TIPManifest-1-3.xsd");
             SchemaFactory factory = 
                 SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(new StreamSource(is));
@@ -368,12 +360,10 @@ public class TIPManifest {
         return merged;
     }
     
-    public TIPObjectSection addObjectSection(TIPObjectSectionType type, 
-                                             int objectSequence) {
+    public TIPObjectSection addObjectSection(TIPObjectSectionType type) {
         TIPObjectSection section = new TIPObjectSection();
         section.setPackage(tipPackage);
         section.setObjectSectionType(type);
-        section.setObjectSequence(objectSequence);
         objectSections.get(type).add(section);
         return section;
     }
