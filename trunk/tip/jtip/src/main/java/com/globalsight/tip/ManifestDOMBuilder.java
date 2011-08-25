@@ -28,9 +28,9 @@ class ManifestDOMBuilder {
         document = docBuilder.newDocument();
         Element root = document.createElement(MANIFEST);
         document.appendChild(root);
-        root.setAttribute(ATTR_VERSION, "1.2");
+        root.setAttribute(ATTR_VERSION, "1.3");
         root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
-                "noNamespaceSchemaLocation", "TIPManifest-1-2.xsd");
+                "noNamespaceSchemaLocation", "TIPManifest-1-3.xsd");
         root.appendChild(makeDescriptor());
         root.appendChild(makePackageObjects());
         return document;
@@ -93,6 +93,8 @@ class ManifestDOMBuilder {
     Element makeOrderResponse() {
         Element el = document.createElement(ORDER_RESPONSE);
         TIPResponse response = manifest.getResponse();
+        appendElementChildWithText(document, el, OrderResponse.REFERENCE_ID,
+                response.getReferenceId());
         appendElementChildWithText(document, el, OrderResponse.NAME,
                 response.getName());
         appendElementChildWithText(document, el, OrderResponse.ID,
@@ -124,8 +126,6 @@ class ManifestDOMBuilder {
         Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getObjectSectionType().getValue());
-        appendElementChildWithText(document, sectionEl, OBJECT_SEQUENCE, 
-                               Integer.toString(section.getObjectSequence()));
         for (TIPObjectFile file : section.getObjectFiles()) {
             sectionEl.appendChild(makeObjectFile(file));
         }

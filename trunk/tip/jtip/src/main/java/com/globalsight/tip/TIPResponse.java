@@ -3,6 +3,7 @@ package com.globalsight.tip;
 import java.util.Date;
 
 public class TIPResponse {
+    private String referenceId;
     private String name;
     private String id;
     private Date update;
@@ -35,8 +36,9 @@ public class TIPResponse {
     TIPResponse() {
     }
     
-    TIPResponse(String name, String id, Date update, Message message, 
-                String comment, TIPTool tool) {
+    TIPResponse(String referenceId, String name, String id, Date update, 
+                Message message, String comment, TIPTool tool) {
+        this.referenceId = referenceId;
         this.name = name;
         this.id = id;
         this.update = update;
@@ -45,6 +47,14 @@ public class TIPResponse {
         this.setTool(tool);
     }
 
+    public String getReferenceId() {
+        return referenceId;
+    }
+    
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
+    }
+    
     public String getName() {
         return name;
     }

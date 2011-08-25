@@ -29,7 +29,7 @@ public class TestTIPPackage {
     @Test
     public void testPackageLoad() throws Exception {
         TIPPackage tip = getSamplePackage("data/test_package.zip");
-        TestTIPManifest.verifySampleManifest(tip.getManifest());
+        TestTIPManifest.verifyRequestManifest(tip.getManifest());
         TIPManifest manifest = tip.getManifest();
         TIPObjectSection biSection = 
             manifest.getObjectSections(TIPObjectSectionType.BILINGUAL)
@@ -53,7 +53,7 @@ public class TestTIPPackage {
         os.close();
         TIPPackage roundtrip  = TIPPackage.openFromStream(
                 new BufferedInputStream(new FileInputStream(temp)));
-        TestTIPManifest.verifySampleManifest(roundtrip.getManifest());
+        TestTIPManifest.verifyRequestManifest(roundtrip.getManifest());
         comparePackageParts(tip, roundtrip);
         temp.delete();
         assertTrue("Could not clean up package", tip.close());
@@ -95,7 +95,7 @@ public class TestTIPPackage {
         manifest.setTaskType(TIPTaskType.TRANSLATE);
                 
         TIPObjectSection inputSection = 
-            manifest.addObjectSection(TIPObjectSectionType.INPUT, 1);
+            manifest.addObjectSection(TIPObjectSectionType.INPUT);
         TIPObjectFile f1 = inputSection.addObject(new TIPObjectFile("text", "test1.txt", true));
         OutputStream os = f1.getOutputStream();
         FileUtil.copyStreamToStream(
@@ -124,7 +124,7 @@ public class TestTIPPackage {
         System.out.println("Using dir " + dir);
         tip.saveToDirectory(dir);
         TIPPackage roundtrip = TIPPackage.openFromDirectory(dir);
-        TestTIPManifest.verifySampleManifest(roundtrip.getManifest());
+        TestTIPManifest.verifyRequestManifest(roundtrip.getManifest());
         comparePackageParts(tip, roundtrip);
         assertTrue("Could not clean up package", tip.close());
         assertTrue("Could not clean up package", roundtrip.close());
