@@ -19,4 +19,4 @@ cp -a ../reference .
 cp -a ../bilingual .
 zip -r pobjects.zip input output reference bilingual
 cp ../manifest.xml .
-zip -r tip.zip manifest.xml pobjects.zip
+zip -r sample-request.tipp manifest.xml pobjects.zip
