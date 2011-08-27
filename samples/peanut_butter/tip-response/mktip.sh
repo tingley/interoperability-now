@@ -17,6 +17,7 @@ cp -a ../input .
 cp -a ../output .
 cp -a ../reference .
 cp -a ../bilingual .
+find . -name \.svn|xargs rm -Rf
 zip -r pobjects.zip input output reference bilingual
 cp ../manifest.xml .
 zip -r sample-response.tipp manifest.xml pobjects.zip
