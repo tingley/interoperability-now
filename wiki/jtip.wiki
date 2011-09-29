@@ -3,7 +3,7 @@
 
 = Introduction =
 
-`jtip` is a Java-based prototype implementation of the TIP package schema.  It is intended for exploratory programming and testing in conjunction with development of the TIP schema.
+`jtip` is a Java-based prototype implementation of the TIPP package schema.  It is intended for exploratory programming and testing in conjunction with development of the TIP schema.
 
 `jtip` currently supports the TIPManifest 1.3 schema.
 
