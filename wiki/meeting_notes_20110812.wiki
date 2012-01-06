@@ -36,13 +36,13 @@
       * Add Micah's use cases for including TMX and TBX in the payload to the future roadmap
       * Chase will send out spreadsheet of feedback and make package changes based on feedback
   * Feedback decisions
-    * Decide on <group> usage (cf. Yves and Christian feedback) - Leave it as-is
-    * Decide on /<g> vs <ph> (or <ph> + ept/bpt).
+    * Decide on {{{<group>}}} usage (cf. Yves and Christian feedback) - Leave it as-is
+    * Decide on {{{/<g> vs <ph> (or <ph> + ept/bpt)}}}.
       * Illegal to add markup to attributes
       * Workaround via lookup table or encoding
       * We could respond with encoding argument
-      * We will investigate <g>/ vs <ept><bpt><it><ph> for placeholders. If we DO move to encapsulating ones, we will only use <ph>, not ept/bpt/it
-    * Decide on <note> element: according to XLIFF 1.2 rules, we can't add dx: attributes to the note element. (why?===?). So, we either give up on some of our info, or we create a new <dx:note> element. 
+      * We will investigate {{{<g>/ vs <ept><bpt><it><ph>}}} for placeholders. If we DO move to encapsulating ones, we will only use {{{<ph>}}}, not ept/bpt/it
+    * Decide on {{{<note>}}} element: according to XLIFF 1.2 rules, we can't add dx: attributes to the note element. (why?!). So, we either give up on some of our info, or we create a new {{{<dx:note>}}} element. 
       * You can't add another namespace to note element
       * Reuse from and annotates? OR use custom element
       * We'll stick with notes and drop dx:refers to
