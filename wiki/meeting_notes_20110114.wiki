@@ -7,7 +7,7 @@
 *XLIFF:Doc*
   * Gábor said he found the document very impressive. 
   * He raised the issue of segmentation and whether this should be done at the trans-unit level or at the mrk way. It was agreed that the simpler way is to have it at that trans-unit level and we will go for that.
-  * Peter asked about what about splitting and merging segments. It was agreed that this could be problematic. We agreed with what is currently in the document but   * Gábor would like to confirm this.
+  * Peter asked about what about splitting and merging segments. It was agreed that this could be problematic. We agreed with what is currently in the document but Gábor would like to confirm this.
   * Gábor asked why it was decided to keep the source file external. It was pointed out that a word file as an internal skeleton could create a huge XLIFF file. 
   * Micah asked for feedback on the XHTML preview functionality. Gábor said that he was very enthusiastic about this. He asked about how we would deal with inline tags. Micah suggested that HTML might be better for previewing than XHTML as it is more forgiving.
   * Gábor raised whether it was possible to add notes to the source or target or to be able to highlight a few words and add a note to them. Micah suggested this could be achieved by adding a dx attribute ‘applies-to’. The translator would highlight a number of words and the tool would enter a note element with the ‘applies-to’ attribute referencing those words.
