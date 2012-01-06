@@ -1,6 +1,7 @@
 #summary Interoperability Now! Meeting Notes Apr 22, 2011
 
 *Present:* Sven, Micah, Gabor, Chase, Russ
+
 *Apologies:* Derek, Yan, Peter
 
 *'Interoperability-September'*
