@@ -3,7 +3,7 @@
 =Conferences=
 
 ==Localization World Seattle 2010==
-  * [http://www.localizationworld.com/lwseattle2010/programDescription.php#C4 Interoperability Within the Supply Chain — It’s Time!] Sven Christian Andrä (ONTRAM Inc.)
+  * [http://www.localizationworld.com/lwseattle2010/programDescription.php#C4 Interoperability Within the Supply Chain — It’s Time!] Sven Christian Andrä (ONTRAM)
 
 ==TM-Europe 2011==
-  * Coming soon!
+  * [http://www.tm-europe.org/content/tm-europe-2011-programme#abstract4 Interoperability Now!] Andrew Pimlott, (Welocalize), Micah Bly (Medtronic), Gabor Ugray (Kilgray)
