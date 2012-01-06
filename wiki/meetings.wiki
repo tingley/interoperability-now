@@ -1,4 +1,5 @@
 #summary Interoperability Now! Meeting Notes
+#labels Featured
 
 =Meeting Notes=
   * [meeting_notes_20100728 July 28, 2010]
