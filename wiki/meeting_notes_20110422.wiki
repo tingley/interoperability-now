@@ -27,8 +27,8 @@
     * Additional discussion of using Unicode private range characters, which Chase & Sven do not like.
   * XSLT preview
     * Micah is still unclear on some of the particulars.  Sven to start work on an example based on PB.
-  * @orig-markup-* and equiv-markup-*: This came up when building the PB example.
-    * Micah will update the spec to include the proposal that if equiv-markup-* is not found, processors fall back on orig-markup-*.
+  * {{{@orig-markup-*}}} and {{{equiv-markup-*}}}: This came up when building the PB example.
+    * Micah will update the spec to include the proposal that if {{{equiv-markup-*}}} is not found, processors fall back on {{{orig-markup-*}}}.
 
 *Misc*
   * We need an issue tracking system, and a version control system for various things we are producing.  Chase to take point.
