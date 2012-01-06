@@ -5,6 +5,7 @@
 *Apologies:* Derek, Gabor, Yan, Russ, Peter
 
 *Resource Naming and Package Organization*
+
 This call was fairly technical and dealt with details of how the Xliff:doc content should reference other files in the package, which digressed into a discussion of package structure.  Since there was a lot of back-and-forth in this discussion, this is a summary of issues touched upon:
 
   * Are relative paths sufficient?  Consensus is 'yes', but this gets into issues of package structure.  
