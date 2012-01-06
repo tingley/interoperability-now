@@ -23,4 +23,4 @@ Our [http://code.google.com/p/interoperability-now/downloads/list Downloads] sec
 Yes! We are working with the [http://linport.org/ Language Interoperability Portfolio Project (LINPORT)] to ensure that both initiatives produce a single container package format.
 
 ==Recent accomplishments==
-Please see our Meeting Notes and [http://code.google.com/p/interoperability-now/updates/list Updates] sections for on-going updates. Please also see our Conferences page for details on presentations that we’ve given at different industry conferences.
+Please see our Meeting Notes and [http://code.google.com/p/interoperability-now/updates/list Updates] sections for on-going updates. Please also see our [http://code.google.com/p/interoperability-now/wiki/conferences Conferences] page for details on presentations that we’ve given at different industry conferences.
