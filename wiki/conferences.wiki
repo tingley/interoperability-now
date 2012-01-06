@@ -1,0 +1,9 @@
+#summary Interoperability Now! Conferences
+
+=Conferences=
+
+==Localization World Seattle 2010==
+  * [http://www.localizationworld.com/lwseattle2010/programDescription.php#C4 Interoperability Within the Supply Chain — It’s Time!] Sven Christian Andrä (ONTRAM Inc.)
+
+==TM-Europe 2011==
+  * Coming soon!
