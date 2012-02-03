@@ -30,3 +30,6 @@
 
 =Implementors' Group Meeting Notes=
   * [implementors_meeting_notes_20110127 January 27, 2012]
+
+=Other Notes=
+  * [xliff_tc_info_session_20120201 Joint info session with XLIFF TC members, Feb 1 2012]
