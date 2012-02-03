@@ -26,6 +26,7 @@
   * [meeting_notes_20111216 December 16, 2011]
   * [meeting_notes_20120106 January 6, 2012]
   * [meeting_notes_20120120 January 20, 2012]
+  * [meeting_notes_20120203 February 3, 2012]
 
 =Implementors' Group Meeting Notes=
   * [implementors_meeting_notes_20110127 January 27, 2012]
