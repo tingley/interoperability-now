@@ -1,6 +1,6 @@
 #summary Interoperability Now! joint info session with XLIFF TC members, February 1, 2012
 
-*Attendees:* David Filip, Andrzej Zydron, Bryan Schnabel, Christian Lieske, David Walters, Helena Chapman, Kevin O'Donnell, Lucia Vazquez, Micah Bly, Peter Reynolds, Chase Tingley, Andrew Pimlott
+*Attendees:* David Filip, Andrzej Zydron, Bryan Schnabel, Christian Lieske, David Walters, Helena Shih Chapman, Kevin O'Donnell, Lucia Vazquez, Micah Bly, Peter Reynolds, Chase Tingley, Andrew Pimlott
 
 == Notes ==
   * This is not an official meeting.
