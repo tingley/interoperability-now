@@ -26,7 +26,7 @@ The entire call was a discussion about package structure issues raised during th
   * Chase: Here are the goals I keep coming back to:
     * Limit the direct bindings between TIPP and Xliff:doc (ie, TIPP should not assume XLIFF:doc behavior directly), and preferably vice-versa as well.
     * In general, try to avoid making assumptions about the file structure required by things inside the package, as I don't think it's possible to anticipate everything.
-  * Micah: Agrees with limiting direct TIPP< - >XLIFF:doc dependencies.  However, the Preview feature of xliff:doc can impose restrictions on how its files are structured, and that may give us an out
+  * Micah: Agrees with limiting direct TIPP`<->`XLIFF:doc dependencies.  However, the Preview feature of xliff:doc can impose restrictions on how its files are structured, and that may give us an out
     * eg, all preview files need to live within some directory (for example, preview/), and as part of prep for xliff:doc preview all those files must be converted as needed to work that way.
       * Observations that nested references in preview are quite likely - chained CSS or JS includes, etc
   * Back to file structures in the TIPP
@@ -51,7 +51,7 @@ The entire call was a discussion about package structure issues raised during th
   * /bilingual.xlf (1 bilingual per TIPP)
 
 === Dependencies ===
-  * XLIFF:doc would need a rule that preview files must be generated in the /preview folder (as root), following the path stored in the <file> element (if you wanted to take advantage of graphics and other resources. If you don't plan to offer that level of preview, then you can generate your preview files whereever you like.
+  * XLIFF:doc would need a rule that preview files must be generated in the /preview folder (as root), following the path stored in the `<file>` element (if you wanted to take advantage of graphics and other resources. If you don't plan to offer that level of preview, then you can generate your preview files whereever you like.
   * in manifest:
     * source files are called out on file-by-file basis (see Chase's recent flat file example)
     * preview files: 1 call out to the .zip file.
