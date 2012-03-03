@@ -1,135 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Need to get real schema location (host in google code?) and schema
-   - version. -->
+<!-- TODO: correct the schema location to something like
+     http://interoperability-now.org/schema/TIPP/TIPManifest-1-4.xsd -->
 <TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-4.xsd" version="1.4">
+  xsi:noNamespaceSchemaLocation="TIPManifest-1-4.xsd" version="1.4">
   <GlobalDescriptor>
-    <!-- We need to specify semantics for generating these, whether it
-       - be a GUID algorithm or something else. 
-       Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
-       -->
-    <UniquePackageID>84983-zzz-0091-alpppq-184903b-aj1239</UniquePackageID>
+    <UniquePackageID>urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239</UniquePackageID>
+    <!-- This is the information about the creator of this package -->
     <PackageCreator>
-      <Name>Welocalize</Name>
-      <ID>http://w01.welocalize.com/globalsight</ID>
-      <Update>2011-05-09T22:45:00Z</Update>
-      <Tool>
-        <!-- Also think this should be a URL 
-        Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
-        <ToolName>GlobalSight 9.0</ToolName>
-        <ToolID>http://www.globalsight.com</ToolID>
-        <ToolVersion>9.0</ToolVersion>
-      </Tool>
+        <Name>Joe the Freelance Translator</Name>
+        <ID>http://joestranslations.biz</ID>
+        <Update>2011-05-18T19:03:15Z</Update>
+        <Tool>
+          <ToolName>Kilgray MemoQ Standard Edition</ToolName>
+          <ToolID>http://www.kilgray.com</ToolID>
+          <ToolVersion>6.0</ToolVersion>
+        </Tool>
     </PackageCreator>
-    <OrderAction>
-      <OrderTask>
-        <TaskType>Translate</TaskType>
-        <!--
-          Chase & Sven:
-            <xs:enumeration value="Translate"/>
-            <xs:enumeration value="Review"/>
-            <xs:enumeration value="QA"/>
-            
-            later:
-            <xs:enumeration value="Quote"/>
-        -->
-        <!-- 
-        Chase & Sven: which locale definition will we use? (especially for things like "international Spanish"
-       follow Yves article on this (AI for Sven to refer to it) 
-        -->
+    <TaskResponse>
+      <!-- The Response repeats what the task was -->
+      <Task>
+        <TaskType>http://interoperability-now.org/TIPP/schema/tasks/v1/translate</TaskType>
         <SourceLanguage>en-US</SourceLanguage>
-        <!-- Chase & Sven: Finalize the decission to have this bilingual only -->
         <TargetLanguage>fr-FR</TargetLanguage>
-        
-        <!-- Chase & Sven: 
-        Add Comment here
-        -->
-      </OrderTask>
-      <OrderResponse>
-        <ResponseReferenceId>12345-abc-6789-aslkjd-19193la-as9911</ResponseReferenceId>
-        <ResponseCreator>
-            <Name>Joe the Freelance Translator</Name>
-            <ID>http://joestranslations.biz</ID>
-            <Update>2011-05-18T19:03:15Z</Update>
-            <Tool>
-              <ToolName>Kilgray MemoQ Standard Edition</ToolName>
-              <ToolID>http://www.kilgray.com</ToolID>
-              <ToolVersion>6.0</ToolVersion>
-            </Tool>
-        </ResponseCreator>
-        <ResponseMessage>Success</ResponseMessage>
-        <ResponseComment></ResponseComment>
-      </OrderResponse>
-    </OrderAction>
+      </Task>
+      <!-- Now describe the package we're responding to, using its
+          - ID and creation information. -->
+      <InResponseTo>
+        <UniquePackageId>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageId>
+        <PackageCreator>
+          <Name>Welocalize</Name>
+          <ID>http://w01.welocalize.com/globalsight</ID>
+          <Update>2011-05-09T22:45:00Z</Update>
+          <Tool>
+            <ToolName>GlobalSight 9.0</ToolName>
+            <ToolID>http://www.globalsight.com</ToolID>
+           <ToolVersion>9.0</ToolVersion>
+         </Tool>
+        </PackageCreator>
+      </InResponseTo>
+      <!-- Now describe the results -->
+      <ResponseMessage>Success</ResponseMessage>
+      <!-- ResponseComment is intended to store supplemental 
+         - (non-machine-readable) information, particularly in error cases.
+         - In this case, the field is empty. -->
+      <ResponseComment />
+    </TaskResponse>
   </GlobalDescriptor>
+
+  
+  <!-- For the response TIPP, the STS and preview data is optional and 
+     - has been omitted.  The only thing that the "translate" task requires
+     - in a successful response is the XLIFF:doc file. -->
   <PackageObjects>
-    <PackageObjectSection sectionname="bilingual">
-      <ObjectFile localizable="true" sequence="1">
-        <Type>XLIFF</Type>
-        <LocationPath>Peanut_Butter.xlf</LocationPath>
-      </ObjectFile>
-    </PackageObjectSection>
-    
-    <!-- Chase & Sven:
-      The resulting package manifest.xml should 100% represent the content of the returned package, meaning, that files should be represented as beeing in "Output" rather than "Input". 
-    
-    -->
-    
-    <PackageObjectSection sectionname="input">
-      <ObjectFile localizable="false" sequence="1">
-        <Type>Unknown</Type>
-        <LocationPath>Peanut_Butter.html.skl</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false" sequence="2">
-        <Type>Unknown</Type>
-        <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false" sequence="3">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load.php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false" sequence="4">
-        <Type>Unknown</Type>
-        <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false" sequence="5">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load(1).php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false" sequence="6">
-        <Type>Unknown</Type>
-        <LocationPath>resources/magnify-clip.png</LocationPath>
+
+    <PackageObjectSection name="bilingual" 
+      type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/bilingual">
+      <ObjectFile sequence="1">
+        <Name>Peanut_Buffer.xlf</Name>
+        <Location>Peanut_Butter.xlf</Location>
       </ObjectFile>
     </PackageObjectSection>
 
-    <!-- The output section contains everything from the input section.
-       - In this case, nothing was localizable, so the files have 
-       - simply been copied. -->
-    <PackageObjectSection sectionname="output">
-      <ObjectFile localizable="false">
-        <Type>Unknown</Type>
-        <LocationPath>Peanut_Butter.html.skl</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false">
-        <Type>Unknown</Type>
-        <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load.php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false">
-        <Type>Unknown</Type>
-        <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load(1).php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="false">
-        <Type>Unknown</Type>
-        <LocationPath>resources/magnify-clip.png</LocationPath>
-      </ObjectFile>
-    </PackageObjectSection>
   </PackageObjects>
 </TIPManifest>
