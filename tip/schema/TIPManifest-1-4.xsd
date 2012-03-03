@@ -10,6 +10,11 @@
 <!--                2011-05-30 Eliminating BOM -->
 <!--                2011-08-23 Updates for 1.3 -->
 <!--                2011-11-03 Draft 1.4 -->
+<!--                2011-03-02 Revised draft 1.4 -->
+<!--                           Open-ended task system, replace hardcoded enums with URIs -->
+<!--                           Add Name to to ObjectFile -->
+<!--						   Remove @localize and @type attributes -->
+<!--						   General streamlining and cleanup -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
         <xs:documentation xml:lang="en">
@@ -28,7 +33,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="PackageObjects" type="PackageObjectSet">
+                <xs:element name="PackageObjects" type="PackageObjects">
                     <xs:annotation>
                         <xs:documentation xml:lang="en">PackageObjects contains all objects that are necessary
                             to fulfill the associated order action plus objects which might additionally support
@@ -46,61 +51,86 @@
             </xs:attribute>
         </xs:complexType>
     </xs:element>
+    <xs:simpleType name="UniquePackageID" type="xs:anyURI">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The UniquePackageID is a URI that uniquely identifies
+                this package.  The simplest way to satisfy this requirement is to assign the 
+                package a UUID and express it as a URN, such as
+                    urn:uuid:ace950d0-73d8-417d-a5c0-b70c2974f244
+            </xs:documentation>
+        </xs:annotation>
+    </xs:simpleType>
     <xs:complexType name="GlobalDescriptor">
         <xs:sequence>
-            <xs:element name="UniquePackageID">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">The UniquePackageID is a fully qualified UUID of the form:
-                        ace950d0-73d8-417d-a5c0-b70c2974f244 or
-                        ace950d073d8417da5c0b70c2974f244 or
-                        {ace950d073d8417da5c0b70c2974f244}.
-                    </xs:documentation>
-                </xs:annotation>
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:minLength value="32" />
-                        <xs:maxLength value="36" />
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="PackageCreator" type="Contributor">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">PackageCreator contains the credentials of the organization
-                        that has generated the package and the tool that was used for the creation
-                        operation as well as the intended communication type.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="OrderAction" type="OrderAction">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">OrderAction identifies the task that is associated with
-                        the package, and a response that details the result of the action.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
+            <xs:element name="UniquePackageID" type="UniquePackageID" />
+            <xs:element name="PackageCreator" type="PackageCreator" />
+            <xs:choice>
+            	<xs:element name="TaskRequest" type="TaskRequest" />
+            	<xs:element name="TaskResponse" type="TaskResponse" />
+            </xs:choice>
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="OrderAction">
-        <xs:sequence>
-            <xs:element name="OrderTask" type="OrderTask">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">OrderTask identifies the type of task, and
-                        the source and target language for the task.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="OrderResponse" type="OrderResponse" minOccurs="0">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">OrderResponse contains information on the
-                        success or failure of the task (message), and includes the responser's
-                        credentials with name, identifier, and a date/time stamp.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
+    <xs:complexType name="Task">
+    	<xs:sequence>
+    		<xs:element name="TaskType" type="xs:anyURI">
+    			<xs:annotation>
+    				<xs:documentation xml:lang="en">TODO: write me
+    				</xs:documentation>
+    			</xs:annotation>
+    		</xs:element>
+    		<xs:element name="SourceLanguage" type="xs:language">
+    			<xs:annotation>
+    				<xs:documentation xml:lang="en">TODO: write me
+    				</xs:documentation>
+    			</xs:annotation>
+    		</xs:element>
+    		<xs:element name="TargetLanguage" type="xs:language">
+    			<xs:annotation>
+    				<xs:documentation xml:lang="en">TODO: write me
+    				</xs:documentation>
+    			</xs:annotation>
+    		</xs:element>
+    	</xs:sequence>
     </xs:complexType>
-    <xs:complexType name="Contributor">
-        <xs:sequence>
+    <xs:complexType name="TaskRequest">
+    	<xs:sequence>
+    		<xs:element name="Task" type="Task" />    	</xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="InResponseTo">
+      	<xs:sequence>
+			<xs:element name="UniquePackageID" type="UniquePackageID" />
+        	<xs:element name="PackageCreator" type="PackageCreator" />
+  		</xs:sequence>
+  	</xs:complexType>
+	<xs:simpleType name="ResponseMessage">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Success" />
+            <xs:enumeration value="Failure" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="TaskResponse">
+    	<xs:sequence>
+	        <xs:element name="Task" type="Task" />
+			<xs:element name="InResponseTo" type="InResponseTo" />
+			<xs:element name="ResponseMessage" type="ResponseMessage" />
+            <xs:element name="ResponseComment" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Provides additional 
+                        information about the response, such as an error 
+                        message, warnings, etc.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+   		</xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PackageCreator">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">PackageCreator contains the credentials of the organization
+		    				 that has generated the package and the tool that was used for the creation
+		    				 operation as well as the intended communication type.
+		    </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
             <xs:element name="Name" type="xs:string" />
             <xs:element name="ID" type="xs:anyURI" />
             <xs:element name="Update" type="xs:dateTime" />
@@ -120,50 +150,7 @@
             <xs:element name="ToolVersion" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="OrderTask">
-        <xs:sequence>
-            <xs:element name="TaskType">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="Translate" />
-                        <xs:enumeration value="Review" />
-                        <xs:enumeration value="QA" />
-                        <xs:enumeration value="Quote" />
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="SourceLanguage" type="xs:language" />
-            <xs:element name="TargetLanguage" type="xs:language" />
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="OrderResponse">
-        <xs:sequence>
-            <xs:element name="ResponseReferenceId">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">The ResponseReferenceId is a fully qualified UUID of the same form used in the UniquePackageID element.  It should contain UniquePackageID value of a task to which this package is a response.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-            <xs:element name="ResponseCreator" type="Contributor" />
-            <xs:element name="ResponseMessage">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="Success" />
-                        <xs:enumeration value="Failure" />
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:element>
-            <xs:element name="ResponseComment" type="xs:string">
-                <xs:annotation>
-                    <xs:documentation xml:lang="en">Provides additional 
-                        information about the response, such as an error 
-                        message, warnings, etc.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="PackageObjectSet">
+    <xs:complexType name="PackageObjects">
         <xs:annotation>
             <xs:documentation xml:lang="en">PackageObjectSet contains the accompanying resources that
                 represent the neccessary objects to fulfill the task associated with the order action.
@@ -177,7 +164,8 @@
                     <xs:sequence>
                         <xs:element name="ObjectFile" type="ObjectFile" minOccurs="1" maxOccurs="unbounded"/>
                     </xs:sequence>
-                    <xs:attribute name="sectionname" type="SectionName" use="required" />
+                    <xs:attribute name="name" type="xs:string" use="required" />
+                    <xs:attribute name="type" type="xs:anyURI" use="required" />
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
@@ -185,17 +173,19 @@
     <xs:complexType name="ObjectFile">
         <xs:annotation>
             <xs:documentation xml:lang="en">An ObjectFile is the actual resource that is employed by
-                the task specified as order action. The resource is identified by its Type with default being
-                UNKNOWN, LocationPath which is either a Windows or a Unix style relative path expression, an
-                optional Description, and an optinal attribute localizable which is either "yes" or "no").
+                the task specified as order action. The resource's location within the package 
+                (relative to the containing section) is identified by the value of the Location 
+                element.  The package location may be normalized as mandated by the spec.  The 
+                resource's original file path is contained in the optional Name element.  If
+                Name is not present, it defaults to the value of Location.  There is also an
+                optional Description element describing the file.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
-            <xs:element name="Type" type="xs:string" default="Unknown" />
-            <xs:element name="LocationPath" type="xs:string" />
+            <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Location" type="xs:string" />
             <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
-        <xs:attribute name="localizable" type="xs:boolean" default="false" />
         <xs:attribute name="sequence">
             <xs:simpleType>
                 <xs:restriction base="xs:integer">
@@ -204,12 +194,4 @@
             </xs:simpleType>
         </xs:attribute>
     </xs:complexType>
-    <xs:simpleType name="SectionName">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="bilingual" />
-            <xs:enumeration value="input" />
-            <xs:enumeration value="output" />
-            <xs:enumeration value="tm" />
-        </xs:restriction>
-    </xs:simpleType>
 </xs:schema>

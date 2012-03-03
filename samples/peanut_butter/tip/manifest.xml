@@ -1,107 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Need to get real schema location (host in google code?) and schema
-   - version. -->
+<!-- TODO: correct the schema location to something like
+     http://interoperability-now.org/schema/TIPP/TIPManifest-1-4.xsd -->
 <TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-4.xsd" version="1.4">
+  xsi:noNamespaceSchemaLocation="TIPManifest-1-4.xsd" version="1.4">
   <GlobalDescriptor>
-    <!-- We need to specify semantics for generating these, whether it
-       - be a GUID algorithm or something else. 
-       Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
-       -->
-    <UniquePackageID>12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
+    <UniquePackageId>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageId>
+    <!-- This is the information about the creator of this package -->
     <PackageCreator>
       <Name>Welocalize</Name>
       <ID>http://w01.welocalize.com/globalsight</ID>
       <Update>2011-05-09T22:45:00Z</Update>
       <Tool>
-        <!-- Also think this should be a URL 
-        Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
         <ToolName>GlobalSight 9.0</ToolName>
         <ToolID>http://www.globalsight.com</ToolID>
         <ToolVersion>9.0</ToolVersion>
       </Tool>
     </PackageCreator>
-    <OrderAction>
-      <OrderTask>
-        <TaskType>Translate</TaskType>
-        <!--
-          Chase & Sven:
-            <xs:enumeration value="Translate"/>
-            <xs:enumeration value="Review"/>
-            <xs:enumeration value="QA"/>
-            
-            later:
-            <xs:enumeration value="Quote"/>
-        -->
-        <!-- 
-        Chase & Sven: which locale definition will we use? (especially for things like "international Spanish"
-       follow Yves article on this (AI for Sven to refer to it) 
-        -->
+    <TaskRequest>
+      <Task>
+        <!-- The Request describes the task -->
+        <TaskType>http://interoperability-now.org/TIPP/schema/tasks/v1/translate</TaskType>
         <SourceLanguage>en-US</SourceLanguage>
-        <!-- Chase & Sven: Finalize the decission to have this bilingual only -->
         <TargetLanguage>fr-FR</TargetLanguage>
-        
-        <!-- Chase & Sven: 
-        Add Comment here
-        -->
-      </OrderTask>
-      <!--
-      Chase & Sven: This would be the place where the returning package would have a "response" element, so a package with a response element can be identified clearly as a returned package
-     <Reponse>
-             <Type>Reject</Type>
-                <SourceLanguage>sv-SE</SourceLanguage>
-                <TargetLanguage>en-AU</TargetLanguage>
-            </Reponse> 
-            
-            Response Type:
-            <xs:enumeration value="Failure"/>
-            <xs:enumeration value="Completed"/>      
-     -->
-       <!-- 
-       Chase & Sven:
-        Add Comment here
-        -->
-    </OrderAction>
+      </Task>
+    </TaskRequest>
   </GlobalDescriptor>
+
   <PackageObjects>
-    <PackageObjectSection sectionname="bilingual">
-      <ObjectFile localizable="true" sequence="1">
-        <Type>XLIFF</Type>
-        <LocationPath>Peanut_Butter.xlf</LocationPath>
+    <!-- This section contains Structured Translation Specification data. -->
+    <PackageObjectSection name="sts"
+      type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/sts">
+      <ObjectFile sequence="1">
+        <Name>specifications.xml</Name>
+        <Location>specifications.xml</Location>
       </ObjectFile>
     </PackageObjectSection>
-    
-    <!-- Chase & Sven:
-      The resulting package manifest.xml should 100% represent the content of the returned package, meaning, that files should be represented as beeing in "Output" rather than "Input". 
-    
-    -->
-    
-    <PackageObjectSection sectionname="input">
-      <ObjectFile localizable="false" sequence="1">
-        <Type>Unknown</Type>
-        <LocationPath>Peanut_Butter.html.skl</LocationPath>
-        <!-- Descriptions are now optional -->
+
+    <!-- This section contains bilingual resources.  For the "translate"
+       - task type, this section must contain one single XLIFF:doc file. -->
+    <PackageObjectSection name="bilingual" 
+      type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/bilingual">
+      <ObjectFile sequence="1">
+        <Name>Peanut_Buffer.xlf</Name>
+        <Location>Peanut_Butter.xlf</Location>
       </ObjectFile>
-      <ObjectFile localizable="false" sequence="2">
-        <Type>Unknown</Type>
-        <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
+    </PackageObjectSection>
+
+    <!-- The "translate" task allows additional resources to be included 
+       - in the TIPP for use in the XLIFF:doc preview process. Those 
+       - resources are stored here.  -->
+    <PackageObjectSection name="preview" 
+      type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/preview">
+      <ObjectFile sequence="1">
+        <Location>Peanut_Butter.html.skl</Location>
       </ObjectFile>
-      <ObjectFile localizable="false" sequence="3">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load.php</LocationPath>
+      <ObjectFile sequence="2">
+        <Name>resources/20px-Padlock-silver.svg.png</Name>
+        <Location>resources/1.png</Location>
       </ObjectFile>
-      <ObjectFile localizable="false" sequence="4">
-        <Type>Unknown</Type>
-        <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
+      <ObjectFile sequence="3">
+        <Name>resources/load.php</Name>
+        <Location>resources/2.php</Location>
       </ObjectFile>
-      <ObjectFile localizable="false" sequence="5">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load(1).php</LocationPath>
+      <ObjectFile sequence="4">
+        <Name>resources/290px-PeanutButter.jpg</Name>
+        <Location>resources/3.jpg</Location>
       </ObjectFile>
-      <ObjectFile localizable="false" sequence="6">
-        <Type>Unknown</Type>
-        <LocationPath>resources/magnify-clip.png</LocationPath>
+      <ObjectFile sequence="5">
+        <Name>resources/load(1).php</Name>
+        <Location>resources/4.php</Location>
+      </ObjectFile>
+      <ObjectFile sequence="6">
+        <Name>resources/magnify-clip.png</Name>
+        <Location>resources/5.png</Location>
       </ObjectFile>
     </PackageObjectSection>
   </PackageObjects>
+
 </TIPManifest>
