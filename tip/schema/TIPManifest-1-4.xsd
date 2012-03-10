@@ -51,7 +51,7 @@
             </xs:attribute>
         </xs:complexType>
     </xs:element>
-    <xs:simpleType name="UniquePackageID" type="xs:anyURI">
+    <xs:simpleType name="UniquePackageID">
         <xs:annotation>
             <xs:documentation xml:lang="en">The UniquePackageID is a URI that uniquely identifies
                 this package.  The simplest way to satisfy this requirement is to assign the 
@@ -59,6 +59,7 @@
                     urn:uuid:ace950d0-73d8-417d-a5c0-b70c2974f244
             </xs:documentation>
         </xs:annotation>
+        <xs:restriction base="xs:anyURI" />
     </xs:simpleType>
     <xs:complexType name="GlobalDescriptor">
         <xs:sequence>
