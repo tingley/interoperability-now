@@ -5,7 +5,7 @@
   <groupId>com.globalsight.tip</groupId>
   <artifactId>jtip</artifactId>
   <!-- Version numbering: [release].[tipSchema] -->
-  <version>0.13-snapshot</version>
+  <version>0.14-snapshot</version>
   <packaging>jar</packaging>
 
   <name>jtip</name>

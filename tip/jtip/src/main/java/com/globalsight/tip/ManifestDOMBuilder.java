@@ -28,9 +28,9 @@ class ManifestDOMBuilder {
         document = docBuilder.newDocument();
         Element root = document.createElement(MANIFEST);
         document.appendChild(root);
-        root.setAttribute(ATTR_VERSION, "1.3");
+        root.setAttribute(ATTR_VERSION, "1.4");
         root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
-                "noNamespaceSchemaLocation", "TIPManifest-1-3.xsd");
+                "noNamespaceSchemaLocation", "TIPManifest-1-4.xsd");
         root.appendChild(makeDescriptor());
         root.appendChild(makePackageObjects());
         return document;
@@ -40,27 +40,25 @@ class ManifestDOMBuilder {
         Element descriptor = document.createElement(GLOBAL_DESCRIPTOR);
         appendElementChildWithText(document, 
                 descriptor, UNIQUE_PACKAGE_ID, manifest.getPackageId());
-        descriptor.appendChild(makePackageCreator());
-        descriptor.appendChild(makeOrderAction());
+        descriptor.appendChild(makePackageCreator(manifest.getCreator()));
+        descriptor.appendChild(makeTaskRequestOrResponse(manifest.getTask()));
         return descriptor;
     }
     
-    Element makePackageCreator() {
-        Element creator = document.createElement(PACKAGE_CREATOR);
+    Element makePackageCreator(TIPCreator creator) {
+        Element creatorEl = document.createElement(PACKAGE_CREATOR);
         appendElementChildWithText(document, 
-                creator, Creator.NAME, manifest.getCreatorName());
+                creatorEl, Creator.NAME, creator.getName());
         appendElementChildWithText(document, 
-                creator, Creator.ID, manifest.getCreatorId());
-        appendElementChildWithText(document, creator, Creator.UPDATE, 
-                DateUtil.writeTIPDate(manifest.getCreatorUpdate()));
-        creator.appendChild(makeContributorTool(manifest.getContributorTool()));
-        appendElementChildWithText(document, 
-                creator, Creator.COMMUNICATION, manifest.getCommunication());
-        return creator;
+                creatorEl, Creator.ID, creator.getId());
+        appendElementChildWithText(document, creatorEl, Creator.UPDATE, 
+                DateUtil.writeTIPDate(creator.getDate()));
+        creatorEl.appendChild(makeContributorTool(creator.getTool()));
+        return creatorEl;
     }
     
     Element makeContributorTool(TIPTool tool) {
-        Element toolEl = document.createElement(CONTRIBUTOR_TOOL);
+        Element toolEl = document.createElement(TOOL);
         appendElementChildWithText(document,
                 toolEl, ContributorTool.NAME, tool.getName());
         appendElementChildWithText(document,
@@ -70,49 +68,53 @@ class ManifestDOMBuilder {
         return toolEl;
     }
     
-    Element makeOrderAction() {
-        Element action = document.createElement(ORDER_ACTION);
-        action.appendChild(makeOrderTask());
-        if (manifest.getResponse() != null) {
-            action.appendChild(makeOrderResponse());
-        }
-        return action;
-    }
-    
-    Element makeOrderTask() {
-        Element task = document.createElement(ORDER_TASK);
-        appendElementChildWithText(document, task, OrderTask.TYPE, 
-                manifest.getTaskType().getValue());
-        appendElementChildWithText(document, task, 
-                OrderTask.SOURCE_LANGUAGE, manifest.getSourceLanguage());
-        appendElementChildWithText(document, task, 
-                OrderTask.TARGET_LANGUAGE, manifest.getTargetLanguage());
-        return task;
-    }
-    
-    Element makeOrderResponse() {
-        Element el = document.createElement(ORDER_RESPONSE);
-        TIPResponse response = manifest.getResponse();
-        appendElementChildWithText(document, el, OrderResponse.REFERENCE_ID,
-                response.getReferenceId());
-        appendElementChildWithText(document, el, OrderResponse.NAME,
-                response.getName());
-        appendElementChildWithText(document, el, OrderResponse.ID,
-                response.getId());
-        appendElementChildWithText(document, el, OrderResponse.UPDATE,
-                DateUtil.writeTIPDate(response.getUpdate()));
-        appendElementChildWithText(document, el, OrderResponse.MESSAGE,
-                response.getMessage().getValue());
-        if (response.getComment() != null) {
-            appendElementChildWithText(document, el, OrderResponse.COMMENT,
-                    response.getComment());
+    Element makeTaskRequestOrResponse(TIPTask task) {
+        if (task instanceof TIPTaskRequest) {
+            return makeTaskRequest((TIPTaskRequest)task);
         }
         else {
-            appendElementChild(document, el, OrderResponse.COMMENT);
+            return makeTaskResponse((TIPTaskResponse)task);
         }
-        el.appendChild(makeContributorTool(response.getTool()));
-        return el;
     }
+    
+    Element makeTaskRequest(TIPTaskRequest request) {
+        Element requestEl = document.createElement(TASK_REQUEST);
+        requestEl.appendChild(makeTask(request));
+        return requestEl;
+    }
+    
+    Element makeTask(TIPTask task) {
+        Element taskEl = document.createElement(TASK);
+        appendElementChildWithText(document, taskEl, 
+                Task.TYPE, task.getTaskType());
+        appendElementChildWithText(document, taskEl, 
+                Task.SOURCE_LANGUAGE, task.getSourceLocale());        
+        appendElementChildWithText(document, taskEl, 
+                Task.TARGET_LANGUAGE, task.getTargetLocale());
+        return taskEl;
+    }
+    
+    Element makeTaskResponse(TIPTaskResponse response) {
+        Element responseEl = document.createElement(TASK_RESPONSE);
+        responseEl.appendChild(makeTask(response));
+        responseEl.appendChild(makeInResponseTo(response));
+        appendElementChildWithText(document, responseEl,
+                TaskResponse.MESSAGE, response.getMessage().getValue());
+        String comment = response.getComment() != null ? 
+                response.getComment() : "";
+        appendElementChildWithText(document, responseEl,
+                TaskResponse.COMMENT, comment);        
+        return responseEl;
+    }
+    
+    Element makeInResponseTo(TIPTaskResponse response) {
+        Element inReEl = document.createElement(TaskResponse.IN_RESPONSE_TO);
+        appendElementChildWithText(document, inReEl,
+                UNIQUE_PACKAGE_ID, response.getRequestPackageId());
+        inReEl.appendChild(makePackageCreator(response.getRequestCreator()));
+        return inReEl;
+    }
+    
     
     Element makePackageObjects() {
         Element objects = document.createElement(PACKAGE_OBJECTS);
@@ -125,7 +127,8 @@ class ManifestDOMBuilder {
     Element makeObjectSection(TIPObjectSection section) {
         Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
-                               section.getObjectSectionType().getValue());
+                               section.getName());
+        sectionEl.setAttribute(ATTR_SECTION_TYPE, section.getType());
         for (TIPObjectFile file : section.getObjectFiles()) {
             sectionEl.appendChild(makeObjectFile(file));
         }
@@ -134,16 +137,12 @@ class ManifestDOMBuilder {
     
     Element makeObjectFile(TIPObjectFile file) {
         Element fileEl = document.createElement(OBJECT_FILE);
-        fileEl.setAttribute(ObjectFile.ATTR_LOCALIZABLE, 
-                            yesNo(file.isLocalizable()));
-        appendElementChildWithText(document, fileEl, ObjectFile.TYPE,
-                                   file.getType());
-        appendElementChildWithText(document, fileEl, ObjectFile.LOCATION_PATH,
-                file.getPath());
+        // TODO: is sequence optional?
+        fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));
+        appendElementChildWithText(document, fileEl, ObjectFile.NAME,
+                                   file.getName());
+        appendElementChildWithText(document, fileEl, ObjectFile.LOCATION,
+                file.getLocation());
         return fileEl;
-    }
-    
-    private String yesNo(boolean b) {
-        return b ? YES : NO;
     }
 }

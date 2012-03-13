@@ -11,39 +11,33 @@ interface TIPConstants {
     // GlobalDescriptor fields
     public static final String UNIQUE_PACKAGE_ID = "UniquePackageID";
     public static final String PACKAGE_CREATOR = "PackageCreator";
-    public static final String ORDER_ACTION = "OrderAction";
+    public static final String TASK_REQUEST = "TaskRequest";
+    public static final String TASK_RESPONSE = "TaskResponse";
     
     // Creator fields
     static class Creator {
-        public static final String NAME = "CreatorName";
-        public static final String ID = "CreatorID";
-        public static final String UPDATE = "CreatorUpdate";
-        public static final String COMMUNICATION = "Communication";
+        public static final String NAME = "Name";
+        public static final String ID = "ID";
+        public static final String UPDATE = "Update";
     }
     
-    public static final String CONTRIBUTOR_TOOL = "ContributorTool";
+    public static final String TOOL = "Tool";
     // ContributorTool fields
     static class ContributorTool {
         public static final String NAME = "ToolName";
         public static final String ID = "ToolID";
         public static final String VERSION = "ToolVersion";
     }
-
-    // OrderAction fields
-    public static final String ORDER_TASK = "OrderTask";
-    public static final String ORDER_RESPONSE = "OrderResponse";
     
-    static class OrderTask {
+    public static final String TASK = "Task";
+    static class Task {
         public static final String TYPE = "TaskType";
         public static final String SOURCE_LANGUAGE = "SourceLanguage";
         public static final String TARGET_LANGUAGE = "TargetLanguage";
     }
     
-    static class OrderResponse {
-        public static final String REFERENCE_ID = "ResponseReferenceId";
-        public static final String NAME = "ResponseName";
-        public static final String ID = "ResponseID";
-        public static final String UPDATE = "ResponseUpdate";
+    static class TaskResponse {
+        public static final String IN_RESPONSE_TO = "InResponseTo";
         public static final String MESSAGE = "ResponseMessage";
         public static final String COMMENT = "ResponseComment";
     }
@@ -52,16 +46,13 @@ interface TIPConstants {
     public static final String PACKAGE_OBJECT_SECTION = "PackageObjectSection";
     
     // PackageObjectSection
-    public static final String ATTR_SECTION_NAME = "sectionname";
-    public static final String OBJECT_SEQUENCE = "ObjectSequence";
+    public static final String ATTR_SECTION_NAME = "name";
+    public static final String ATTR_SECTION_TYPE = "type";
     public static final String OBJECT_FILE = "ObjectFile";
     
     static class ObjectFile {
-        public static final String ATTR_LOCALIZABLE = "localizable";
-        public static final String TYPE = "Type";
-        public static final String LOCATION_PATH = "LocationPath";
+        public static final String LOCATION = "Location";
+        public static final String NAME = "Name";
+        public static final String ATTR_SEQUENCE = "sequence";
     }
-    
-    public static final String YES = "yes";
-    public static final String NO = "no";
 }

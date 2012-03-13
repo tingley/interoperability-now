@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.UUID;
 
@@ -19,7 +20,6 @@ import com.globalsight.tip.FileUtil;
 import com.globalsight.tip.TIPManifest;
 import com.globalsight.tip.TIPObjectFile;
 import com.globalsight.tip.TIPObjectSection;
-import com.globalsight.tip.TIPObjectSectionType;
 import com.globalsight.tip.TIPPackage;
 
 import static org.junit.Assert.*;
@@ -32,8 +32,7 @@ public class TestTIPPackage {
         TestTIPManifest.verifyRequestManifest(tip.getManifest());
         TIPManifest manifest = tip.getManifest();
         TIPObjectSection biSection = 
-            manifest.getObjectSections(TIPObjectSectionType.BILINGUAL)
-            .iterator().next();
+                manifest.getObjectSection(StandardTaskType.Translate.BILINGUAL);
         for (TIPObjectFile file : biSection.getObjectFiles()) {
             // Just instantiating the input stream is the real test..
             InputStream is = file.getInputStream();
@@ -81,22 +80,19 @@ public class TestTIPPackage {
     public void testNewPackage() throws Exception {
         TIPPackage tip = TIPPackage.newPackage();
         TIPManifest manifest = tip.getManifest();
-        manifest.setCommunication("FTP");
-        manifest.setContributorTool(new TIPTool("jtip", 
-                "http://code.google.com/p/interoperability-now", "0.12"));
-        manifest.setCreatorId("testid");
-        manifest.setCreatorName("testname");
-        // TODO: there should be some sort of date automatically
-        manifest.setCreatorUpdate(
-                TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12));
-        manifest.setPackageId(UUID.randomUUID().toString());
-        manifest.setSourceLanguage("en-US");
-        manifest.setTargetLanguage("fr-FR");
-        manifest.setTaskType(TIPTaskType.TRANSLATE);
+        manifest.setCreator(
+            new TIPCreator("testname", "testid", 
+                           TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12), 
+                           new TIPTool("jtip", 
+                                   "http://code.google.com/p/interoperability-now", "0.12"))
+        );
+        manifest.setPackageId("urn:uuid:" + UUID.randomUUID().toString());
+        manifest.setTask(new TIPTaskRequest(StandardTaskType.TRANSLATE, "en-US", "fr-FR"));
                 
         TIPObjectSection inputSection = 
-            manifest.addObjectSection(TIPObjectSectionType.INPUT);
-        TIPObjectFile f1 = inputSection.addObject(new TIPObjectFile("text", "test1.txt", true));
+            manifest.addObjectSection("bilingual", StandardTaskType.Translate.BILINGUAL);
+        TIPObjectFile f1 = inputSection.addObject(
+                new TIPObjectFile("test1.xlf", 1));
         OutputStream os = f1.getOutputStream();
         FileUtil.copyStreamToStream(
                 new ByteArrayInputStream("test".getBytes("UTF-8")), os);
@@ -109,7 +105,19 @@ public class TestTIPPackage {
         TIPPackage roundTrip = 
             TIPPackage.openFromStream(new FileInputStream(temp));
         assertNotNull(roundTrip);
-        compareManifestMetadata(manifest, roundTrip.getManifest());
+        //assertEquals(manifest, roundTrip.getManifest());
+        assertEquals(manifest.getPackageId(), roundTrip.getManifest().getPackageId());
+        assertEquals(manifest.getCreator(), roundTrip.getManifest().getCreator());
+        assertEquals(manifest.getTask(), roundTrip.getManifest().getTask());
+        //assertEquals(manifest.getObjectSections(), roundTrip.getManifest().getObjectSections());
+        Collection<TIPObjectSection> s1 = manifest.getObjectSections();
+        Collection<TIPObjectSection> s2 = roundTrip.getManifest().getObjectSections();
+        Iterator<TIPObjectSection> it1 = s1.iterator(), it2 = s2.iterator();
+        for (; it1.hasNext() && it2.hasNext(); ) {
+            assertEquals(it1.next(), it2.next());
+        }
+        assertFalse(it1.hasNext());
+        assertFalse(it2.hasNext());
         comparePackageParts(tip, roundTrip);        
         temp.delete();
         tip.close();
@@ -137,18 +145,6 @@ public class TestTIPPackage {
         InputStream is = 
             getClass().getResourceAsStream(path);
         return TIPPackage.openFromStream(is);
-    }
-    
-    // Doesn't compare object sections or objects
-    private void compareManifestMetadata(TIPManifest m1, TIPManifest m2) throws Exception {
-        assertEquals(m1.getCommunication(), m2.getCommunication());
-        assertEquals(m1.getContributorTool(), m2.getContributorTool());
-        assertEquals(m1.getCreatorId(), m2.getCreatorId());
-        assertEquals(m1.getCreatorName(), m2.getCreatorName());
-        assertEquals(m1.getCreatorUpdate(), m2.getCreatorUpdate());
-        assertEquals(m1.getPackageId(), m2.getPackageId());
-        assertEquals(m1.getTaskType(), m2.getTaskType());
-        assertEquals(m1.getResponse(), m2.getResponse());
     }
     
     private void comparePackageParts(TIPPackage p1, TIPPackage p2) throws Exception {
