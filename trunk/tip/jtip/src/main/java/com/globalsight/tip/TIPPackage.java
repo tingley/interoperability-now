@@ -21,7 +21,7 @@ public class TIPPackage {
     
     static final String MANIFEST = "manifest.xml";
     static final String INSECURE_OBJECTS_FILE = "pobjects.zip";
-    static final String SECURE_OBJECTS_FILE = "pobjects.sec";
+    static final String SECURE_OBJECTS_FILE = "pobjects.zip.enc";
     
     /**
      * Create a new empty TIPPackage.
@@ -133,8 +133,8 @@ public class TIPPackage {
             for (TIPObjectSection section : manifest.getObjectSections()) {
                 for (TIPObjectFile objFile : section.getObjectFiles()) {
                     // TODO: convert path separators
-                    String path = section.getObjectSectionType().getValue() + 
-                        File.separator + objFile.getPath();
+                    String path = section.getName() + 
+                        File.separator + objFile.getLocation();
                     File file = new File(outputDirectory, path);
                     File parent = file.getParentFile();
                     if (!parent.exists()) {
@@ -179,8 +179,8 @@ public class TIPPackage {
     void writeObjects(ZipOutputStream zos) throws IOException {
         for (TIPObjectSection section : manifest.getObjectSections()) {
             for (TIPObjectFile file : section.getObjectFiles()) {
-                String path = section.getObjectSectionType().getValue() + 
-                        "/" + file.getPath();
+                String path = section.getName() +  
+                        "/" + file.getLocation();
                 zos.putNextEntry(new ZipEntry(path));
                 InputStream is = file.getInputStream();
                 FileUtil.copyStreamToStream(is, zos);

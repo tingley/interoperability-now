@@ -5,20 +5,25 @@ import java.util.Collection;
 
 /**
  * Represents a TIP object section.  Object sections are identified by
- * a type and a sequence number.  (There may be more than one section 
+ * a name and a type.  (There may be more than one section 
  * for a given type, distinguished by sequence number.)  An object 
  * section contains one or more objects of the specified type.
  */
 // TODO eventually factor out TIPObject from TIPObjectFile
 public class TIPObjectSection {
     private TIPPackage tip;
-    private TIPObjectSectionType type;
-    private int sequence;
+    private String type;
+    private String name;
     Collection<TIPObjectFile> objects = new ArrayList<TIPObjectFile>();
     
     TIPObjectSection() { }
     
-    public TIPObjectSectionType getObjectSectionType() {
+    public TIPObjectSection(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
+    
+    public String getType() {
         return type;
     }
     
@@ -30,8 +35,16 @@ public class TIPObjectSection {
         return tip;
     }
     
-    public void setObjectSectionType(TIPObjectSectionType type) {
+    public void setType(String type) {
         this.type = type;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
     }
     
     public Collection<TIPObjectFile> getObjectFiles() {
@@ -47,7 +60,7 @@ public class TIPObjectSection {
     
     @Override
     public String toString() {
-        return type.getValue() + "-" + sequence;
+        return name + "(" + type + ")";
     }
     
     @Override
@@ -59,8 +72,9 @@ public class TIPObjectSection {
             return false;
         }
         TIPObjectSection s = (TIPObjectSection)o;
-        return type.equals(s.getObjectSectionType()) && 
-                    objects.equals(s.getObjectFiles());
+        return type.equals(s.getType()) && 
+                name.equals(s.getName()) &&
+                objects.equals(s.getObjectFiles());
     }
     
     @Override
@@ -68,7 +82,6 @@ public class TIPObjectSection {
         final int prime = 31;
         int result = 1;
         result = prime * result + type.hashCode();
-        result = prime * result + sequence;
         result = prime * result + objects.hashCode();
         return result;
     }

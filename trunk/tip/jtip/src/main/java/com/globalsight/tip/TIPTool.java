@@ -43,9 +43,8 @@ public class TIPTool {
      */
     @Override
     public boolean equals(Object o) {
-        if (o == null || !(o instanceof TIPTool)) {
-            return false;
-        }
+        if (o == this) return true;
+        if (o == null || !(o instanceof TIPTool)) return false;
         TIPTool t = (TIPTool)o;
         return getName().equals(t.getName()) &&
                getId().equals(t.getId()) &&

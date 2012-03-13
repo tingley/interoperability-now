@@ -1,133 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Need to get real schema location (host in google code?) and schema
-   - version. -->
 <TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-3.xsd" version="1.3">
+    xsi:noNamespaceSchemaLocation="TIPManifest-1-4.xsd" version="1.4">
   <GlobalDescriptor>
-    <!-- We need to specify semantics for generating these, whether it
-       - be a GUID algorithm or something else. 
-       Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
-       -->
-    <UniquePackageID>84983-zzz-0091-alpppq-184903b-aj1239</UniquePackageID>
+    <UniquePackageID>urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239</UniquePackageID>
     <PackageCreator>
-      <CreatorName>Test Company</CreatorName>
-      <CreatorID>http://127.0.0.1/test</CreatorID>
-      <CreatorUpdate>2011-05-09T22:45:00Z</CreatorUpdate>
-      <ContributorTool>
-        <!-- Also think this should be a URL 
-        Chase & Sven: keep the ID out as long as we don't have a tool repository, add a tool name which is freetext and should include vendor, tool, version (like user agent string) so we know whom to blame ;-) -->
-        <ToolName>TestTool</ToolName>
-        <ToolID>http://interoperability-now.org/</ToolID>
-        <ToolVersion>1.0</ToolVersion>
-      </ContributorTool>
-      <Communication>FTP</Communication>
-    </PackageCreator>
-    <OrderAction>
-      <OrderTask>
-        <TaskType>Translate</TaskType>
-        <!--
-          Chase & Sven:
-            <xs:enumeration value="Translate"/>
-            <xs:enumeration value="Review"/>
-            <xs:enumeration value="QA"/>
-            
-            later:
-            <xs:enumeration value="Quote"/>
-        -->
-        <!-- 
-        Chase & Sven: which locale definition will we use? (especially for things like "international Spanish"
-       follow Yves article on this (AI for Sven to refer to it) 
-        -->
-        <SourceLanguage>en-US</SourceLanguage>
-        <!-- Chase & Sven: Finalize the decission to have this bilingual only -->
-        <TargetLanguage>fr-FR</TargetLanguage>
-        
-        <!-- Chase & Sven: 
-        Add Comment here
-        -->
-      </OrderTask>
-      <OrderResponse>
-        <ResponseReferenceId>12345-abc-6789-aslkjd-19193la-as9911</ResponseReferenceId>
-        <ResponseName>Test Testerson</ResponseName>
-        <ResponseID>http://interoperability-now.org</ResponseID>
-        <ResponseUpdate>2011-05-18T19:03:15</ResponseUpdate>
-        <ResponseMessage>Success</ResponseMessage>
-        <ResponseComment></ResponseComment>
-        <ContributorTool>
+      <Name>Test Testerson</Name>
+      <ID>http://interoperability-now.org</ID>
+      <Update>2011-05-18T19:03:15</Update>
+      <Tool>
           <ToolName>Test Workbench</ToolName>
           <ToolID>http://interoperability-now.org</ToolID>
           <ToolVersion>2.0</ToolVersion>
-        </ContributorTool>
-      </OrderResponse>
-    </OrderAction>
+      </Tool>
+    </PackageCreator>
+    <TaskResponse>
+      <Task>
+        <TaskType>http://interoperability-now.org/TIPP/schema/tasks/v1/translate</TaskType>
+        <SourceLanguage>en-US</SourceLanguage>
+        <TargetLanguage>fr-FR</TargetLanguage>
+      </Task>
+      <InResponseTo>
+        <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
+        <PackageCreator>
+          <Name>Test Company</Name>
+          <ID>http://127.0.0.1/test</ID>
+          <Update>2011-05-09T22:45:00Z</Update>
+          <Tool>
+            <ToolName>TestTool</ToolName>
+            <ToolID>http://interoperability-now.org/</ToolID>
+            <ToolVersion>1.0</ToolVersion>
+          </Tool>
+        </PackageCreator>
+      </InResponseTo>
+      <ResponseMessage>Success</ResponseMessage>
+      <ResponseComment />
+    </TaskResponse>
   </GlobalDescriptor>
   <PackageObjects>
-    <PackageObjectSection sectionname="bilingual">
-      <ObjectFile localizable="yes" sequence="1">
-        <Type>XLIFF</Type>
-        <LocationPath>Peanut_Butter.xlf</LocationPath>
-      </ObjectFile>
-    </PackageObjectSection>
-    
-    <!-- Chase & Sven:
-      The resulting package manifest.xml should 100% represent the content of the returned package, meaning, that files should be represented as beeing in "Output" rather than "Input". 
-    
-    -->
-    
-    <PackageObjectSection sectionname="input">
-      <ObjectFile localizable="no" sequence="1">
-        <Type>Unknown</Type>
-        <LocationPath>Peanut_Butter.html.skl</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no" sequence="2">
-        <Type>Unknown</Type>
-        <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no" sequence="3">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load.php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no" sequence="4">
-        <Type>Unknown</Type>
-        <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no" sequence="5">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load(1).php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no" sequence="6">
-        <Type>Unknown</Type>
-        <LocationPath>resources/magnify-clip.png</LocationPath>
-      </ObjectFile>
-    </PackageObjectSection>
-
-    <!-- The output section contains everything from the input section.
-       - In this case, nothing was localizable, so the files have 
-       - simply been copied. -->
-    <PackageObjectSection sectionname="output">
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>Peanut_Butter.html.skl</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>resources/20px-Padlock-silver.svg.png</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load.php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>resources/290px-PeanutButter.jpg</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>resources/load(1).php</LocationPath>
-      </ObjectFile>
-      <ObjectFile localizable="no">
-        <Type>Unknown</Type>
-        <LocationPath>resources/magnify-clip.png</LocationPath>
+    <PackageObjectSection name="bilingual" 
+            type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/bilingual">
+      <ObjectFile sequence="1">
+        <Location>Peanut_Butter.xlf</Location>
       </ObjectFile>
     </PackageObjectSection>
   </PackageObjects>
