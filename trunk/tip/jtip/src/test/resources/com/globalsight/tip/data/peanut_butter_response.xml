@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPPManifest-1_4.xsd" version="1.4">
+    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
   <GlobalDescriptor>
     <UniquePackageID>urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239</UniquePackageID>
     <PackageCreator>
