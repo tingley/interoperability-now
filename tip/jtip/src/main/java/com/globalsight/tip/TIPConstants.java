@@ -2,7 +2,11 @@ package com.globalsight.tip;
 
 interface TIPConstants {
 
-    public static final String MANIFEST = "TIPManifest";
+    public static final String SCHEMA_VERSION = "1.4";
+    public static final String SCHEMA_LOCATION =
+                "http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd";
+
+    public static final String MANIFEST = "TIPPManifest";
     public static final String ATTR_VERSION = "version";
     
     public static final String GLOBAL_DESCRIPTOR = "GlobalDescriptor";

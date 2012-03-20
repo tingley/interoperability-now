@@ -28,9 +28,9 @@ class ManifestDOMBuilder {
         document = docBuilder.newDocument();
         Element root = document.createElement(MANIFEST);
         document.appendChild(root);
-        root.setAttribute(ATTR_VERSION, "1.4");
+        root.setAttribute(ATTR_VERSION, SCHEMA_VERSION);
         root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
-                "noNamespaceSchemaLocation", "TIPManifest-1-4.xsd");
+                "noNamespaceSchemaLocation", SCHEMA_LOCATION);
         root.appendChild(makeDescriptor());
         root.appendChild(makePackageObjects());
         return document;

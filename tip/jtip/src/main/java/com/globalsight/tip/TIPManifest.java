@@ -231,7 +231,7 @@ public class TIPManifest {
     void validate(Document dom) throws TIPValidationException {
         try {
             InputStream is = 
-                getClass().getResourceAsStream("/TIPManifest-1-4.xsd");
+                getClass().getResourceAsStream("/TIPPManifest-1_4.xsd");
             SchemaFactory factory = 
                 SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(new StreamSource(is));
