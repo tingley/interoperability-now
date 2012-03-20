@@ -22,13 +22,13 @@
 	<xsd:complexType name="content">
 		<xsd:attribute name="id" type="xsd:string" use="required"/>
 	</xsd:complexType>
-	<xsd:complexType name="internal-preview-file" mixed="true">
+	<xsd:complexType name="internal-preview" mixed="true">
 		<xsd:sequence>
 			<xsd:element name="content" type="dx:content" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
-	<xsd:element name="internal-preview-file" type="dx:internal-preview-file"/>
-	<xsd:element name="external-preview-file" type="xsd:anyURI"/>
+	<xsd:element name="internal-preview" type="dx:internal-preview"/>
+	<xsd:element name="external-preview" type="xsd:anyURI"/>
 	<xsd:element name="external-xsl" type="xsd:anyURI"/>
 	<xsd:attribute name="allow-tu-join" type="dx:AttrType_YesNo"/>
 	<xsd:attribute name="allow-tu-split" type="dx:AttrType_YesNo"/>
@@ -41,9 +41,9 @@
 	<xsd:attribute name="allow-revision-history-deletion" type="dx:AttrType_YesNo"/>
 	<xsd:complexType name="attribute">
 		<xsd:simpleContent>
-			  <xsd:extension base="xsd:string">
+			<xsd:extension base="xsd:string">
 				<xsd:attribute name="name" type="xsd:string" use="required"/>
-		  </xsd:extension>
+			</xsd:extension>
 		</xsd:simpleContent>
 	</xsd:complexType>
 	<xsd:complexType name="attributes">
@@ -180,7 +180,7 @@ failed to find a match, depending on usage)</xsd:documentation>
 	</xsd:complexType>
 	<xsd:complexType name="qa-hits">
 		<xsd:sequence>
-			<xsd:element name="qa-hit" type="dx:qa-hit" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element name="qa-hit" type="dx:qa-hit" maxOccurs="unbounded"/>
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:element name="qa-hits" type="dx:qa-hits"/>
@@ -294,18 +294,18 @@ failed to find a match, depending on usage)</xsd:documentation>
 		</xsd:restriction>
 	</xsd:simpleType>
 	<xsd:complexType name="utx-src">
-	<xsd:simpleContent>
-		<xsd:extension base="xsd:string">
-			<xsd:attribute name="pos" type="dx:AttrType_UtxPos" use="required"/>
-		</xsd:extension>
-	</xsd:simpleContent>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="pos" type="dx:AttrType_UtxPos" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
 	</xsd:complexType>
 	<xsd:complexType name="utx-tgt">
-	<xsd:simpleContent>
-		<xsd:extension base="xsd:string">
-			<xsd:attribute name="status" type="dx:AttrType_UtxStatus" use="required"/>
-	</xsd:extension>
-	</xsd:simpleContent>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="status" type="dx:AttrType_UtxStatus" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
 	</xsd:complexType>
 	<xsd:simpleType name="utx-comment">
 		<xsd:restriction base="xsd:string"/>
