@@ -2,7 +2,7 @@
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPPManifest-1_4.xsd" version="1.4">
+    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
