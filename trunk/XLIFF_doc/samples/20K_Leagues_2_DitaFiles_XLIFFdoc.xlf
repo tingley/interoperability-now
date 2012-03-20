@@ -151,7 +151,7 @@
 		</skl>
 		<tool tool-id="1" tool-name="MyTMserver" tool-version="v2.0.1" tool-company="Acme Rocketry Corporation" />
 		<note from="2011-03-04T14:22:00Z-Micah Bly">The English source for this document is made available by the dita2indesign project, as a sample. See http://dita2indesign.sourceforge.net/dita_gutenberg_samples.html for more information.</note>
-		<dx:internal-preview-file>
+		<dx:internal-preview>
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -180,7 +180,7 @@
 
 &lt;/body&gt;
 &lt;/html&gt;
-		</dx:internal-preview-file>
+		</dx:internal-preview>
 	</header>
 
 	<body>
