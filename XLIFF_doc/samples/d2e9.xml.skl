@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE topic
+  PUBLIC "-//OASIS//DTD DITA Topic//EN" "http://docs.oasis-open.org/dita/v1.1/OS/dtd/topic.dtd">
+<topic class="- topic/topic " ditaarch:DITAArchVersion="1.0" domains="(topic ui-d) (topic hi-d) (topic pr-d) (topic sw-d)                          (topic ut-d) (topic indexing-d)" id="d2e9">
+   <title class="- topic/title ">%%%1%%%
+</title>
+  <body class="- topic/body ">
+    <p class="- topic/p " outputclass="1">%%%2%%%
+</p>
+    <p class="- topic/p " outputclass="3">%%%3%%%
+</p>
+    <p class="- topic/p " outputclass="2">%%%4%%%
+</p>
+    <p class="- topic/p " outputclass="2">%%%5%%%
+%%%6%%%
+%%%7%%%
+</p>
+    <p class="- topic/p ">%%%8%%%
+%%%9%%%
+%%%10%%%
+%%%11%%%
+</p>
+    <p class="- topic/p ">%%%12%%%
+%%%13%%%
+</p>
+    <p class="- topic/p ">%%%14%%%
+<i class="+ topic/ph hi-d/i ">%%%15%%%
+</i>%%%16%%%
+%%%17%%%
+%%%18%%%
+</p>
+    <section class="- topic/section ">
+      <title class="- topic/title ">%%%19%%%
+</title>
+    <p class="- topic/p ">%%%20%%%
+<i class="+ topic/ph hi-d/i ">%%%21%%%
+</i>.%%%22%%%
+%%%23%%%
+%%%24%%%
+</p>
+    </section>
+
+  </body>
+</topic>
