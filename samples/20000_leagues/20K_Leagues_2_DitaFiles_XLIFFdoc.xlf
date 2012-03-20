@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dx="http://www.interoperability-now.org/schema"
-	xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-doc-1_0_extensions.xsd" dx:version="1.5">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dx="http://schema.interoperability-now.org"
+	xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://schema.interoperability-now.org/xliff-doc-1_5.xsd" dx:version="1.5">
 <file datatype="x-application/dita+xml" original="d2e9.xml" source-language="en-US" target-language="fr-FR" xml:space="preserve" dx:allow-tu-join="yes">
 	<header>
 		<skl>
 			<external-file href="file://d2e9.xml.skl"/>
 		</skl>
-		<tool tool-id="1" tool-name="MyTMserver" tool-version="v2.0.1" tool-company="Acme Rocketry Corporation" />
 		<note from="2011-03-04T14:22:00Z-Micah Bly">The English source for this document is made available by the dita2indesign project, as a sample. See http://dita2indesign.sourceforge.net/dita_gutenberg_samples.html for more information.</note>
+		<tool tool-id="1" tool-name="MyTMserver" tool-version="v2.0.1" tool-company="Acme Rocketry Corporation" />
 		<dx:internal-preview>
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
 &lt;HTML&gt;
@@ -120,6 +120,7 @@
 		<group id="9">
 			<trans-unit id="1-17">
 				<source>VERNE'S TITLE</source>
+				<target state="new"></target>
 			</trans-unit>
 		</group>
 		<group id="10">
@@ -143,7 +144,7 @@
 	</body>
 </file>
 
-<file datatype="x-application/dita+xml" original="d2e485.xml" source-language="en-US" target-language="fr-FR" xml:space="preserve" dx:allow-tu-merge="yes">
+<file datatype="x-application/dita+xml" original="d2e485.xml" source-language="en-US" target-language="fr-FR" xml:space="preserve" dx:allow-tu-join="yes">
 	<header>
 		<skl>
 			<external-file href="file://d2e485.xml.skl"/>
@@ -197,7 +198,7 @@
 				<source> <g id="0" dx:orig-markup-open="&lt;ph class=&quot;- topic/ph &quot; outputclass=&quot;size: +2&quot;&gt;" dx:equiv-markup-open="&lt;span style=&quot;font-variant: small-caps;&quot;&gt;" ctype="x-other-format" dx:orig-markup-close="&lt;/ph&gt;" dx:equiv-markup-close="&lt;/span&gt;">THE YEAR</g> 1866 was marked by a bizarre development, an unexplained and downright inexplicable phenomenon that surely no one has forgotten.</source>
 				<target state="translated"> <g id="0" dx:orig-markup-open="&lt;ph class=&quot;- topic/ph &quot; outputclass=&quot;size: +2&quot;&gt;" dx:equiv-markup-open="&lt;span style=&quot;font-variant: small-caps;&quot;&gt;" ctype="x-other-format" dx:orig-markup-close="&lt;/ph&gt;" dx:equiv-markup-close="&lt;/span&gt;">L'année</g> 1866 a été marquée par un développement bizarre, un phénomène inexpliqué et inexplicable que sûrement carrément personne n'a oublié.</target>
 				<note from="2011-03-04T14:24:00Z-Micah Bly" annotates="target">Original French, as found online: L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</note>
-				<alt-trans alttranstype="proposal" match-quality="99" dx:origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
+				<alt-trans alttranstype="proposal" match-quality="99" origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
 					<source>THE YEAR 1866 was marked by a bizarre development, an unexplained and downright inexplicable phenomenon that surely no one has forgotten.</source>
 					<target state="signed-off">L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</target>
 					<note from="2010-10-12T00:00:00Z-Jane Doe">This is a really old translation!</note>
@@ -219,7 +220,7 @@
 				<note from="2011-03-04T14:24:00Z-Micah Bly">First alt-trans match has a 1/2 percent penalty for a tag mismatch.</note>
 				<note from="2011-03-04T14:24:00Z-Micah Bly">2nd alt-trans match is a Machine Translation</note>
 
-				<alt-trans alttranstype="proposal" match-quality="100" dx:match-penalty="0.5" dx:origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
+				<alt-trans alttranstype="proposal" match-quality="100" dx:match-penalty="0.5" origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
 					<source>Without getting into those rumors that upset <mrk mtype="term" dx:term-id="0">civilians</mrk> in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</source>
 					<target state="signed-off">Sans parler des rumeurs qui agitaient les <mrk mtype="term" dx:term-id="0">populations</mrk> des ports et surexcitaient l’esprit public à l’intérieur des continents les gens de mer furent particulièrement émus.</target>
 					<dx:attributes>
@@ -231,7 +232,7 @@
 						<dx:attribute dx:name="Project ID">Project0002,Project0005</dx:attribute>
 					</dx:attributes>
 				</alt-trans>
-				<alt-trans alttranstype="proposal" match-quality="100" dx:origin="MT" dx:origin-shorttext="Google MT" dx:modified-by="googlebot01" dx:modified-at="2011-02-01T18:08:20Z">
+				<alt-trans alttranstype="proposal" match-quality="100" origin="MT" dx:origin-shorttext="Google MT" dx:modified-by="googlebot01" dx:modified-at="2011-02-01T18:08:20Z">
 					<source>Without getting into those rumors that upset <mrk mtype="term" dx:term-id="0">civilians</mrk> in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</source>
 					<target state="signed-off">Sans parler des rumeurs qui agitaient les <mrk mtype="term" dx:term-id="0">populations</mrk> des ports et surexcitaient l’esprit public à l’intérieur des continents les gens de mer furent particulièrement émus.</target>
 				</alt-trans>
@@ -241,7 +242,7 @@
 				<source> Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.</source>
 				<target state="translated">Traders, les armateurs, les capitaines de navires, capitaines, et les capitaines de l'Europe et l'Amérique, officiers de marine de tous les pays, et sur leurs talons les différents gouvernements nationaux sur ces deux continents, ont tous été extrêmement troublé par l'entreprise.</target>
 				<note from="2011-03-04T14:24:00Z-Micah Bly">alt-trans match is exact, in-context match (dx:glorious-match=yes)</note>
-				<alt-trans alttranstype="proposal" match-quality="100" dx:glorious-match="yes" dx:origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
+				<alt-trans alttranstype="proposal" match-quality="100" dx:glorious-match="yes" origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
 					<source>Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.</source>
 					<target state="signed-off">Traders, les armateurs, les capitaines de navires, capitaines, et les capitaines de l'Europe et l'Amérique, officiers de marine de tous les pays, et sur leurs talons les différents gouvernements nationaux sur ces deux continents, ont tous été extrêmement troublé par l'entreprise.</target>
 					<dx:attributes>
@@ -410,20 +411,20 @@
 	</body>
 </file>
 
-<dx:utx-glossary version="1.11" src-lang="en-US" tgt-lang="fr-FR" date-created="2011-08-17T19:00:00Z" creator="Acme Corporation">
-  <dx:utx-term entry-id="0" concept-id="150">
-    <dx:utx-src pos="noun">civilians</dx:utx-src>
-    <dx:utx-tgt status="approved">populations</dx:utx-tgt>
+<dx:utx-glossary dx:version="1.11" dx:src-lang="en-US" dx:tgt-lang="fr-FR" dx:date-created="2011-08-17T19:00:00Z" dx:creator="Acme Corporation">
+  <dx:utx-term dx:entry-id="0" dx:concept-id="150">
+    <dx:utx-src dx:pos="noun">civilians</dx:utx-src>
+    <dx:utx-tgt dx:status="approved">populations</dx:utx-tgt>
     <dx:utx-comment>I have no idea if this is correct, but let's pretend it is for the sake of this example.</dx:utx-comment>
   </dx:utx-term>
-  <dx:utx-term entry-id="1" concept-id="150">
-    <dx:utx-src pos="noun">civilians</dx:utx-src>
-    <dx:utx-tgt status="forbidden">civils</dx:utx-tgt>
+  <dx:utx-term dx:entry-id="1" dx:concept-id="150">
+    <dx:utx-src dx:pos="noun">civilians</dx:utx-src>
+    <dx:utx-tgt dx:status="forbidden">civils</dx:utx-tgt>
     <dx:utx-comment>If this is used, it should be flagged.</dx:utx-comment>
   </dx:utx-term>
-  <dx:utx-term entry-id="2" concept-id="250">
-    <dx:utx-src pos="noun">ichthyologist</dx:utx-src>
-    <dx:utx-tgt status="forbidden">ichtyologiste</dx:utx-tgt>
+  <dx:utx-term dx:entry-id="2" dx:concept-id="150">
+    <dx:utx-src dx:pos="noun">ichthyologist</dx:utx-src>
+    <dx:utx-tgt dx:status="forbidden">ichtyologiste</dx:utx-tgt>
     <dx:utx-comment>A person who devotes a career to studying some of the estimated 25,000 to 30,000 species of bony fishes, sharks, rays, and lobe-finned fishes</dx:utx-comment>
   </dx:utx-term>
 </dx:utx-glossary>
