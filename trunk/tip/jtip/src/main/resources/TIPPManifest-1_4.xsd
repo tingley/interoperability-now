@@ -18,11 +18,11 @@
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:annotation>
         <xs:documentation xml:lang="en">
-           XML Schema of the TIP Manifest. The Manifest specifies the entire content of an
+           XML Schema of the TIPP Manifest. The Manifest specifies the entire content of an
            Interoperability Package.
         </xs:documentation>
     </xs:annotation>
-    <xs:element name="TIPManifest">
+    <xs:element name="TIPPManifest">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="GlobalDescriptor" type="GlobalDescriptor">

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
-<TIPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="TIPManifest-1-4.xsd" version="1.4">
+<TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="TIPPManifest-1_4.xsd" version="1.4">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
@@ -58,4 +58,4 @@
       </ObjectFile>
     </PackageObjectSection>
   </PackageObjects>
-</TIPManifest>
+</TIPPManifest>
