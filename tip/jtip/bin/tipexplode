@@ -3,6 +3,6 @@
 set -e
 
 DIR=`dirname $0`
-CLASSPATH="$DIR/../target/*:$CLASSPATH"
+export CLASSPATH="$DIR/../target/*:$CLASSPATH"
 
 java com.globalsight.tip.samples.TIPExplode $*
