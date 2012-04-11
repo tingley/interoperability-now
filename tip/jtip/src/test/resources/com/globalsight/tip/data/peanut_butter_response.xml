@@ -15,7 +15,7 @@
     </PackageCreator>
     <TaskResponse>
       <Task>
-        <TaskType>http://interoperability-now.org/TIPP/schema/tasks/v1/translate</TaskType>
+        <TaskType>http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext</TaskType>
         <SourceLanguage>en-US</SourceLanguage>
         <TargetLanguage>fr-FR</TargetLanguage>
       </Task>
@@ -38,7 +38,7 @@
   </GlobalDescriptor>
   <PackageObjects>
     <PackageObjectSection name="bilingual" 
-            type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/bilingual">
+            type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/bilingual">
       <ObjectFile sequence="1">
         <Location>Peanut_Butter.xlf</Location>
       </ObjectFile>
