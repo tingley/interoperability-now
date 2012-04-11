@@ -32,7 +32,7 @@ public class TestTIPPackage {
         TestTIPManifest.verifyRequestManifest(tip.getManifest());
         TIPManifest manifest = tip.getManifest();
         TIPObjectSection biSection = 
-                manifest.getObjectSection(StandardTaskType.Translate.BILINGUAL);
+                manifest.getObjectSection(StandardTaskType.TranslateStrictBitext.BILINGUAL);
         for (TIPObjectFile file : biSection.getObjectFiles()) {
             // Just instantiating the input stream is the real test..
             InputStream is = file.getInputStream();
@@ -87,10 +87,10 @@ public class TestTIPPackage {
                                    "http://code.google.com/p/interoperability-now", "0.12"))
         );
         manifest.setPackageId("urn:uuid:" + UUID.randomUUID().toString());
-        manifest.setTask(new TIPTaskRequest(StandardTaskType.TRANSLATE, "en-US", "fr-FR"));
+        manifest.setTask(new TIPTaskRequest(StandardTaskType.TRANSLATE_STRICT_BITEXT, "en-US", "fr-FR"));
                 
         TIPObjectSection inputSection = 
-            manifest.addObjectSection("bilingual", StandardTaskType.Translate.BILINGUAL);
+            manifest.addObjectSection("bilingual", StandardTaskType.TranslateStrictBitext.BILINGUAL);
         TIPObjectFile f1 = inputSection.addObject(
                 new TIPObjectFile("test1.xlf", 1));
         OutputStream os = f1.getOutputStream();

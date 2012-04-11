@@ -91,6 +91,7 @@ public class TIPManifest {
     private void loadDescriptor(Element descriptor) 
                             throws TIPValidationException {
         packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
+        
         creator = loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
         // Either load the request or the response, depending on which is
         // present

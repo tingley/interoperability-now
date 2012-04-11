@@ -4,6 +4,7 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 import java.io.*;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -48,19 +49,19 @@ public class TestTIPManifest {
                 2011, 3, 14, 6, 55, 11), new TIPTool("TestTool", "urn:test",
                 "1.0")));
         manifest.setTask(new TIPTaskRequest(
-                StandardTaskType.TRANSLATE, "en-US", "jp-JP"));
+                StandardTaskType.TRANSLATE_STRICT_BITEXT, "en-US", "jp-JP"));
         // Add a section
         final TIPObjectFile file = 
                 new TIPObjectFile("test.xlf", "test.xlf", 1);
         TIPObjectSection section = manifest.addObjectSection("bilingual",
-                StandardTaskType.Translate.BILINGUAL);
+                StandardTaskType.TranslateStrictBitext.BILINGUAL);
         section.addObject(file);
         TIPManifest roundtrip = roundtripManifest(manifest);
         assertEquals("urn:uuid:12345", roundtrip.getPackageId());
         assertEquals(manifest.getCreator(), roundtrip.getCreator());
         assertEquals(manifest.getTask(), roundtrip.getTask());
         expectObjectSection(roundtrip, 
-                StandardTaskType.Translate.BILINGUAL,
+                StandardTaskType.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(file));
     }
 
@@ -88,15 +89,15 @@ public class TestTIPManifest {
                 getDate(2011, 4, 9, 22, 45, 0), new TIPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                 manifest.getCreator());
-        assertEquals(new TIPTaskRequest(StandardTaskType.TRANSLATE,
+        assertEquals(new TIPTaskRequest(StandardTaskType.TRANSLATE_STRICT_BITEXT,
                 "en-US", "fr-FR"), manifest.getTask());
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(manifest, StandardTaskType.Translate.BILINGUAL,
+        expectObjectSection(manifest, StandardTaskType.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(
                         new TIPObjectFile("Peanut_Butter.xlf", 1)));
-        expectObjectSection(manifest, StandardTaskType.Translate.PREVIEW,
+        expectObjectSection(manifest, StandardTaskType.TranslateStrictBitext.PREVIEW,
                 new ArrayList<TIPObjectFile>() {
                     {
                         add(new TIPObjectFile(
@@ -125,7 +126,7 @@ public class TestTIPManifest {
         assertNotNull(manifest.getTask());
         assertTrue(manifest.getTask() instanceof TIPTaskResponse);
         assertEquals(new TIPTaskResponse(
-                        StandardTaskType.TRANSLATE,
+                        StandardTaskType.TRANSLATE_STRICT_BITEXT,
                         "en-US", 
                         "fr-FR",
                         "urn:uuid:12345-abc-6789-aslkjd-19193la-as9911",
