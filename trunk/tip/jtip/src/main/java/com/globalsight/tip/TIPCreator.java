@@ -7,7 +7,7 @@ public class TIPCreator {
     private String name;
     private String id;
     private Date date;
-    private TIPTool tool;
+    private TIPTool tool = new TIPTool();
 
     public TIPCreator() { }
     

@@ -40,7 +40,7 @@ public class TIPManifest {
     private TIPPackage tipPackage;
     private String packageId;
     private TIPTask task; // Either request or response
-    private TIPCreator creator;
+    private TIPCreator creator = new TIPCreator();
     
     private Map<String, TIPObjectSection> objectSections = 
         new HashMap<String, TIPObjectSection>();    

@@ -4,7 +4,6 @@ import org.junit.*;
 
 import static org.junit.Assert.*;
 import java.io.*;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -14,6 +13,14 @@ import java.util.List;
 
 public class TestTIPManifest {
 
+	@Test
+	public void testEmptyManifest() throws Exception {
+		TIPManifest manifest = TIPManifest.newManifest(null);
+		assertNotNull(manifest.getCreator());
+		assertNotNull(manifest.getCreator().getTool());
+		assertNotNull(manifest.getObjectSections());
+	}
+	
     @Test
     public void testManifest() throws Exception {
         TIPManifest manifest = new TIPManifest(null);
