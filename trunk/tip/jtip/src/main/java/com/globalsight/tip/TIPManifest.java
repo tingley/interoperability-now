@@ -37,6 +37,10 @@ import com.globalsight.tip.TIPConstants.ObjectFile;
 
 public class TIPManifest {
 
+	// Only for construction
+	// XXX Should this go in the TIPTask somehow?
+	private TIPTaskType taskType;
+	
     private TIPPackage tipPackage;
     private String packageId;
     private TIPTask task; // Either request or response
@@ -53,6 +57,49 @@ public class TIPManifest {
         TIPManifest manifest = new TIPManifest(tipPackage);
         manifest.setPackageId(UUID.randomUUID().toString());
         return manifest;
+    }
+    
+    static TIPManifest newRequestManifest(TIPPackage tipPackage, TIPTaskType type) {
+    	TIPManifest manifest = newManifest(tipPackage);
+    	TIPTaskRequest request = new TIPTaskRequest();
+    	request.setTaskType(type.getType());
+    	manifest.setTaskType(type);
+    	manifest.setTask(request);
+    	return manifest;
+    }
+    
+    static TIPManifest newResponseManifest(TIPPackage tipPackage, TIPTaskType type) {
+    	TIPManifest manifest = newManifest(tipPackage);
+    	TIPTaskResponse response = new TIPTaskResponse();
+    	response.setTaskType(type.getType());
+    	manifest.setTaskType(type);
+    	manifest.setTask(response);
+    	return manifest;
+    }
+    
+    static TIPManifest newResponseManifest(TIPPackage tipPackage, 
+    									   TIPManifest requestManifest) {
+    	if (requestManifest.isResponse()) {
+    		throw new IllegalArgumentException(
+    				"Can't construct a response to a response package");
+    	}
+    	TIPManifest manifest = newManifest(tipPackage);
+    	// Get the task type of the request and assign it to the response.
+    	TIPTaskRequest request = (TIPTaskRequest)requestManifest.getTask();
+    	manifest.setTask(new TIPTaskResponse(request, 
+    			requestManifest.getPackageId(), requestManifest.getCreator()));
+    	// If it's a standard type, assign that as well.
+    	manifest.setTaskType(
+    			StandardTaskType.forTypeUri(request.getTaskType()));
+    	return manifest;
+    }
+    
+    void setTaskType(TIPTaskType type) {
+    	this.taskType = type;
+    }
+    
+    TIPTaskType getTaskType() {
+    	return taskType;
     }
     
     void saveToStream(OutputStream saveStream) throws TIPException { 
@@ -292,6 +339,14 @@ public class TIPManifest {
     }
     
     public TIPObjectSection addObjectSection(String name, String type) {
+    	// If we were created with a task type object, restrict the 
+    	// section type to one of the choices for this task type.
+    	if (taskType != null) {
+    		if (!taskType.getSupportedSectionTypes().contains(type)) {
+    			throw new IllegalArgumentException("Section type " + type + 
+					" is not supported for task type " + taskType.getType());
+    		}
+    	}
         TIPObjectSection section = new TIPObjectSection(name, type);
         section.setPackage(tipPackage);
         objectSections.put(type, section);

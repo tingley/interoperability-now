@@ -49,26 +49,47 @@ public class TestTIPManifest {
     }
 
     @Test
+    public void testResponseCreationFromRequest() throws Exception {
+    	TIPManifest manifest = new TIPManifest(null);
+        manifest.loadFromStream(getClass().getResourceAsStream(
+                "data/peanut_butter.xml"));
+        TIPManifest responseManifest = TIPManifest.newResponseManifest(null, manifest);
+        assertTrue(responseManifest.isResponse());
+        assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(), 
+   		 	 responseManifest.getTask().getTaskType());
+        assertEquals("en-US", responseManifest.getTask().getSourceLocale());
+        assertEquals("fr-FR", responseManifest.getTask().getTargetLocale());
+        // Make sure the internal object was set correctly
+        assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT, 
+        			 responseManifest.getTaskType());
+        TIPTaskResponse taskResponse = 
+        		(TIPTaskResponse)responseManifest.getTask();
+        assertEquals(manifest.getCreator(), taskResponse.getRequestCreator());
+        assertEquals(manifest.getPackageId(), taskResponse.getRequestPackageId());
+    }
+    
+    @Test
     public void testNewManifest() throws Exception {
-        TIPManifest manifest = TIPManifest.newManifest(null);
+        TIPManifest manifest = TIPManifest.newRequestManifest(null, 
+        						StandardTaskType.TRANSLATE_STRICT_BITEXT);
         manifest.setPackageId("urn:uuid:12345");
         manifest.setCreator(new TIPCreator("Test", "Test Testerson", getDate(
                 2011, 3, 14, 6, 55, 11), new TIPTool("TestTool", "urn:test",
                 "1.0")));
-        manifest.setTask(new TIPTaskRequest(
-                StandardTaskType.TRANSLATE_STRICT_BITEXT, "en-US", "jp-JP"));
+        manifest.getTask().setSourceLocale("en-US");
+        manifest.getTask().setTargetLocale("jp-JP");
         // Add a section
         final TIPObjectFile file = 
                 new TIPObjectFile("test.xlf", "test.xlf", 1);
         TIPObjectSection section = manifest.addObjectSection("bilingual",
-                StandardTaskType.TranslateStrictBitext.BILINGUAL);
+                StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
         section.addObject(file);
         TIPManifest roundtrip = roundtripManifest(manifest);
         assertEquals("urn:uuid:12345", roundtrip.getPackageId());
         assertEquals(manifest.getCreator(), roundtrip.getCreator());
         assertEquals(manifest.getTask(), roundtrip.getTask());
         expectObjectSection(roundtrip, 
-                StandardTaskType.TranslateStrictBitext.BILINGUAL,
+        		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(file));
     }
 
@@ -96,15 +117,15 @@ public class TestTIPManifest {
                 getDate(2011, 4, 9, 22, 45, 0), new TIPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                 manifest.getCreator());
-        assertEquals(new TIPTaskRequest(StandardTaskType.TRANSLATE_STRICT_BITEXT,
+        assertEquals(new TIPTaskRequest(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
                 "en-US", "fr-FR"), manifest.getTask());
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(manifest, StandardTaskType.TranslateStrictBitext.BILINGUAL,
+        expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(
                         new TIPObjectFile("Peanut_Butter.xlf", 1)));
-        expectObjectSection(manifest, StandardTaskType.TranslateStrictBitext.PREVIEW,
+        expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.PREVIEW,
                 new ArrayList<TIPObjectFile>() {
                     {
                         add(new TIPObjectFile(
@@ -133,7 +154,7 @@ public class TestTIPManifest {
         assertNotNull(manifest.getTask());
         assertTrue(manifest.getTask() instanceof TIPTaskResponse);
         assertEquals(new TIPTaskResponse(
-                        StandardTaskType.TRANSLATE_STRICT_BITEXT,
+        				StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
                         "en-US", 
                         "fr-FR",
                         "urn:uuid:12345-abc-6789-aslkjd-19193la-as9911",

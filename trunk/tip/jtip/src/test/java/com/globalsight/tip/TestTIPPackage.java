@@ -32,7 +32,7 @@ public class TestTIPPackage {
         TestTIPManifest.verifyRequestManifest(tip.getManifest());
         TIPManifest manifest = tip.getManifest();
         TIPObjectSection biSection = 
-                manifest.getObjectSection(StandardTaskType.TranslateStrictBitext.BILINGUAL);
+                manifest.getObjectSection(StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
         for (TIPObjectFile file : biSection.getObjectFiles()) {
             // Just instantiating the input stream is the real test..
             InputStream is = file.getInputStream();
@@ -78,19 +78,20 @@ public class TestTIPPackage {
     
     @Test
     public void testNewPackage() throws Exception {
-        TIPPackage tip = TIPPackage.newPackage();
+        TIPPackage tip = TIPPackage.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT);
         TIPManifest manifest = tip.getManifest();
         manifest.setCreator(
             new TIPCreator("testname", "testid", 
                            TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12), 
                            new TIPTool("jtip", 
-                                   "http://code.google.com/p/interoperability-now", "0.12"))
+                                   "http://code.google.com/p/interoperability-now", "0.14"))
         );
         manifest.setPackageId("urn:uuid:" + UUID.randomUUID().toString());
-        manifest.setTask(new TIPTaskRequest(StandardTaskType.TRANSLATE_STRICT_BITEXT, "en-US", "fr-FR"));
+        manifest.getTask().setSourceLocale("en-US");
+        manifest.getTask().setTargetLocale("fr-FR");
                 
-        TIPObjectSection inputSection = 
-            manifest.addObjectSection("bilingual", StandardTaskType.TranslateStrictBitext.BILINGUAL);
+        TIPObjectSection inputSection = manifest.addObjectSection("bilingual", 
+            		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
         TIPObjectFile f1 = inputSection.addObject(
                 new TIPObjectFile("test1.xlf", 1));
         OutputStream os = f1.getOutputStream();

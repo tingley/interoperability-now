@@ -42,7 +42,19 @@ public class TIPTaskResponse extends TIPTask {
         this.requestCreator = requestCreator;
         this.message = message;
         this.comment = comment;
-    }    
+    }
+    
+    /**
+     * Create a response header based on an existing request Manifest.
+     * @param request
+     */
+    public TIPTaskResponse(TIPTaskRequest request, 
+    		String requestPackageId, TIPCreator requestCreator) {
+    	super(request.getTaskType(), request.getSourceLocale(), 
+    		  request.getTargetLocale());
+    	this.requestPackageId = requestPackageId;
+    	this.requestCreator = requestCreator;
+    }
 
     public String getRequestPackageId() {
         return requestPackageId;
