@@ -37,6 +37,22 @@ public class TIPPackage {
         return tipPackage;
     }
     
+    public static TIPPackage newRequestPackage(TIPTaskType taskType) throws TIPException {
+    	TIPPackage tipPackage = new TIPPackage(new TempFilePackageSource());
+    	tipPackage.manifest = TIPManifest.newRequestManifest(tipPackage, taskType);
+    	tipPackage.open(); // XXX same problem as above
+    	return tipPackage;
+    }
+    
+    public static TIPPackage newResponsePackage(TIPPackage requestPackage) 
+														throws TIPException {
+    	TIPPackage tipPackage = new TIPPackage(new TempFilePackageSource());
+    	tipPackage.manifest = TIPManifest.newResponseManifest(tipPackage, 
+											  requestPackage.getManifest());
+    	tipPackage.open(); // XXX same problem as above
+    	return tipPackage;
+    }
+    
     /**
      * Create a new TIPPackage object from a byte stream.  The data 
      * must be ZIP-encoded.  The TIPPackage will be expanded to disk
