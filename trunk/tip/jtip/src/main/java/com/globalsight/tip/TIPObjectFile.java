@@ -3,17 +3,13 @@ package com.globalsight.tip;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Represents a TIP resource represented as a file.
  */
 public class TIPObjectFile {
-    private TIPPackage tipPackage;
+    private PackageBase tipPackage;
     private TIPObjectSection section;
 
     private String name, location;
@@ -44,29 +40,19 @@ public class TIPObjectFile {
         this.section = section;
     }
     
-    public InputStream getInputStream() throws IOException {
-        return new BufferedInputStream(
-                new FileInputStream(getFilePath()));
+    public BufferedInputStream getInputStream() throws IOException {
+    	return tipPackage.getPackageObjectInputStream(getObjectPath());
     }
 
-    public OutputStream getOutputStream() throws IOException, TIPException {
-        File f = getFilePath();
-        if (!f.exists()) {
-            if (!FileUtil.recursiveCreate(f)) {
-                throw new TIPException(
-                        "Unable to open resource for writing: " + location);
-            }
-        }
-        return new BufferedOutputStream(
-                new FileOutputStream(getFilePath()));
+    public BufferedOutputStream getOutputStream() throws IOException, TIPException {
+    	return tipPackage.getPackageObjectOutputStream(getObjectPath());
     }
     
-    private File getFilePath() {
-        return tipPackage.getPackageObjectFile(
-                section.getName() + File.separator + location);
+    private String getObjectPath() {
+    	return section.getName() + File.separator + location;
     }
     
-    void setPackage(TIPPackage tipPackage) {
+    void setPackage(PackageBase tipPackage) {
         this.tipPackage = tipPackage;
     }
 

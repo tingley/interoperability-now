@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-public class TIPTaskRequest extends TIPTask {
+class TIPTaskRequest extends TIPTask {
 
     TIPTaskRequest() { super(); }
     
