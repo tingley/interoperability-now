@@ -50,11 +50,9 @@ public class TestTIPManifest {
 
     @Test
     public void testResponseCreationFromRequest() throws Exception {
-    	TIPManifest manifest = new TIPManifest(null);
-        manifest.loadFromStream(getClass().getResourceAsStream(
-                "data/peanut_butter.xml"));
-        TIPManifest responseManifest = TIPManifest.newResponseManifest(null, manifest);
-        assertTrue(responseManifest.isResponse());
+    	TIPPackage requestPackage = getSamplePackage("data/test_package.zip");
+        TIPManifest responseManifest = TIPManifest.newResponseManifest(null, requestPackage);
+        assertFalse(responseManifest.isRequest());
         assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(), 
    		 	 responseManifest.getTask().getTaskType());
         assertEquals("en-US", responseManifest.getTask().getSourceLocale());
@@ -64,8 +62,8 @@ public class TestTIPManifest {
         			 responseManifest.getTaskType());
         TIPTaskResponse taskResponse = 
         		(TIPTaskResponse)responseManifest.getTask();
-        assertEquals(manifest.getCreator(), taskResponse.getRequestCreator());
-        assertEquals(manifest.getPackageId(), taskResponse.getRequestPackageId());
+        assertEquals(requestPackage.getCreator(), taskResponse.getRequestCreator());
+        assertEquals(requestPackage.getPackageId(), taskResponse.getRequestPackageId());
     }
     
     @Test
@@ -162,7 +160,7 @@ public class TestTIPManifest {
                                         "http://127.0.0.1/test",
                                         getDate(2011, 4, 9, 22, 45, 0),
                                         new TIPTool("TestTool", "http://interoperability-now.org/", "1.0")),
-                        TIPTaskResponse.Message.SUCCESS, ""),
+                        TIPResponseMessage.SUCCESS, ""),
                      manifest.getTask());
         assertEquals(new TIPCreator("Test Testerson", 
                                 "http://interoperability-now.org", 
@@ -171,7 +169,7 @@ public class TestTIPManifest {
                                         "http://interoperability-now.org", "2.0")),
                      manifest.getCreator());
         TIPTaskResponse response = ((TIPTaskResponse)manifest.getTask());
-        assertEquals(TIPTaskResponse.Message.SUCCESS, 
+        assertEquals(TIPResponseMessage.SUCCESS, 
                 response.getMessage());
         assertEquals("", response.getComment());
         // TODO: verify response
@@ -196,4 +194,11 @@ public class TestTIPManifest {
         assertEquals(files,
                 new ArrayList<TIPObjectFile>(section.getObjectFiles()));
     }
+    
+    private TIPPackage getSamplePackage(String path) throws Exception {
+        InputStream is = 
+            getClass().getResourceAsStream(path);
+        return TIPPackageFactory.openFromStream(is);
+    }
+
 }

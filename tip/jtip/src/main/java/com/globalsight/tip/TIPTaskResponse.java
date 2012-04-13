@@ -1,42 +1,17 @@
 package com.globalsight.tip;
 
-public class TIPTaskResponse extends TIPTask {
+class TIPTaskResponse extends TIPTask {
     private String requestPackageId;
     private TIPCreator requestCreator;
-    private Message message;
+    private TIPResponseMessage message;
     private String comment;
     
-    public enum Message {
-        SUCCESS("Success"),
-        FAILURE("Failure");
-        
-        private String value;
-        
-        Message(String value) {
-            this.value = value;
-        }
-        public String getValue() {
-            return value;
-        }
-        public static Message fromValue(String value) {
-            for (Message m : values()) {
-                if (m.getValue().equals(value)) {
-                    return m;
-                }
-            }
-            return null;
-        }
-        @Override
-        public String toString() {
-            return value;
-        }
-    }
 
     TIPTaskResponse() { super(); }
     
     public TIPTaskResponse(String taskType, String sourceLocale, String targetLocale,
                             String requestPackageId, TIPCreator requestCreator,
-                            Message message, String comment) {
+                            TIPResponseMessage message, String comment) {
         super(taskType, sourceLocale, targetLocale);
         this.requestPackageId = requestPackageId;
         this.requestCreator = requestCreator;
@@ -72,11 +47,11 @@ public class TIPTaskResponse extends TIPTask {
         this.requestCreator = requestCreator;
     }
 
-    public Message getMessage() {
+    public TIPResponseMessage getMessage() {
         return message;
     }
 
-    public void setMessage(Message message) {
+    public void setMessage(TIPResponseMessage message) {
         this.message = message;
     }
 

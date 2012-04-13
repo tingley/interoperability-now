@@ -35,13 +35,13 @@ import com.globalsight.tip.TIPConstants.ContributorTool;
 import com.globalsight.tip.TIPConstants.Creator;
 import com.globalsight.tip.TIPConstants.ObjectFile;
 
-public class TIPManifest {
+class TIPManifest {
 
 	// Only for construction
 	// XXX Should this go in the TIPTask somehow?
 	private TIPTaskType taskType;
 	
-    private TIPPackage tipPackage;
+    private PackageBase tipPackage;
     private String packageId;
     private TIPTask task; // Either request or response
     private TIPCreator creator = new TIPCreator();
@@ -49,17 +49,17 @@ public class TIPManifest {
     private Map<String, TIPObjectSection> objectSections = 
         new HashMap<String, TIPObjectSection>();    
     
-    TIPManifest(TIPPackage tipPackage) {
+    TIPManifest(PackageBase tipPackage) {
         this.tipPackage = tipPackage;
     }
 
-    static TIPManifest newManifest(TIPPackage tipPackage) {
+    static TIPManifest newManifest(PackageBase tipPackage) {
         TIPManifest manifest = new TIPManifest(tipPackage);
-        manifest.setPackageId(UUID.randomUUID().toString());
+        manifest.setPackageId("urn:uuid:" + UUID.randomUUID().toString());
         return manifest;
     }
     
-    static TIPManifest newRequestManifest(TIPPackage tipPackage, TIPTaskType type) {
+    static TIPManifest newRequestManifest(PackageBase tipPackage, TIPTaskType type) {
     	TIPManifest manifest = newManifest(tipPackage);
     	TIPTaskRequest request = new TIPTaskRequest();
     	request.setTaskType(type.getType());
@@ -68,7 +68,7 @@ public class TIPManifest {
     	return manifest;
     }
     
-    static TIPManifest newResponseManifest(TIPPackage tipPackage, TIPTaskType type) {
+    static TIPManifest newResponseManifest(PackageBase tipPackage, TIPTaskType type) {
     	TIPManifest manifest = newManifest(tipPackage);
     	TIPTaskResponse response = new TIPTaskResponse();
     	response.setTaskType(type.getType());
@@ -77,20 +77,24 @@ public class TIPManifest {
     	return manifest;
     }
     
-    static TIPManifest newResponseManifest(TIPPackage tipPackage, 
-    									   TIPManifest requestManifest) {
-    	if (requestManifest.isResponse()) {
+    static TIPManifest newResponseManifest(TIPWriteableResponsePackage tipPackage, 
+    									   TIPPackage requestPackage) {
+    	if (!requestPackage.isRequest()) {
     		throw new IllegalArgumentException(
     				"Can't construct a response to a response package");
     	}
     	TIPManifest manifest = newManifest(tipPackage);
-    	// Get the task type of the request and assign it to the response.
-    	TIPTaskRequest request = (TIPTaskRequest)requestManifest.getTask();
-    	manifest.setTask(new TIPTaskResponse(request, 
-    			requestManifest.getPackageId(), requestManifest.getCreator()));
+    	// Copy all the fields over.  Tedious.
+    	TIPTaskResponse response = new TIPTaskResponse();
+    	response.setRequestCreator(requestPackage.getCreator());
+    	response.setRequestPackageId(requestPackage.getPackageId());
+    	response.setTaskType(requestPackage.getTaskType());
+    	response.setSourceLocale(requestPackage.getSourceLocale());
+    	response.setTargetLocale(requestPackage.getTargetLocale());
+    	manifest.setTask(response);
     	// If it's a standard type, assign that as well.
     	manifest.setTaskType(
-    			StandardTaskType.forTypeUri(request.getTaskType()));
+    			StandardTaskType.forTypeUri(requestPackage.getTaskType()));
     	return manifest;
     }
     
@@ -122,10 +126,15 @@ public class TIPManifest {
     
     // XXX This should blow away any existing settings 
     void loadFromStream(InputStream manifestStream) 
-                throws TIPValidationException, IOException, ParserConfigurationException {
-        Document document = parse(manifestStream);
-        validate(document);
-        loadManifest(document);
+                throws TIPValidationException, IOException {
+    	try {
+	        Document document = parse(manifestStream);
+	        validate(document);
+	        loadManifest(document);
+    	}
+    	catch (ParserConfigurationException e) {
+    		throw new RuntimeException(e);
+    	}
     }    
     
     private void loadManifest(Document document) 
@@ -170,6 +179,7 @@ public class TIPManifest {
         task.setTaskType(getChildTextByName(taskEl, Task.TYPE));
         task.setSourceLocale(getChildTextByName(taskEl, Task.SOURCE_LANGUAGE));
         task.setTargetLocale(getChildTextByName(taskEl, Task.TARGET_LANGUAGE));
+        setTaskType(StandardTaskType.forTypeUri(task.getTaskType()));
     }
     
     private TIPTaskRequest loadTaskRequest(Element requestEl) {
@@ -192,7 +202,7 @@ public class TIPManifest {
                             TaskResponse.COMMENT));
         String rawMessage = getChildTextByName(responseEl, 
                             TaskResponse.MESSAGE);
-        TIPTaskResponse.Message msg = TIPTaskResponse.Message.fromValue(rawMessage);
+        TIPResponseMessage msg = TIPResponseMessage.fromValue(rawMessage);
         if (msg == null) {
             throw new TIPValidationException(
                     "Invalid ResponseMessage value: " + msg);
@@ -317,8 +327,8 @@ public class TIPManifest {
         this.task = task;
     }
     
-    public boolean isResponse() {
-        return (task instanceof TIPTaskResponse);
+    public boolean isRequest() {
+        return (task instanceof TIPTaskRequest);
     }
 
     /**
