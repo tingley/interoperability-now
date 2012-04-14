@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-public class TIPTask {
+class TIPTask {
 
     private String taskType;
     private String sourceLocale, targetLocale;

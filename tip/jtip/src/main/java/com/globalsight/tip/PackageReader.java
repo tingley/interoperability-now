@@ -32,8 +32,8 @@ class PackageReader {
 			// creating the package from a stream, the manifest is created
 			// first and the package doesn't exist yet.  So I need to go back
 			// and re-inject the package once it has been created.
-			for (TIPObjectSection section : tip.getObjectSections()) {
-				for (TIPObjectFile file : section.getObjectFiles()) {
+			for (String sectionTypeUri : tip.getSections()) {
+				for (TIPObjectFile file : tip.getSectionObjects(sectionTypeUri)) {
 					file.setPackage(tip);
 				}
 			}

@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.*;
 
@@ -31,9 +32,9 @@ public class TestTIPPackage {
     public void testPackageLoad() throws Exception {
         TIPPackage tip = getSamplePackage("data/test_package.zip");
         verifyRequestPackage(tip);
-        TIPObjectSection biSection = 
-                tip.getObjectSection(StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
-        for (TIPObjectFile file : biSection.getObjectFiles()) {
+        for (TIPObjectFile file : 
+        	 tip.getSectionObjects(StandardTaskTypeConstants
+        			 .TranslateStrictBitext.BILINGUAL)) {
             // Just instantiating the input stream is the real test..
             InputStream is = file.getInputStream();
             assertNotNull(is);
@@ -92,38 +93,24 @@ public class TestTIPPackage {
         assertTrue(requestPackageId.startsWith("urn:uuid"));
         tip.setSourceLocale("en-US");
         tip.setTargetLocale("fr-FR");
-                
-        TIPObjectSection inputSection = tip.addObjectSection("bilingual", 
-            		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
-        TIPObjectFile f1 = inputSection.addObject(
-                new TIPObjectFile("test1.xlf", 1));
-        OutputStream os = f1.getOutputStream();
-        FileUtil.copyStreamToStream(
-                new ByteArrayInputStream("test".getBytes("UTF-8")), os);
-        os.close();
+               
+        TIPObjectFile f1 = tip.addSectionObject(
+        		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
+        		"test1.xlf", 
+        		new ByteArrayInputStream("test".getBytes("UTF-8"))); 
         
         File temp = File.createTempFile("tiptest", ".zip");
-        os = new FileOutputStream(temp);
+        OutputStream os = new FileOutputStream(temp);
         tip.saveToStream(os);
         os.close();
         TIPPackage roundTrip = 
             TIPPackageFactory.openFromStream(new FileInputStream(temp));
         assertNotNull(roundTrip);
-        //assertEquals(manifest, roundTrip.getManifest());
         assertEquals(tip.getPackageId(), roundTrip.getPackageId());
         assertEquals(tip.getCreator(), roundTrip.getCreator());
         assertEquals(tip.getTaskType(), roundTrip.getTaskType());
         assertEquals(tip.getSourceLocale(), roundTrip.getSourceLocale());
         assertEquals(tip.getTargetLocale(), roundTrip.getTargetLocale());
-        //assertEquals(manifest.getObjectSections(), roundTrip.getManifest().getObjectSections());
-        Collection<TIPObjectSection> s1 = tip.getObjectSections();
-        Collection<TIPObjectSection> s2 = roundTrip.getObjectSections();
-        Iterator<TIPObjectSection> it1 = s1.iterator(), it2 = s2.iterator();
-        for (; it1.hasNext() && it2.hasNext(); ) {
-            assertEquals(it1.next(), it2.next());
-        }
-        assertFalse(it1.hasNext());
-        assertFalse(it2.hasNext());
         comparePackageParts(tip, roundTrip);        
         temp.delete();
         tip.close();
@@ -155,21 +142,20 @@ public class TestTIPPackage {
     }
     
     private void comparePackageParts(TIPPackage p1, TIPPackage p2) throws Exception {
-        assertNotNull(p1.getObjectSections());
-        assertNotNull(p2.getObjectSections());
-        // XXX Again, this cheats slightly by assuming a particular order
-        assertEquals(p1.getObjectSections().size(), 
-                     p2.getObjectSections().size());
-        Iterator<TIPObjectSection> it1 = p1.getObjectSections().iterator();
-        Iterator<TIPObjectSection> it2 = p2.getObjectSections().iterator();
-        while (it1.hasNext()) {
-            TIPObjectSection s1 = it1.next();
-            assertTrue(it2.hasNext());
-            TIPObjectSection s2 = it2.next();
-            assertEquals(s1.getObjectFiles().size(), 
-                         s2.getObjectFiles().size());
-            Iterator<TIPObjectFile> fit1 = s1.getObjectFiles().iterator();
-            Iterator<TIPObjectFile> fit2 = s2.getObjectFiles().iterator();
+        Set<String> s1 = p1.getSections();
+        Set<String> s2 = p2.getSections();
+        assertNotNull(s1);
+        assertNotNull(s2);
+        assertEquals(s1, s2);
+        for (String uri : s1) {
+        	List<TIPObjectFile> o1 = p1.getSectionObjects(uri);
+        	List<TIPObjectFile> o2 = p2.getSectionObjects(uri);
+        	assertNotNull(o1);
+        	assertNotNull(o2);
+        	assertEquals(o1, o2);
+	        // XXX Again, this cheats slightly by assuming a particular order
+            Iterator<TIPObjectFile> fit1 = o1.iterator();
+            Iterator<TIPObjectFile> fit2 = o2.iterator();
             while (fit1.hasNext()) {
                 TIPObjectFile f1 = fit1.next();
                 assertTrue(fit2.hasNext());
@@ -251,11 +237,9 @@ public class TestTIPPackage {
     
     private static void expectObjectSection(TIPPackage tip,
             String type, List<TIPObjectFile> files) {
-        TIPObjectSection section = tip.getObjectSection(type);
-        assertNotNull(section);
-        assertEquals(type, section.getType());
+        assertNotNull(tip.getSectionName(type));
         assertEquals(files,
-                new ArrayList<TIPObjectFile>(section.getObjectFiles()));
+                new ArrayList<TIPObjectFile>(tip.getSectionObjects(type)));
     }
     
     private void verifyBytes(InputStream is1, InputStream is2) throws IOException {

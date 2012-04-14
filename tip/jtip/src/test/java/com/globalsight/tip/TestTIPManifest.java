@@ -78,7 +78,7 @@ public class TestTIPManifest {
         manifest.getTask().setTargetLocale("jp-JP");
         // Add a section
         final TIPObjectFile file = 
-                new TIPObjectFile("test.xlf", "test.xlf", 1);
+                new TIPObjectFile("test.xlf", "test.xlf");
         TIPObjectSection section = manifest.addObjectSection("bilingual",
                 StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
         section.addObject(file);
@@ -122,7 +122,7 @@ public class TestTIPManifest {
         // which is not guaranteed
         expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(
-                        new TIPObjectFile("Peanut_Butter.xlf", 1)));
+                        new TIPObjectFile("Peanut_Butter.xlf")));
         expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.PREVIEW,
                 new ArrayList<TIPObjectFile>() {
                     {
@@ -160,7 +160,7 @@ public class TestTIPManifest {
                                         "http://127.0.0.1/test",
                                         getDate(2011, 4, 9, 22, 45, 0),
                                         new TIPTool("TestTool", "http://interoperability-now.org/", "1.0")),
-                        TIPResponseMessage.SUCCESS, ""),
+                        TIPResponseMessage.Success, ""),
                      manifest.getTask());
         assertEquals(new TIPCreator("Test Testerson", 
                                 "http://interoperability-now.org", 
@@ -169,7 +169,7 @@ public class TestTIPManifest {
                                         "http://interoperability-now.org", "2.0")),
                      manifest.getCreator());
         TIPTaskResponse response = ((TIPTaskResponse)manifest.getTask());
-        assertEquals(TIPResponseMessage.SUCCESS, 
+        assertEquals(TIPResponseMessage.Success, 
                 response.getMessage());
         assertEquals("", response.getComment());
         // TODO: verify response

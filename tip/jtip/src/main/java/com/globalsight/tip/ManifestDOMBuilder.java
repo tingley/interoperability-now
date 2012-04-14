@@ -99,7 +99,7 @@ class ManifestDOMBuilder {
         responseEl.appendChild(makeTask(response));
         responseEl.appendChild(makeInResponseTo(response));
         appendElementChildWithText(document, responseEl,
-                TaskResponse.MESSAGE, response.getMessage().getValue());
+                TaskResponse.MESSAGE, response.getMessage().toString());
         String comment = response.getComment() != null ? 
                 response.getComment() : "";
         appendElementChildWithText(document, responseEl,

@@ -202,7 +202,7 @@ class TIPManifest {
                             TaskResponse.COMMENT));
         String rawMessage = getChildTextByName(responseEl, 
                             TaskResponse.MESSAGE);
-        TIPResponseMessage msg = TIPResponseMessage.fromValue(rawMessage);
+        TIPResponseMessage msg = TIPResponseMessage.valueOf(rawMessage);
         if (msg == null) {
             throw new TIPValidationException(
                     "Invalid ResponseMessage value: " + msg);
@@ -266,7 +266,8 @@ class TIPManifest {
                     "Invalid sequence value: '" + rawSequence + "'");
         }
         object.setLocation(getChildTextByName(file, ObjectFile.LOCATION));
-        object.setName(getChildTextByName(file, ObjectFile.NAME));
+        String name = getChildTextByName(file, ObjectFile.NAME);
+        object.setName((name == null) ? object.getLocation() : name);
         return object;
     }
 
