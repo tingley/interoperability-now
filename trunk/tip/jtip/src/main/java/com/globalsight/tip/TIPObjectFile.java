@@ -13,30 +13,37 @@ public class TIPObjectFile {
     private TIPObjectSection section;
 
     private String name, location;
-    private int sequence;
+    private int sequence = 1;
     
     TIPObjectFile() { }
 
     /**
      * Constructor where name and location are the same.
      * @param location
-     * @param sequence
      */
-    public TIPObjectFile(String location, int sequence) {
+    TIPObjectFile(String location) {
+        this(location, location);
+    }
+
+    TIPObjectFile(String location, int sequence) {
         this(location, location, sequence);
     }
 
-    public TIPObjectFile(String location, String name, int sequence) {
+    TIPObjectFile(String location, String name) {
         this.location = location;
         this.name = name;
+    }
+    
+    TIPObjectFile(String location, String name, int sequence) {
+        this(location, name);
         this.sequence = sequence;
     }
     
-    public TIPObjectSection getSection() {
+    TIPObjectSection getSection() {
         return section;
     }
     
-    public void setSection(TIPObjectSection section) {
+    void setSection(TIPObjectSection section) {
         this.section = section;
     }
     

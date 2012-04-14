@@ -3,12 +3,19 @@ package com.globalsight.tip;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -57,15 +64,7 @@ abstract class PackageBase implements TIPWriteablePackage {
 	public String getTargetLocale() {
 		return getManifest().getTask().getTargetLocale();
 	}
-	
-	public TIPObjectSection getObjectSection(String sectionType) {
-		return getManifest().getObjectSection(sectionType);
-	}
-	
-	public Collection<TIPObjectSection> getObjectSections() {
-		return getManifest().getObjectSections();
-	}
-	
+
 	public void setPackageId(String id) {
 		getManifest().setPackageId(id);
 	}
@@ -85,11 +84,70 @@ abstract class PackageBase implements TIPWriteablePackage {
 	public void setTargetLocale(String targetLocale) {
 		getManifest().getTask().setTargetLocale(targetLocale);
 	}
-	
-	public TIPObjectSection addObjectSection(String name, String type) {
-		return getManifest().addObjectSection(name, type);
+
+	// For now, this sorts every time
+	public List<TIPObjectFile> getSectionObjects(String sectionTypeUri) {
+		TIPObjectSection section = 
+				getManifest().getObjectSection(sectionTypeUri);
+		if (section == null) {
+			return Collections.emptyList();
+		}
+		List<TIPObjectFile> list = 
+				new ArrayList<TIPObjectFile>(section.getObjectFiles());
+		Collections.sort(list, new Comparator<TIPObjectFile>() {
+			public int compare(TIPObjectFile f1, TIPObjectFile f2) {
+				return f1.getSequence() - f2.getSequence();
+			}
+		});
+		return list;
 	}
-    
+	
+	public Set<String> getSections() {
+		Set<String> sections = new HashSet<String>();
+		for (TIPObjectSection s : getManifest().getObjectSections()) {
+			sections.add(s.getType());
+		}
+		return sections;
+	}
+	
+	public String getSectionName(String sectionTypeUri) {
+		TIPObjectSection section = 
+				getManifest().getObjectSection(sectionTypeUri);
+		return (section == null) ? null : section.getName();
+	}
+
+	public TIPObjectFile addSectionObject(String sectionTypeUri, 
+			String objectName, InputStream objectData) throws IOException, TIPException {
+		TIPObjectSection section = manifest.getObjectSection(sectionTypeUri);
+		if (section == null) {
+			// Create the section.  Derive the section name from the uri.
+			section = manifest.addObjectSection(
+					sectionNameFromUri(sectionTypeUri), sectionTypeUri);
+		}
+		// TODO: path normalization, etc
+		TIPObjectFile objectFile = new TIPObjectFile(objectName, objectName);
+		section.addObject(objectFile);
+		// Copy the data
+		OutputStream os = objectFile.getOutputStream();
+		FileUtil.copyStreamToStream(objectData, os);
+		objectData.close();
+		os.close();
+		return objectFile;
+	}
+	
+	public TIPObjectFile addSectionObject(String sectionTypeUri, 
+			String objectName, File objectData) throws IOException, TIPException {
+		return addSectionObject(sectionTypeUri, objectName, 
+				new BufferedInputStream(new FileInputStream(objectData)));
+	}
+	
+	private String sectionNameFromUri(String uri) {
+		if (uri.endsWith("/")) {
+			uri = uri.substring(0, uri.length() - 1);
+		}
+		return uri.substring(uri.lastIndexOf('/'), uri.length());
+	}
+	
     /**
      * Write this package to an output stream as a ZIP archive
      * @param outputStream

@@ -10,7 +10,7 @@ import java.util.Collection;
  * section contains one or more objects of the specified type.
  */
 // TODO eventually factor out TIPObject from TIPObjectFile
-public class TIPObjectSection {
+class TIPObjectSection {
     private PackageBase tip;
     private String type;
     private String name;
@@ -53,6 +53,7 @@ public class TIPObjectSection {
     
     public TIPObjectFile addObject(TIPObjectFile object) {
         objects.add(object);
+        object.setSequence(objects.size());
         object.setPackage(tip);
         object.setSection(this);
         return object;
