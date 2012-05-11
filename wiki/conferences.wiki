@@ -8,3 +8,6 @@
 
 ==TM-Europe 2011==
   * [http://www.tm-europe.org/content/tm-europe-2011-programme#abstract4 Interoperability Now!] Andrew Pimlott, (Welocalize), Micah Bly (Medtronic), Gabor Ugray (Kilgray)
+
+==Localization World Paris 2012==
+  * [http://www.localizationworld.com/lwparis2012/programDescription.php#D4 The Case for Interoperability: Efficiency and Freedom of Choice in the Translation Supply Chain] Sven Christian Andrä (ONTRAM Inc), Micah Bly (Medtronic, Inc.), Gergely Vándor (Kilgray), Andrzej Zydroń (XTM International)
