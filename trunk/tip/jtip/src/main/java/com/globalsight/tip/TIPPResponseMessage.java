@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-public enum TIPResponseMessage {
+public enum TIPPResponseMessage {
     Success,
     Failure;
 }

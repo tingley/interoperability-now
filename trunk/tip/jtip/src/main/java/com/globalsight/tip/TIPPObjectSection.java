@@ -10,15 +10,15 @@ import java.util.Collection;
  * section contains one or more objects of the specified type.
  */
 // TODO eventually factor out TIPObject from TIPObjectFile
-class TIPObjectSection {
+class TIPPObjectSection {
     private PackageBase tip;
     private String type;
     private String name;
-    Collection<TIPObjectFile> objects = new ArrayList<TIPObjectFile>();
+    Collection<TIPPObjectFile> objects = new ArrayList<TIPPObjectFile>();
     
-    TIPObjectSection() { }
+    TIPPObjectSection() { }
     
-    public TIPObjectSection(String name, String type) {
+    public TIPPObjectSection(String name, String type) {
         this.name = name;
         this.type = type;
     }
@@ -31,7 +31,7 @@ class TIPObjectSection {
         this.tip = tip;
     }
     
-    TIPPackage getPackage() {
+    TIPP getPackage() {
         return tip;
     }
     
@@ -47,11 +47,11 @@ class TIPObjectSection {
         this.name = name;
     }
     
-    public Collection<TIPObjectFile> getObjectFiles() {
+    public Collection<TIPPObjectFile> getObjectFiles() {
         return objects;
     }
     
-    public TIPObjectFile addObject(TIPObjectFile object) {
+    public TIPPObjectFile addObject(TIPPObjectFile object) {
         objects.add(object);
         object.setSequence(objects.size());
         object.setPackage(tip);
@@ -69,10 +69,10 @@ class TIPObjectSection {
         if (o == this) {
             return true;
         }
-        if (o == null || !(o instanceof TIPObjectSection)) {
+        if (o == null || !(o instanceof TIPPObjectSection)) {
             return false;
         }
-        TIPObjectSection s = (TIPObjectSection)o;
+        TIPPObjectSection s = (TIPPObjectSection)o;
         return type.equals(s.getType()) && 
                 name.equals(s.getName()) &&
                 objects.equals(s.getObjectFiles());

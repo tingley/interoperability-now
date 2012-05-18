@@ -10,20 +10,20 @@ class PackageReader {
 		this.source = source;
 	}
 	
-	PackageBase load() throws TIPException, IOException {
+	PackageBase load() throws TIPPException, IOException {
 		source.open();
 		
 		try {
 			InputStream is = source.getPackageStream(PackageBase.MANIFEST);
-			TIPManifest manifest = new TIPManifest(null);
+			Manifest manifest = new Manifest(null);
 			manifest.loadFromStream(is);
 			// What kind of manifest was it?
 			PackageBase tip = null;
 			if (manifest.isRequest()) {
-				tip = new TIPWriteableRequestPackage(source);
+				tip = new WriteableRequestTIPP(source);
 			}
 			else {
-				tip = new TIPWriteableResponsePackage(source);
+				tip = new WriteableResponseTIPP(source);
 			}
 			tip.setManifest(manifest);
 			// HACK: Doing this to resolve an ugly chicken-and-egg
@@ -33,14 +33,14 @@ class PackageReader {
 			// first and the package doesn't exist yet.  So I need to go back
 			// and re-inject the package once it has been created.
 			for (String sectionTypeUri : tip.getSections()) {
-				for (TIPObjectFile file : tip.getSectionObjects(sectionTypeUri)) {
+				for (TIPPObjectFile file : tip.getSectionObjects(sectionTypeUri)) {
 					file.setPackage(tip);
 				}
 			}
 			return tip;
 		}
 		catch (FileNotFoundException e) {
-			throw new TIPException("Package has no " + PackageBase.MANIFEST);
+			throw new TIPPException("Package has no " + PackageBase.MANIFEST);
 		}
 	}
 }

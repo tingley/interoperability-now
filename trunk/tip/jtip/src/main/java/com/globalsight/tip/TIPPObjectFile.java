@@ -8,42 +8,42 @@ import java.io.IOException;
 /**
  * Represents a TIP resource represented as a file.
  */
-public class TIPObjectFile {
+public class TIPPObjectFile {
     private PackageBase tipPackage;
-    private TIPObjectSection section;
+    private TIPPObjectSection section;
 
     private String name, location;
     private int sequence = 1;
     
-    TIPObjectFile() { }
+    TIPPObjectFile() { }
 
     /**
      * Constructor where name and location are the same.
      * @param location
      */
-    TIPObjectFile(String location) {
+    TIPPObjectFile(String location) {
         this(location, location);
     }
 
-    TIPObjectFile(String location, int sequence) {
+    TIPPObjectFile(String location, int sequence) {
         this(location, location, sequence);
     }
 
-    TIPObjectFile(String location, String name) {
+    TIPPObjectFile(String location, String name) {
         this.location = location;
         this.name = name;
     }
     
-    TIPObjectFile(String location, String name, int sequence) {
+    TIPPObjectFile(String location, String name, int sequence) {
         this(location, name);
         this.sequence = sequence;
     }
     
-    TIPObjectSection getSection() {
+    TIPPObjectSection getSection() {
         return section;
     }
     
-    void setSection(TIPObjectSection section) {
+    void setSection(TIPPObjectSection section) {
         this.section = section;
     }
     
@@ -51,7 +51,7 @@ public class TIPObjectFile {
     	return tipPackage.getPackageObjectInputStream(getObjectPath());
     }
 
-    public BufferedOutputStream getOutputStream() throws IOException, TIPException {
+    public BufferedOutputStream getOutputStream() throws IOException, TIPPException {
     	return tipPackage.getPackageObjectOutputStream(getObjectPath());
     }
     
@@ -108,10 +108,10 @@ public class TIPObjectFile {
         if (o == this) {
             return true;
         }
-        if (o == null || !(o instanceof TIPObjectFile)) {
+        if (o == null || !(o instanceof TIPPObjectFile)) {
             return false;
         }
-        TIPObjectFile f = (TIPObjectFile)o;
+        TIPPObjectFile f = (TIPPObjectFile)o;
         return f.getLocation().equals(getLocation()) &&
                 f.getName().equals(getName()) &&
                 f.getSequence() == getSequence();

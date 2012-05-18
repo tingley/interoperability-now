@@ -1,17 +1,17 @@
 package com.globalsight.tip;
 
-class TIPTaskResponse extends TIPTask {
+class TIPPTaskResponse extends TIPPTask {
     private String requestPackageId;
-    private TIPCreator requestCreator;
-    private TIPResponseMessage message;
+    private TIPPCreator requestCreator;
+    private TIPPResponseMessage message;
     private String comment;
     
 
-    TIPTaskResponse() { super(); }
+    TIPPTaskResponse() { super(); }
     
-    public TIPTaskResponse(String taskType, String sourceLocale, String targetLocale,
-                            String requestPackageId, TIPCreator requestCreator,
-                            TIPResponseMessage message, String comment) {
+    public TIPPTaskResponse(String taskType, String sourceLocale, String targetLocale,
+                            String requestPackageId, TIPPCreator requestCreator,
+                            TIPPResponseMessage message, String comment) {
         super(taskType, sourceLocale, targetLocale);
         this.requestPackageId = requestPackageId;
         this.requestCreator = requestCreator;
@@ -23,8 +23,8 @@ class TIPTaskResponse extends TIPTask {
      * Create a response header based on an existing request Manifest.
      * @param request
      */
-    public TIPTaskResponse(TIPTaskRequest request, 
-    		String requestPackageId, TIPCreator requestCreator) {
+    public TIPPTaskResponse(TIPPTaskRequest request, 
+    		String requestPackageId, TIPPCreator requestCreator) {
     	super(request.getTaskType(), request.getSourceLocale(), 
     		  request.getTargetLocale());
     	this.requestPackageId = requestPackageId;
@@ -39,19 +39,19 @@ class TIPTaskResponse extends TIPTask {
         this.requestPackageId = requestPackageId;
     }
 
-    public TIPCreator getRequestCreator() {
+    public TIPPCreator getRequestCreator() {
         return requestCreator;
     }
 
-    public void setRequestCreator(TIPCreator requestCreator) {
+    public void setRequestCreator(TIPPCreator requestCreator) {
         this.requestCreator = requestCreator;
     }
 
-    public TIPResponseMessage getMessage() {
+    public TIPPResponseMessage getMessage() {
         return message;
     }
 
-    public void setMessage(TIPResponseMessage message) {
+    public void setMessage(TIPPResponseMessage message) {
         this.message = message;
     }
 
@@ -66,8 +66,8 @@ class TIPTaskResponse extends TIPTask {
     @Override
     public boolean equals(Object o) {
         if (!super.equals(o) || 
-            !(o instanceof TIPTaskResponse)) return false;
-        TIPTaskResponse r = (TIPTaskResponse)o;
+            !(o instanceof TIPPTaskResponse)) return false;
+        TIPPTaskResponse r = (TIPPTaskResponse)o;
         return r.getMessage().equals(getMessage()) &&
                 r.getComment().equals(getComment()) &&
                 r.getRequestPackageId().equals(getRequestPackageId()) &&

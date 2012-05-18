@@ -34,14 +34,14 @@ abstract class PackageSource {
     /**
      * @param path
      * @return
-     * @throws TIPException 
+     * @throws TIPPException 
      * @throws IOException 
      */
-    BufferedOutputStream getPackageObjectOutputStream(String path) throws IOException, TIPException {
+    BufferedOutputStream getPackageObjectOutputStream(String path) throws IOException, TIPPException {
     	File f = getPackageObjectFile(path);
         if (!f.exists()) {
             if (!FileUtil.recursiveCreate(f)) {
-                throw new TIPException(
+                throw new TIPPException(
                         "Unable to open resource for writing: " + path);
             }
         }

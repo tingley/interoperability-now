@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.globalsight.tip.TIPPackage;
-import com.globalsight.tip.TIPPackageFactory;
+import com.globalsight.tip.TIPP;
+import com.globalsight.tip.TIPPFactory;
 
 public class TIPExplode {
 
@@ -28,7 +28,7 @@ public class TIPExplode {
         File targetDir = prepareTargetDirectory(args[1]);
         
         InputStream is = new BufferedInputStream(new FileInputStream(tipFile));
-        TIPPackage tip = TIPPackageFactory.openFromStream(is);
+        TIPP tip = TIPPFactory.openFromStream(is);
         is.close();
         tip.saveToDirectory(targetDir);
         tip.close();

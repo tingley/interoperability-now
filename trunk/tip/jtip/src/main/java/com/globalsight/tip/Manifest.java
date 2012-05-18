@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-import static com.globalsight.tip.TIPConstants.*;
+import static com.globalsight.tip.TIPPConstants.*;
 import static com.globalsight.tip.XMLUtil.*;
 import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
@@ -31,61 +31,61 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.globalsight.tip.TIPConstants.ContributorTool;
-import com.globalsight.tip.TIPConstants.Creator;
-import com.globalsight.tip.TIPConstants.ObjectFile;
+import com.globalsight.tip.TIPPConstants.ContributorTool;
+import com.globalsight.tip.TIPPConstants.Creator;
+import com.globalsight.tip.TIPPConstants.ObjectFile;
 
-class TIPManifest {
+class Manifest {
 
 	// Only for construction
 	// XXX Should this go in the TIPTask somehow?
-	private TIPTaskType taskType;
+	private TIPPTaskType taskType;
 	
     private PackageBase tipPackage;
     private String packageId;
-    private TIPTask task; // Either request or response
-    private TIPCreator creator = new TIPCreator();
+    private TIPPTask task; // Either request or response
+    private TIPPCreator creator = new TIPPCreator();
     
-    private Map<String, TIPObjectSection> objectSections = 
-        new HashMap<String, TIPObjectSection>();    
+    private Map<String, TIPPObjectSection> objectSections = 
+        new HashMap<String, TIPPObjectSection>();    
     
-    TIPManifest(PackageBase tipPackage) {
+    Manifest(PackageBase tipPackage) {
         this.tipPackage = tipPackage;
     }
 
-    static TIPManifest newManifest(PackageBase tipPackage) {
-        TIPManifest manifest = new TIPManifest(tipPackage);
+    static Manifest newManifest(PackageBase tipPackage) {
+        Manifest manifest = new Manifest(tipPackage);
         manifest.setPackageId("urn:uuid:" + UUID.randomUUID().toString());
         return manifest;
     }
     
-    static TIPManifest newRequestManifest(PackageBase tipPackage, TIPTaskType type) {
-    	TIPManifest manifest = newManifest(tipPackage);
-    	TIPTaskRequest request = new TIPTaskRequest();
+    static Manifest newRequestManifest(PackageBase tipPackage, TIPPTaskType type) {
+    	Manifest manifest = newManifest(tipPackage);
+    	TIPPTaskRequest request = new TIPPTaskRequest();
     	request.setTaskType(type.getType());
     	manifest.setTaskType(type);
     	manifest.setTask(request);
     	return manifest;
     }
     
-    static TIPManifest newResponseManifest(PackageBase tipPackage, TIPTaskType type) {
-    	TIPManifest manifest = newManifest(tipPackage);
-    	TIPTaskResponse response = new TIPTaskResponse();
+    static Manifest newResponseManifest(PackageBase tipPackage, TIPPTaskType type) {
+    	Manifest manifest = newManifest(tipPackage);
+    	TIPPTaskResponse response = new TIPPTaskResponse();
     	response.setTaskType(type.getType());
     	manifest.setTaskType(type);
     	manifest.setTask(response);
     	return manifest;
     }
     
-    static TIPManifest newResponseManifest(TIPWriteableResponsePackage tipPackage, 
-    									   TIPPackage requestPackage) {
+    static Manifest newResponseManifest(WriteableResponseTIPP tipPackage, 
+    									   TIPP requestPackage) {
     	if (!requestPackage.isRequest()) {
     		throw new IllegalArgumentException(
     				"Can't construct a response to a response package");
     	}
-    	TIPManifest manifest = newManifest(tipPackage);
+    	Manifest manifest = newManifest(tipPackage);
     	// Copy all the fields over.  Tedious.
-    	TIPTaskResponse response = new TIPTaskResponse();
+    	TIPPTaskResponse response = new TIPPTaskResponse();
     	response.setRequestCreator(requestPackage.getCreator());
     	response.setRequestPackageId(requestPackage.getPackageId());
     	response.setTaskType(requestPackage.getTaskType());
@@ -98,15 +98,15 @@ class TIPManifest {
     	return manifest;
     }
     
-    void setTaskType(TIPTaskType type) {
+    void setTaskType(TIPPTaskType type) {
     	this.taskType = type;
     }
     
-    TIPTaskType getTaskType() {
+    TIPPTaskType getTaskType() {
     	return taskType;
     }
     
-    void saveToStream(OutputStream saveStream) throws TIPException { 
+    void saveToStream(OutputStream saveStream) throws TIPPException { 
         try {
             Document document = new ManifestDOMBuilder(this).makeDocument();
             validate(document);
@@ -120,13 +120,13 @@ class TIPManifest {
                     new StreamResult(saveStream));
         }
         catch (Exception e) {
-            throw new TIPException(e);
+            throw new TIPPException(e);
         }
     }
     
     // XXX This should blow away any existing settings 
     void loadFromStream(InputStream manifestStream) 
-                throws TIPValidationException, IOException {
+                throws TIPPValidationException, IOException {
     	try {
 	        Document document = parse(manifestStream);
 	        validate(document);
@@ -138,14 +138,14 @@ class TIPManifest {
     }    
     
     private void loadManifest(Document document) 
-                            throws TIPValidationException {
+                            throws TIPPValidationException {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
         loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS));
     }
     
     private void loadDescriptor(Element descriptor) 
-                            throws TIPValidationException {
+                            throws TIPPValidationException {
         packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
         
         creator = loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
@@ -154,8 +154,8 @@ class TIPManifest {
         task = loadTaskRequestOrResponse(descriptor);
     }
     
-    private TIPCreator loadCreator(Element creatorEl) {
-        TIPCreator creator = new TIPCreator();
+    private TIPPCreator loadCreator(Element creatorEl) {
+        TIPPCreator creator = new TIPPCreator();
         creator.setName(getChildTextByName(creatorEl, Creator.NAME));
         creator.setId(getChildTextByName(creatorEl, Creator.ID));
         creator.setDate(
@@ -165,8 +165,8 @@ class TIPManifest {
         return creator;
     }
     
-    private TIPTask loadTaskRequestOrResponse(Element descriptor) 
-                        throws TIPValidationException {
+    private TIPPTask loadTaskRequestOrResponse(Element descriptor) 
+                        throws TIPPValidationException {
         Element requestEl = getFirstChildByName(descriptor, TASK_REQUEST);
         if (requestEl != null) {
             return loadTaskRequest(requestEl);
@@ -175,22 +175,22 @@ class TIPManifest {
                                  TASK_RESPONSE));
     }
     
-    private void loadTask(Element taskEl, TIPTask task) {
+    private void loadTask(Element taskEl, TIPPTask task) {
         task.setTaskType(getChildTextByName(taskEl, Task.TYPE));
         task.setSourceLocale(getChildTextByName(taskEl, Task.SOURCE_LANGUAGE));
         task.setTargetLocale(getChildTextByName(taskEl, Task.TARGET_LANGUAGE));
         setTaskType(StandardTaskType.forTypeUri(task.getTaskType()));
     }
     
-    private TIPTaskRequest loadTaskRequest(Element requestEl) {
-        TIPTaskRequest request = new TIPTaskRequest();
+    private TIPPTaskRequest loadTaskRequest(Element requestEl) {
+        TIPPTaskRequest request = new TIPPTaskRequest();
         loadTask(getFirstChildByName(requestEl, TASK), request);
         return request;
     }
     
-    private TIPTaskResponse loadTaskResponse(Element responseEl) 
-                                throws TIPValidationException {
-        TIPTaskResponse response = new TIPTaskResponse();
+    private TIPPTaskResponse loadTaskResponse(Element responseEl) 
+                                throws TIPPValidationException {
+        TIPPTaskResponse response = new TIPPTaskResponse();
         loadTask(getFirstChildByName(responseEl, TASK), response);
         Element inResponseTo = getFirstChildByName(responseEl, 
                                 TaskResponse.IN_RESPONSE_TO);
@@ -202,9 +202,9 @@ class TIPManifest {
                             TaskResponse.COMMENT));
         String rawMessage = getChildTextByName(responseEl, 
                             TaskResponse.MESSAGE);
-        TIPResponseMessage msg = TIPResponseMessage.valueOf(rawMessage);
+        TIPPResponseMessage msg = TIPPResponseMessage.valueOf(rawMessage);
         if (msg == null) {
-            throw new TIPValidationException(
+            throw new TIPPValidationException(
                     "Invalid ResponseMessage value: " + msg);
         }
         response.setMessage(msg);
@@ -215,8 +215,8 @@ class TIPManifest {
         return DateUtil.parseTIPDate(getTextContent(dateNode));
     }
     
-    private TIPTool loadTool(Element toolEl) {
-        TIPTool tool = new TIPTool();
+    private TIPPTool loadTool(Element toolEl) {
+        TIPPTool tool = new TIPPTool();
         tool.setName(getChildTextByName(toolEl, ContributorTool.NAME));
         tool.setId(getChildTextByName(toolEl, ContributorTool.ID));
         tool.setVersion(getChildTextByName(toolEl, ContributorTool.VERSION));
@@ -224,25 +224,25 @@ class TIPManifest {
     }
     
     private void loadPackageObjects(Element parent) 
-                            throws TIPValidationException {
+                            throws TIPPValidationException {
         // parse all the sections
         NodeList children = 
             parent.getElementsByTagName(PACKAGE_OBJECT_SECTION);
         for (int i = 0; i < children.getLength(); i++) {
-            TIPObjectSection section = 
+            TIPPObjectSection section = 
                 loadPackageObjectSection((Element)children.item(i));
             // Don't allow duplicate sections
             if (objectSections.containsKey(section.getType())) {
-                throw new TIPValidationException("Duplicate object section: " +
+                throw new TIPPValidationException("Duplicate object section: " +
                                                   section.getType());
             }
             objectSections.put(section.getType(), section);
         }
     }
     
-    private TIPObjectSection loadPackageObjectSection(Element section) 
-                    throws TIPValidationException {
-        TIPObjectSection objectSection = new TIPObjectSection(
+    private TIPPObjectSection loadPackageObjectSection(Element section) 
+                    throws TIPPValidationException {
+        TIPPObjectSection objectSection = new TIPPObjectSection(
                 section.getAttribute(ATTR_SECTION_NAME),
                 section.getAttribute(ATTR_SECTION_TYPE));
         objectSection.setPackage(tipPackage);
@@ -253,16 +253,16 @@ class TIPManifest {
         return objectSection;
     }
     
-    private TIPObjectFile loadObjectFile(Element file) 
-                            throws TIPValidationException {
-        TIPObjectFile object = new TIPObjectFile();
+    private TIPPObjectFile loadObjectFile(Element file) 
+                            throws TIPPValidationException {
+        TIPPObjectFile object = new TIPPObjectFile();
         object.setPackage(tipPackage);
         String rawSequence = file.getAttribute(ObjectFile.ATTR_SEQUENCE);
         try {
             object.setSequence(Integer.parseInt(rawSequence));
         }
         catch (NumberFormatException e) {
-            throw new TIPValidationException(
+            throw new TIPPValidationException(
                     "Invalid sequence value: '" + rawSequence + "'");
         }
         object.setLocation(getChildTextByName(file, ObjectFile.LOCATION));
@@ -272,7 +272,7 @@ class TIPManifest {
     }
 
     Document parse(InputStream is) throws ParserConfigurationException, 
-                                    TIPValidationException, IOException {
+                                    TIPPValidationException, IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -280,14 +280,14 @@ class TIPManifest {
             return builder.parse(is);
         }
         catch (SAXException e) {
-            throw new TIPValidationException(e);
+            throw new TIPPValidationException(e);
         }
         finally {
             is.close();
         }
     }
     
-    void validate(Document dom) throws TIPValidationException {
+    void validate(Document dom) throws TIPPValidationException {
         try {
             InputStream is = 
                 getClass().getResourceAsStream("/TIPPManifest-1_4.xsd");
@@ -300,7 +300,7 @@ class TIPManifest {
             is.close();
         }
         catch (Exception e) {
-            throw new TIPValidationException(e);
+            throw new TIPPValidationException(e);
         }
     }
 
@@ -312,24 +312,24 @@ class TIPManifest {
         this.packageId = packageId;
     }
     
-    public TIPCreator getCreator() {
+    public TIPPCreator getCreator() {
         return creator;
     }
 
-    public void setCreator(TIPCreator creator) {
+    public void setCreator(TIPPCreator creator) {
         this.creator = creator;
     }
 
-    public TIPTask getTask() {
+    public TIPPTask getTask() {
         return task;
     }
     
-    public void setTask(TIPTask task) {
+    public void setTask(TIPPTask task) {
         this.task = task;
     }
     
     public boolean isRequest() {
-        return (task instanceof TIPTaskRequest);
+        return (task instanceof TIPPTaskRequest);
     }
 
     /**
@@ -337,7 +337,7 @@ class TIPManifest {
      * @param type section type
      * @return (possibly empty) collection of object sections
      */
-    public TIPObjectSection getObjectSection(String type) {
+    public TIPPObjectSection getObjectSection(String type) {
         return objectSections.get(type);
     }
     
@@ -345,11 +345,11 @@ class TIPManifest {
      * Return a collection of all object sections.
      * @return (possibly empty) collection of object sections
      */
-    public Collection<TIPObjectSection> getObjectSections() {
+    public Collection<TIPPObjectSection> getObjectSections() {
         return objectSections.values();
     }
     
-    public TIPObjectSection addObjectSection(String name, String type) {
+    public TIPPObjectSection addObjectSection(String name, String type) {
     	// If we were created with a task type object, restrict the 
     	// section type to one of the choices for this task type.
     	if (taskType != null) {
@@ -358,7 +358,7 @@ class TIPManifest {
 					" is not supported for task type " + taskType.getType());
     		}
     	}
-        TIPObjectSection section = new TIPObjectSection(name, type);
+        TIPPObjectSection section = new TIPPObjectSection(name, type);
         section.setPackage(tipPackage);
         objectSections.put(type, section);
         return section;
@@ -367,8 +367,8 @@ class TIPManifest {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o == null || !(o instanceof TIPManifest)) return false;
-        TIPManifest m = (TIPManifest)o;
+        if (o == null || !(o instanceof Manifest)) return false;
+        Manifest m = (Manifest)o;
         return m.getPackageId().equals(getPackageId()) &&
                 m.getCreator().equals(getCreator()) &&
                 m.getTask().equals(getTask()) &&

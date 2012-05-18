@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-interface TIPConstants {
+interface TIPPConstants {
 
     public static final String SCHEMA_VERSION = "1.4";
     public static final String SCHEMA_LOCATION =

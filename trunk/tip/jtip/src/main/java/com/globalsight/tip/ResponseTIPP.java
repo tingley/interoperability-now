@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-public interface TIPResponsePackage extends TIPPackage {
+public interface ResponseTIPP extends TIPP {
 	/**
 	 * Get the ID of the request package to which this is a response.
 	 * @return request package id
@@ -12,13 +12,13 @@ public interface TIPResponsePackage extends TIPPackage {
 	 * a response.
 	 * @return TIPCreator 
 	 */
-	TIPCreator getRequestCreator();
+	TIPPCreator getRequestCreator();
 	
 	/**
 	 * Get the success/failure message for this package.
 	 * @return TIPResponseMessage value
 	 */
-	TIPResponseMessage getMessage();
+	TIPPResponseMessage getMessage();
 	
 	/**
 	 * Get the response package comment, if any.

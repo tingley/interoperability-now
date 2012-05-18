@@ -1,13 +1,13 @@
 package com.globalsight.tip;
 
-class TIPTask {
+class TIPPTask {
 
     private String taskType;
     private String sourceLocale, targetLocale;
 
-    TIPTask() { }
+    TIPPTask() { }
     
-    public TIPTask(String taskType, String sourceLocale, String targetLocale) {
+    public TIPPTask(String taskType, String sourceLocale, String targetLocale) {
         this.taskType = taskType;
         this.sourceLocale = sourceLocale;
         this.targetLocale = targetLocale;
@@ -38,8 +38,8 @@ class TIPTask {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o == null || !(o instanceof TIPTask)) return false;
-        TIPTask t = (TIPTask)o;
+        if (o == null || !(o instanceof TIPPTask)) return false;
+        TIPPTask t = (TIPPTask)o;
         return t.getTaskType().equals(getTaskType()) &&
                 t.getSourceLocale().equals(getSourceLocale()) &&
                 t.getTargetLocale().equals(getTargetLocale());

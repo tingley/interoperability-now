@@ -20,9 +20,9 @@ import java.util.Set;
 import org.junit.*;
 
 import com.globalsight.tip.FileUtil;
-import com.globalsight.tip.TIPObjectFile;
-import com.globalsight.tip.TIPObjectSection;
-import com.globalsight.tip.TIPPackage;
+import com.globalsight.tip.TIPPObjectFile;
+import com.globalsight.tip.TIPPObjectSection;
+import com.globalsight.tip.TIPP;
 
 import static org.junit.Assert.*;
 
@@ -30,9 +30,9 @@ public class TestTIPPackage {
     
     @Test
     public void testPackageLoad() throws Exception {
-        TIPPackage tip = getSamplePackage("data/test_package.zip");
+        TIPP tip = getSamplePackage("data/test_package.zip");
         verifyRequestPackage(tip);
-        for (TIPObjectFile file : 
+        for (TIPPObjectFile file : 
         	 tip.getSectionObjects(StandardTaskTypeConstants
         			 .TranslateStrictBitext.BILINGUAL)) {
             // Just instantiating the input stream is the real test..
@@ -46,12 +46,12 @@ public class TestTIPPackage {
     @Test
     public void testPackageSave() throws Exception {
         // Load the package, save it out to a zip file, read it back.
-        TIPPackage tip = getSamplePackage("data/test_package.zip");
+        TIPP tip = getSamplePackage("data/test_package.zip");
         File temp = File.createTempFile("tiptest", ".zip");
         OutputStream os = new BufferedOutputStream(new FileOutputStream(temp));
         tip.saveToStream(os);
         os.close();
-        TIPPackage roundtrip  = TIPPackageFactory.openFromStream(
+        TIPP roundtrip  = TIPPFactory.openFromStream(
                 new BufferedInputStream(new FileInputStream(temp)));
         verifyRequestPackage(roundtrip);
         comparePackageParts(tip, roundtrip);
@@ -62,17 +62,17 @@ public class TestTIPPackage {
     
     @Test
     public void testResponsePackage() throws Exception {
-        TIPPackage tip = getSamplePackage("data/test_response_package.zip");
+        TIPP tip = getSamplePackage("data/test_response_package.zip");
         assertFalse(tip.isRequest());
-        verifyResponsePackage((TIPResponsePackage)tip);
+        verifyResponsePackage((ResponseTIPP)tip);
         File temp = File.createTempFile("tiptest", ".zip");
         OutputStream os = new BufferedOutputStream(new FileOutputStream(temp));
         tip.saveToStream(os);
         os.close();
-        TIPPackage roundtrip  = TIPPackageFactory.openFromStream(
+        TIPP roundtrip  = TIPPFactory.openFromStream(
                 new BufferedInputStream(new FileInputStream(temp)));
         assertFalse(roundtrip.isRequest());
-        verifyResponsePackage((TIPResponsePackage)roundtrip);
+        verifyResponsePackage((ResponseTIPP)roundtrip);
         comparePackageParts(tip, roundtrip);
         temp.delete();
         assertTrue("Could not clean up package", tip.close());
@@ -81,11 +81,11 @@ public class TestTIPPackage {
     
     @Test
     public void testNewPackage() throws Exception {
-        TIPWriteableRequestPackage tip = TIPPackageFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT);
+        WriteableRequestTIPP tip = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT);
         tip.setCreator(
-            new TIPCreator("testname", "testid", 
+            new TIPPCreator("testname", "testid", 
                            TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12), 
-                           new TIPTool("jtip", 
+                           new TIPPTool("jtip", 
                                    "http://code.google.com/p/interoperability-now", "0.14"))
         );
         String requestPackageId = tip.getPackageId();
@@ -94,7 +94,7 @@ public class TestTIPPackage {
         tip.setSourceLocale("en-US");
         tip.setTargetLocale("fr-FR");
                
-        TIPObjectFile f1 = tip.addSectionObject(
+        TIPPObjectFile f1 = tip.addSectionObject(
         		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
         		"test1.xlf", 
         		new ByteArrayInputStream("test".getBytes("UTF-8"))); 
@@ -103,8 +103,8 @@ public class TestTIPPackage {
         OutputStream os = new FileOutputStream(temp);
         tip.saveToStream(os);
         os.close();
-        TIPPackage roundTrip = 
-            TIPPackageFactory.openFromStream(new FileInputStream(temp));
+        TIPP roundTrip = 
+            TIPPFactory.openFromStream(new FileInputStream(temp));
         assertNotNull(roundTrip);
         assertEquals(tip.getPackageId(), roundTrip.getPackageId());
         assertEquals(tip.getCreator(), roundTrip.getCreator());
@@ -135,31 +135,31 @@ public class TestTIPPackage {
     }
     */
     
-    private TIPPackage getSamplePackage(String path) throws Exception {
+    private TIPP getSamplePackage(String path) throws Exception {
         InputStream is = 
             getClass().getResourceAsStream(path);
-        return TIPPackageFactory.openFromStream(is);
+        return TIPPFactory.openFromStream(is);
     }
     
-    private void comparePackageParts(TIPPackage p1, TIPPackage p2) throws Exception {
+    private void comparePackageParts(TIPP p1, TIPP p2) throws Exception {
         Set<String> s1 = p1.getSections();
         Set<String> s2 = p2.getSections();
         assertNotNull(s1);
         assertNotNull(s2);
         assertEquals(s1, s2);
         for (String uri : s1) {
-        	List<TIPObjectFile> o1 = p1.getSectionObjects(uri);
-        	List<TIPObjectFile> o2 = p2.getSectionObjects(uri);
+        	List<TIPPObjectFile> o1 = p1.getSectionObjects(uri);
+        	List<TIPPObjectFile> o2 = p2.getSectionObjects(uri);
         	assertNotNull(o1);
         	assertNotNull(o2);
         	assertEquals(o1, o2);
 	        // XXX Again, this cheats slightly by assuming a particular order
-            Iterator<TIPObjectFile> fit1 = o1.iterator();
-            Iterator<TIPObjectFile> fit2 = o2.iterator();
+            Iterator<TIPPObjectFile> fit1 = o1.iterator();
+            Iterator<TIPPObjectFile> fit2 = o2.iterator();
             while (fit1.hasNext()) {
-                TIPObjectFile f1 = fit1.next();
+                TIPPObjectFile f1 = fit1.next();
                 assertTrue(fit2.hasNext());
-                TIPObjectFile f2 = fit2.next();
+                TIPPObjectFile f2 = fit2.next();
                 assertEquals(f1, f2);
                 InputStream is1 = f1.getInputStream();
                 InputStream is2 = f2.getInputStream();
@@ -170,16 +170,16 @@ public class TestTIPPackage {
         }
     }
     
-    static void verifyRequestPackage(TIPPackage tip) {
+    static void verifyRequestPackage(TIPP tip) {
         assertTrue(tip.isRequest());
     	verifySamplePackage(tip, "urn:uuid:12345-abc-6789-aslkjd-19193la-as9911");
     }
 
     @SuppressWarnings("serial")
-    static void verifySamplePackage(TIPPackage tip, String packageId) {
+    static void verifySamplePackage(TIPP tip, String packageId) {
         assertEquals(packageId, tip.getPackageId());
-        assertEquals(new TIPCreator("Test Company", "http://127.0.0.1/test",
-                TestTIPManifest.getDate(2011, 4, 9, 22, 45, 0), new TIPTool("TestTool",
+        assertEquals(new TIPPCreator("Test Company", "http://127.0.0.1/test",
+                TestTIPManifest.getDate(2011, 4, 9, 22, 45, 0), new TIPPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                         tip.getCreator());
         assertEquals(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
@@ -191,34 +191,34 @@ public class TestTIPPackage {
         // which is not guaranteed
         expectObjectSection(tip, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(
-                        new TIPObjectFile("Peanut_Butter.xlf", 1)));
+                        new TIPPObjectFile("Peanut_Butter.xlf", 1)));
         expectObjectSection(tip, StandardTaskTypeConstants.TranslateStrictBitext.PREVIEW,
-                new ArrayList<TIPObjectFile>() {
+                new ArrayList<TIPPObjectFile>() {
                     {
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "Peanut_Butter.html.skl", 1));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "resources/20px-Padlock-silver.svg.png", 2));
-                        add(new TIPObjectFile("resources/load.php", 3));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile("resources/load.php", 3));
+                        add(new TIPPObjectFile(
                                 "resources/290px-PeanutButter.jpg", 4));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "resources/load(1).php", 5));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "resources/magnify-clip.png", 6));
                     }
                 });
     }
     
     @SuppressWarnings("serial")
-    static void verifyResponsePackage(TIPResponsePackage tip) {
+    static void verifyResponsePackage(ResponseTIPP tip) {
         assertEquals("urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239", tip.getPackageId());
-        assertEquals(new TIPCreator("Test Testerson", "http://interoperability-now.org",
-                TestTIPManifest.getDate(2011, 4, 18, 19, 3, 15), new TIPTool("Test Workbench",
+        assertEquals(new TIPPCreator("Test Testerson", "http://interoperability-now.org",
+                TestTIPManifest.getDate(2011, 4, 18, 19, 3, 15), new TIPPTool("Test Workbench",
                         "http://interoperability-now.org", "2.0")),
                         tip.getCreator());
-        assertEquals(new TIPCreator("Test Company", "http://127.0.0.1/test",
-                TestTIPManifest.getDate(2011, 4, 9, 22, 45, 0), new TIPTool("TestTool",
+        assertEquals(new TIPPCreator("Test Company", "http://127.0.0.1/test",
+                TestTIPManifest.getDate(2011, 4, 9, 22, 45, 0), new TIPPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                         tip.getRequestCreator());
         assertEquals("urn:uuid:12345-abc-6789-aslkjd-19193la-as9911",
@@ -232,14 +232,14 @@ public class TestTIPPackage {
         // which is not guaranteed
         expectObjectSection(tip, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(
-                        new TIPObjectFile("Peanut_Butter.xlf", 1)));
+                        new TIPPObjectFile("Peanut_Butter.xlf", 1)));
     }
     
-    private static void expectObjectSection(TIPPackage tip,
-            String type, List<TIPObjectFile> files) {
+    private static void expectObjectSection(TIPP tip,
+            String type, List<TIPPObjectFile> files) {
         assertNotNull(tip.getSectionName(type));
         assertEquals(files,
-                new ArrayList<TIPObjectFile>(tip.getSectionObjects(type)));
+                new ArrayList<TIPPObjectFile>(tip.getSectionObjects(type)));
     }
     
     private void verifyBytes(InputStream is1, InputStream is2) throws IOException {

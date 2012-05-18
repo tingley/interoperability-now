@@ -2,16 +2,16 @@ package com.globalsight.tip;
 
 import java.util.Date;
 
-public class TIPCreator {
+public class TIPPCreator {
 
     private String name;
     private String id;
     private Date date;
-    private TIPTool tool = new TIPTool();
+    private TIPPTool tool = new TIPPTool();
 
-    public TIPCreator() { }
+    public TIPPCreator() { }
     
-    TIPCreator(String name, String id, Date date, TIPTool tool) {
+    TIPPCreator(String name, String id, Date date, TIPPTool tool) {
         this.name = name;
         this.id = id;
         this.date = date;
@@ -36,10 +36,10 @@ public class TIPCreator {
     public void setDate(Date date) {
         this.date = date;
     }
-    public TIPTool getTool() {
+    public TIPPTool getTool() {
         return tool;
     }
-    public void setTool(TIPTool tool) {
+    public void setTool(TIPPTool tool) {
         this.tool = tool;
     }
     
@@ -49,8 +49,8 @@ public class TIPCreator {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o == null || !(o instanceof TIPCreator)) return false;
-        TIPCreator c = (TIPCreator)o;
+        if (o == null || !(o instanceof TIPPCreator)) return false;
+        TIPPCreator c = (TIPPCreator)o;
         return c.getName().equals(getName()) &&
                 c.getId().equals(getId()) &&
                 c.getDate().equals(getDate()) &&

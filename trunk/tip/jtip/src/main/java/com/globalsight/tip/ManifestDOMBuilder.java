@@ -7,7 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import static com.globalsight.tip.TIPConstants.*;
+import static com.globalsight.tip.TIPPConstants.*;
 import static com.globalsight.tip.XMLUtil.*;
 
 /**
@@ -15,10 +15,10 @@ import static com.globalsight.tip.XMLUtil.*;
  */
 class ManifestDOMBuilder {
 
-    private TIPManifest manifest;
+    private Manifest manifest;
     private Document document;
     
-    ManifestDOMBuilder(TIPManifest manifest) {
+    ManifestDOMBuilder(Manifest manifest) {
         this.manifest = manifest;
     }
     
@@ -45,7 +45,7 @@ class ManifestDOMBuilder {
         return descriptor;
     }
     
-    Element makePackageCreator(TIPCreator creator) {
+    Element makePackageCreator(TIPPCreator creator) {
         Element creatorEl = document.createElement(PACKAGE_CREATOR);
         appendElementChildWithText(document, 
                 creatorEl, Creator.NAME, creator.getName());
@@ -57,7 +57,7 @@ class ManifestDOMBuilder {
         return creatorEl;
     }
     
-    Element makeContributorTool(TIPTool tool) {
+    Element makeContributorTool(TIPPTool tool) {
         Element toolEl = document.createElement(TOOL);
         appendElementChildWithText(document,
                 toolEl, ContributorTool.NAME, tool.getName());
@@ -68,22 +68,22 @@ class ManifestDOMBuilder {
         return toolEl;
     }
     
-    Element makeTaskRequestOrResponse(TIPTask task) {
-        if (task instanceof TIPTaskRequest) {
-            return makeTaskRequest((TIPTaskRequest)task);
+    Element makeTaskRequestOrResponse(TIPPTask task) {
+        if (task instanceof TIPPTaskRequest) {
+            return makeTaskRequest((TIPPTaskRequest)task);
         }
         else {
-            return makeTaskResponse((TIPTaskResponse)task);
+            return makeTaskResponse((TIPPTaskResponse)task);
         }
     }
     
-    Element makeTaskRequest(TIPTaskRequest request) {
+    Element makeTaskRequest(TIPPTaskRequest request) {
         Element requestEl = document.createElement(TASK_REQUEST);
         requestEl.appendChild(makeTask(request));
         return requestEl;
     }
     
-    Element makeTask(TIPTask task) {
+    Element makeTask(TIPPTask task) {
         Element taskEl = document.createElement(TASK);
         appendElementChildWithText(document, taskEl, 
                 Task.TYPE, task.getTaskType());
@@ -94,7 +94,7 @@ class ManifestDOMBuilder {
         return taskEl;
     }
     
-    Element makeTaskResponse(TIPTaskResponse response) {
+    Element makeTaskResponse(TIPPTaskResponse response) {
         Element responseEl = document.createElement(TASK_RESPONSE);
         responseEl.appendChild(makeTask(response));
         responseEl.appendChild(makeInResponseTo(response));
@@ -107,7 +107,7 @@ class ManifestDOMBuilder {
         return responseEl;
     }
     
-    Element makeInResponseTo(TIPTaskResponse response) {
+    Element makeInResponseTo(TIPPTaskResponse response) {
         Element inReEl = document.createElement(TaskResponse.IN_RESPONSE_TO);
         appendElementChildWithText(document, inReEl,
                 UNIQUE_PACKAGE_ID, response.getRequestPackageId());
@@ -118,24 +118,24 @@ class ManifestDOMBuilder {
     
     Element makePackageObjects() {
         Element objects = document.createElement(PACKAGE_OBJECTS);
-        for (TIPObjectSection section : manifest.getObjectSections()) {
+        for (TIPPObjectSection section : manifest.getObjectSections()) {
             objects.appendChild(makeObjectSection(section));
         }
         return objects;
     }
     
-    Element makeObjectSection(TIPObjectSection section) {
+    Element makeObjectSection(TIPPObjectSection section) {
         Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getName());
         sectionEl.setAttribute(ATTR_SECTION_TYPE, section.getType());
-        for (TIPObjectFile file : section.getObjectFiles()) {
+        for (TIPPObjectFile file : section.getObjectFiles()) {
             sectionEl.appendChild(makeObjectFile(file));
         }
         return sectionEl;
     }
     
-    Element makeObjectFile(TIPObjectFile file) {
+    Element makeObjectFile(TIPPObjectFile file) {
         Element fileEl = document.createElement(OBJECT_FILE);
         // TODO: is sequence optional?
         fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));

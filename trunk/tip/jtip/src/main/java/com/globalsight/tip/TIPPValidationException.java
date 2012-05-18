@@ -5,16 +5,16 @@ package com.globalsight.tip;
  * is invalid - for reasons of spec conformance, schema 
  * validation, etc. 
  */
-public class TIPValidationException extends TIPException {
+public class TIPPValidationException extends TIPPException {
     private static final long serialVersionUID = 1L;
 
-    TIPValidationException(String message) {
+    TIPPValidationException(String message) {
         super(message);
     }
-    TIPValidationException(Throwable cause) {
+    TIPPValidationException(Throwable cause) {
         super(cause);
     }
-    TIPValidationException(String message, Throwable cause) {
+    TIPPValidationException(String message, Throwable cause) {
         super(message, cause);
     }
 

@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface TIPWriteablePackage extends TIPPackage {
+public interface WriteableTIPP extends TIPP {
 
 	void setPackageId(String id);
 	
-	void setCreator(TIPCreator creator);
+	void setCreator(TIPPCreator creator);
 	
 	void setTaskType(String taskTypeUri);
 	
@@ -35,9 +35,9 @@ public interface TIPWriteablePackage extends TIPPackage {
 	 * @param objectData Object data stream.
 	 * @return TIPObjectFile that is added to the package
 	 */
-	TIPObjectFile addSectionObject(String sectionTypeUri, String objectName,
+	TIPPObjectFile addSectionObject(String sectionTypeUri, String objectName,
 								   InputStream objectData) 
-										   throws IOException, TIPException;
+										   throws IOException, TIPPException;
 	
 	/**
 	 * Add data to the package as an embedded object.  This will copy the 
@@ -58,7 +58,7 @@ public interface TIPWriteablePackage extends TIPPackage {
 	 * @param objectData Object data file.
 	 * @return TIPObjectFile that is added to the package
 	 */
-	TIPObjectFile addSectionObject(String sectionTypeUri, String objectName, 
+	TIPPObjectFile addSectionObject(String sectionTypeUri, String objectName, 
 								   File objectData) 
-										   throws IOException, TIPException;
+										   throws IOException, TIPPException;
 }
