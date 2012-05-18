@@ -37,7 +37,7 @@ public class StandardTaskTypeConstants {
         public static final String OUTPUT =
                 "http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-native-format/output";
         public static final String STS =
-                "http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-generic-bitext/sts";
+                "http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-native-format/sts";
         public static final String TMX =
                 "http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-native-format/tmx";
         public static final String REFERENCE =
