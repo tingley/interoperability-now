@@ -24,10 +24,10 @@ import java.util.zip.ZipOutputStream;
  * readable/writeable stuff is enforced by the interfaces.  Shhh, 
  * don't tell anybody.
  */
-abstract class PackageBase implements TIPWriteablePackage {
+abstract class PackageBase implements WriteableTIPP {
 
     private PackageSource packageSource;
-    private TIPManifest manifest;
+    private Manifest manifest;
     
     PackageBase(PackageSource packageSource) {
         this.packageSource = packageSource;
@@ -37,11 +37,11 @@ abstract class PackageBase implements TIPWriteablePackage {
     static final String INSECURE_OBJECTS_FILE = "pobjects.zip";
     static final String SECURE_OBJECTS_FILE = "pobjects.zip.enc";
 
-    TIPManifest getManifest() {
+    Manifest getManifest() {
         return manifest;
     }
     
-    void setManifest(TIPManifest manifest) {
+    void setManifest(Manifest manifest) {
     	this.manifest = manifest;
     }
     
@@ -49,7 +49,7 @@ abstract class PackageBase implements TIPWriteablePackage {
 		return getManifest().getPackageId();
 	}
 	
-	public TIPCreator getCreator() {
+	public TIPPCreator getCreator() {
 		return getManifest().getCreator();
 	}
 	
@@ -69,7 +69,7 @@ abstract class PackageBase implements TIPWriteablePackage {
 		getManifest().setPackageId(id);
 	}
 	
-	public void setCreator(TIPCreator creator) {
+	public void setCreator(TIPPCreator creator) {
 		getManifest().setCreator(creator);
 	}
 	
@@ -86,16 +86,16 @@ abstract class PackageBase implements TIPWriteablePackage {
 	}
 
 	// For now, this sorts every time
-	public List<TIPObjectFile> getSectionObjects(String sectionTypeUri) {
-		TIPObjectSection section = 
+	public List<TIPPObjectFile> getSectionObjects(String sectionTypeUri) {
+		TIPPObjectSection section = 
 				getManifest().getObjectSection(sectionTypeUri);
 		if (section == null) {
 			return Collections.emptyList();
 		}
-		List<TIPObjectFile> list = 
-				new ArrayList<TIPObjectFile>(section.getObjectFiles());
-		Collections.sort(list, new Comparator<TIPObjectFile>() {
-			public int compare(TIPObjectFile f1, TIPObjectFile f2) {
+		List<TIPPObjectFile> list = 
+				new ArrayList<TIPPObjectFile>(section.getObjectFiles());
+		Collections.sort(list, new Comparator<TIPPObjectFile>() {
+			public int compare(TIPPObjectFile f1, TIPPObjectFile f2) {
 				return f1.getSequence() - f2.getSequence();
 			}
 		});
@@ -104,28 +104,28 @@ abstract class PackageBase implements TIPWriteablePackage {
 	
 	public Set<String> getSections() {
 		Set<String> sections = new HashSet<String>();
-		for (TIPObjectSection s : getManifest().getObjectSections()) {
+		for (TIPPObjectSection s : getManifest().getObjectSections()) {
 			sections.add(s.getType());
 		}
 		return sections;
 	}
 	
 	public String getSectionName(String sectionTypeUri) {
-		TIPObjectSection section = 
+		TIPPObjectSection section = 
 				getManifest().getObjectSection(sectionTypeUri);
 		return (section == null) ? null : section.getName();
 	}
 
-	public TIPObjectFile addSectionObject(String sectionTypeUri, 
-			String objectName, InputStream objectData) throws IOException, TIPException {
-		TIPObjectSection section = manifest.getObjectSection(sectionTypeUri);
+	public TIPPObjectFile addSectionObject(String sectionTypeUri, 
+			String objectName, InputStream objectData) throws IOException, TIPPException {
+		TIPPObjectSection section = manifest.getObjectSection(sectionTypeUri);
 		if (section == null) {
 			// Create the section.  Derive the section name from the uri.
 			section = manifest.addObjectSection(
 					sectionNameFromUri(sectionTypeUri), sectionTypeUri);
 		}
 		// TODO: path normalization, etc
-		TIPObjectFile objectFile = new TIPObjectFile(objectName, objectName);
+		TIPPObjectFile objectFile = new TIPPObjectFile(objectName, objectName);
 		section.addObject(objectFile);
 		// Copy the data
 		OutputStream os = objectFile.getOutputStream();
@@ -135,8 +135,8 @@ abstract class PackageBase implements TIPWriteablePackage {
 		return objectFile;
 	}
 	
-	public TIPObjectFile addSectionObject(String sectionTypeUri, 
-			String objectName, File objectData) throws IOException, TIPException {
+	public TIPPObjectFile addSectionObject(String sectionTypeUri, 
+			String objectName, File objectData) throws IOException, TIPPException {
 		return addSectionObject(sectionTypeUri, objectName, 
 				new BufferedInputStream(new FileInputStream(objectData)));
 	}
@@ -151,10 +151,10 @@ abstract class PackageBase implements TIPWriteablePackage {
     /**
      * Write this package to an output stream as a ZIP archive
      * @param outputStream
-     * @throws TIPException
+     * @throws TIPPException
      * @throws IOException
      */
-    public void saveToStream(OutputStream outputStream) throws TIPException, IOException {
+    public void saveToStream(OutputStream outputStream) throws TIPPException, IOException {
         // XXX What if this has no backing on disk?
         ZipOutputStream zos = new ZipOutputStream(outputStream);
 
@@ -182,9 +182,9 @@ abstract class PackageBase implements TIPWriteablePackage {
      * Write the contents of this package to a directory on disk. 
      * @param outputDirectory top-level directory to contain the package.
      *        This directory should be empty.
-     * @throws TIPException
+     * @throws TIPPException
      */
-    public void saveToDirectory(File outputDirectory) throws TIPException, IOException {
+    public void saveToDirectory(File outputDirectory) throws TIPPException, IOException {
         if (!outputDirectory.exists()) {
             if (!outputDirectory.mkdir()) {
                 throw new IllegalArgumentException("Directory " + 
@@ -202,8 +202,8 @@ abstract class PackageBase implements TIPWriteablePackage {
         manifest.saveToStream(manifestStream);
         manifestStream.close();
         
-        for (TIPObjectSection section : manifest.getObjectSections()) {
-            for (TIPObjectFile objFile : section.getObjectFiles()) {
+        for (TIPPObjectSection section : manifest.getObjectSections()) {
+            for (TIPPObjectFile objFile : section.getObjectFiles()) {
                 // TODO: convert path separators
                 String path = section.getName() + 
                     File.separator + objFile.getLocation();
@@ -245,8 +245,8 @@ abstract class PackageBase implements TIPWriteablePackage {
      * @throws IOException
      */
     void writeObjects(ZipOutputStream zos) throws IOException {
-        for (TIPObjectSection section : manifest.getObjectSections()) {
-            for (TIPObjectFile file : section.getObjectFiles()) {
+        for (TIPPObjectSection section : manifest.getObjectSections()) {
+            for (TIPPObjectFile file : section.getObjectFiles()) {
                 String path = section.getName() +  
                         "/" + file.getLocation();
                 zos.putNextEntry(new ZipEntry(path));
@@ -275,7 +275,7 @@ abstract class PackageBase implements TIPWriteablePackage {
     	return packageSource.getPackageObjectInputStream(path);
     }
     
-    BufferedOutputStream getPackageObjectOutputStream(String path) throws IOException, TIPException {
+    BufferedOutputStream getPackageObjectOutputStream(String path) throws IOException, TIPPException {
     	return packageSource.getPackageObjectOutputStream(path);
     }
 }

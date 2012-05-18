@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-class ResponsePackageBase extends PackageBase implements TIPResponsePackage {
+class ResponsePackageBase extends PackageBase implements ResponseTIPP {
 
 	ResponsePackageBase(PackageSource packageSource) {
 		super(packageSource);
@@ -11,7 +11,7 @@ class ResponsePackageBase extends PackageBase implements TIPResponsePackage {
 	}
 
 	@Override
-	void setManifest(TIPManifest manifest) {
+	void setManifest(Manifest manifest) {
 		if (manifest.isRequest()) {
 			throw new IllegalStateException(
 					"Constructing a response package with request manifest");
@@ -20,38 +20,38 @@ class ResponsePackageBase extends PackageBase implements TIPResponsePackage {
 	}
 	
 	public String getRequestPackageId() {
-		return ((TIPTaskResponse)getManifest().getTask())
+		return ((TIPPTaskResponse)getManifest().getTask())
 				.getRequestPackageId();
 	}
 
-	public TIPCreator getRequestCreator() {
-		return ((TIPTaskResponse)getManifest().getTask()).getRequestCreator();
+	public TIPPCreator getRequestCreator() {
+		return ((TIPPTaskResponse)getManifest().getTask()).getRequestCreator();
 	}
 
 	void setRequestPackageId(String requestPackageId) {
-		((TIPTaskResponse)getManifest().getTask())
+		((TIPPTaskResponse)getManifest().getTask())
 				.setRequestPackageId(requestPackageId);
 	}
 	
-	void setRequestCreator(TIPCreator requestCreator) {
-		((TIPTaskResponse)getManifest().getTask())
+	void setRequestCreator(TIPPCreator requestCreator) {
+		((TIPPTaskResponse)getManifest().getTask())
 				.setRequestCreator(requestCreator);
 	}
 
-	public TIPResponseMessage getMessage() {
-		return ((TIPTaskResponse)getManifest().getTask()).getMessage();
+	public TIPPResponseMessage getMessage() {
+		return ((TIPPTaskResponse)getManifest().getTask()).getMessage();
 	}
 	
-	void setMessage(TIPResponseMessage message) {
-		((TIPTaskResponse)getManifest().getTask()).setMessage(message);
+	void setMessage(TIPPResponseMessage message) {
+		((TIPPTaskResponse)getManifest().getTask()).setMessage(message);
 	}
 
 	public String getComment() {
-		return ((TIPTaskResponse)getManifest().getTask()).getComment();
+		return ((TIPPTaskResponse)getManifest().getTask()).getComment();
 	}
 	
 	void setComment(String comment) {
-		((TIPTaskResponse)getManifest().getTask()).setComment(comment);
+		((TIPPTaskResponse)getManifest().getTask()).setComment(comment);
 	}
 
 }

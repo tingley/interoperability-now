@@ -11,7 +11,7 @@ import com.globalsight.tip.StandardTaskTypeConstants.TranslateStrictBitext;
 import static com.globalsight.tip.StandardTaskTypeConstants.*;
 
 @SuppressWarnings("serial")
-public enum StandardTaskType implements TIPTaskType {
+public enum StandardTaskType implements TIPPTaskType {
 	
 	TRANSLATE_STRICT_BITEXT(TRANSLATE_STRICT_BITEXT_URI, new HashSet<String>() {{
 				add(TranslateStrictBitext.BILINGUAL);
@@ -39,8 +39,8 @@ public enum StandardTaskType implements TIPTaskType {
 			}});
 
 	
-	public static TIPTaskType forTypeUri(String typeUri) {
-		for (TIPTaskType t : values()) {
+	public static TIPPTaskType forTypeUri(String typeUri) {
+		for (TIPPTaskType t : values()) {
 			if (t.getType().equals(typeUri)) {
 				return t;
 			}

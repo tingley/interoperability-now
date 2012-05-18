@@ -15,7 +15,7 @@ public class TestTIPManifest {
 
 	@Test
 	public void testEmptyManifest() throws Exception {
-		TIPManifest manifest = TIPManifest.newManifest(null);
+		Manifest manifest = Manifest.newManifest(null);
 		assertNotNull(manifest.getCreator());
 		assertNotNull(manifest.getCreator().getTool());
 		assertNotNull(manifest.getObjectSections());
@@ -23,7 +23,7 @@ public class TestTIPManifest {
 	
     @Test
     public void testManifest() throws Exception {
-        TIPManifest manifest = new TIPManifest(null);
+        Manifest manifest = new Manifest(null);
         manifest.loadFromStream(getClass().getResourceAsStream(
                 "data/peanut_butter.xml"));
         verifyRequestManifest(manifest);
@@ -31,27 +31,27 @@ public class TestTIPManifest {
 
     @Test
     public void testManifestSave() throws Exception {
-        TIPManifest manifest = new TIPManifest(null);
+        Manifest manifest = new Manifest(null);
         manifest.loadFromStream(getClass().getResourceAsStream(
                 "data/peanut_butter.xml"));
-        TIPManifest roundtrip = roundtripManifest(manifest);
+        Manifest roundtrip = roundtripManifest(manifest);
         verifyRequestManifest(roundtrip);
     }
 
     @Test
     public void testResponseManifest() throws Exception {
-        TIPManifest manifest = new TIPManifest(null);
+        Manifest manifest = new Manifest(null);
         manifest.loadFromStream(getClass().getResourceAsStream(
                 "data/peanut_butter_response.xml"));
         verifySampleResponseManifest(manifest);
-        TIPManifest roundtrip = roundtripManifest(manifest);
+        Manifest roundtrip = roundtripManifest(manifest);
         verifySampleResponseManifest(roundtrip);
     }
 
     @Test
     public void testResponseCreationFromRequest() throws Exception {
-    	TIPPackage requestPackage = getSamplePackage("data/test_package.zip");
-        TIPManifest responseManifest = TIPManifest.newResponseManifest(null, requestPackage);
+    	TIPP requestPackage = getSamplePackage("data/test_package.zip");
+        Manifest responseManifest = Manifest.newResponseManifest(null, requestPackage);
         assertFalse(responseManifest.isRequest());
         assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(), 
    		 	 responseManifest.getTask().getTaskType());
@@ -60,29 +60,29 @@ public class TestTIPManifest {
         // Make sure the internal object was set correctly
         assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT, 
         			 responseManifest.getTaskType());
-        TIPTaskResponse taskResponse = 
-        		(TIPTaskResponse)responseManifest.getTask();
+        TIPPTaskResponse taskResponse = 
+        		(TIPPTaskResponse)responseManifest.getTask();
         assertEquals(requestPackage.getCreator(), taskResponse.getRequestCreator());
         assertEquals(requestPackage.getPackageId(), taskResponse.getRequestPackageId());
     }
     
     @Test
     public void testNewManifest() throws Exception {
-        TIPManifest manifest = TIPManifest.newRequestManifest(null, 
+        Manifest manifest = Manifest.newRequestManifest(null, 
         						StandardTaskType.TRANSLATE_STRICT_BITEXT);
         manifest.setPackageId("urn:uuid:12345");
-        manifest.setCreator(new TIPCreator("Test", "Test Testerson", getDate(
-                2011, 3, 14, 6, 55, 11), new TIPTool("TestTool", "urn:test",
+        manifest.setCreator(new TIPPCreator("Test", "Test Testerson", getDate(
+                2011, 3, 14, 6, 55, 11), new TIPPTool("TestTool", "urn:test",
                 "1.0")));
         manifest.getTask().setSourceLocale("en-US");
         manifest.getTask().setTargetLocale("jp-JP");
         // Add a section
-        final TIPObjectFile file = 
-                new TIPObjectFile("test.xlf", "test.xlf");
-        TIPObjectSection section = manifest.addObjectSection("bilingual",
+        final TIPPObjectFile file = 
+                new TIPPObjectFile("test.xlf", "test.xlf");
+        TIPPObjectSection section = manifest.addObjectSection("bilingual",
                 StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
         section.addObject(file);
-        TIPManifest roundtrip = roundtripManifest(manifest);
+        Manifest roundtrip = roundtripManifest(manifest);
         assertEquals("urn:uuid:12345", roundtrip.getPackageId());
         assertEquals(manifest.getCreator(), roundtrip.getCreator());
         assertEquals(manifest.getTask(), roundtrip.getTask());
@@ -91,85 +91,85 @@ public class TestTIPManifest {
                 Collections.singletonList(file));
     }
 
-    private TIPManifest roundtripManifest(TIPManifest src) throws Exception {
+    private Manifest roundtripManifest(Manifest src) throws Exception {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         src.saveToStream(output);
-        TIPManifest roundtrip = new TIPManifest(null);
+        Manifest roundtrip = new Manifest(null);
         roundtrip
                 .loadFromStream(new ByteArrayInputStream(output.toByteArray()));
         return roundtrip;
     }
 
-    static void verifyRequestManifest(TIPManifest manifest) {
+    static void verifyRequestManifest(Manifest manifest) {
         verifySampleManifest(manifest, "urn:uuid:12345-abc-6789-aslkjd-19193la-as9911");
     }
 
-    static void verifyResponseManifest(TIPManifest manifest) {
+    static void verifyResponseManifest(Manifest manifest) {
         verifySampleManifest(manifest, "urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239");
     }
 
     @SuppressWarnings("serial")
-    static void verifySampleManifest(TIPManifest manifest, String packageId) {
+    static void verifySampleManifest(Manifest manifest, String packageId) {
         assertEquals(packageId, manifest.getPackageId());
-        assertEquals(new TIPCreator("Test Company", "http://127.0.0.1/test",
-                getDate(2011, 4, 9, 22, 45, 0), new TIPTool("TestTool",
+        assertEquals(new TIPPCreator("Test Company", "http://127.0.0.1/test",
+                getDate(2011, 4, 9, 22, 45, 0), new TIPPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                 manifest.getCreator());
-        assertEquals(new TIPTaskRequest(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
+        assertEquals(new TIPPTaskRequest(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
                 "en-US", "fr-FR"), manifest.getTask());
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
         expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
                 Collections.singletonList(
-                        new TIPObjectFile("Peanut_Butter.xlf")));
+                        new TIPPObjectFile("Peanut_Butter.xlf")));
         expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.PREVIEW,
-                new ArrayList<TIPObjectFile>() {
+                new ArrayList<TIPPObjectFile>() {
                     {
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "Peanut_Butter.html.skl", 1));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "resources/20px-Padlock-silver.svg.png", 2));
-                        add(new TIPObjectFile("resources/load.php", 3));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile("resources/load.php", 3));
+                        add(new TIPPObjectFile(
                                 "resources/290px-PeanutButter.jpg", 4));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "resources/load(1).php", 5));
-                        add(new TIPObjectFile(
+                        add(new TIPPObjectFile(
                                 "resources/magnify-clip.png", 6));
                     }
                 });
     }
 
-    static void verifySampleResponseManifest(TIPManifest manifest) {
+    static void verifySampleResponseManifest(Manifest manifest) {
         assertEquals("urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239", 
                      manifest.getPackageId());
-        assertEquals(new TIPCreator("Test Testerson", "http://interoperability-now.org",
-                getDate(2011, 4, 18, 19, 03, 15), new TIPTool("Test Workbench",
+        assertEquals(new TIPPCreator("Test Testerson", "http://interoperability-now.org",
+                getDate(2011, 4, 18, 19, 03, 15), new TIPPTool("Test Workbench",
                         "http://interoperability-now.org", "2.0")),
                 manifest.getCreator());
         // Then verify the response
         assertNotNull(manifest.getTask());
-        assertTrue(manifest.getTask() instanceof TIPTaskResponse);
-        assertEquals(new TIPTaskResponse(
+        assertTrue(manifest.getTask() instanceof TIPPTaskResponse);
+        assertEquals(new TIPPTaskResponse(
         				StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
                         "en-US", 
                         "fr-FR",
                         "urn:uuid:12345-abc-6789-aslkjd-19193la-as9911",
-                        new TIPCreator("Test Company",
+                        new TIPPCreator("Test Company",
                                         "http://127.0.0.1/test",
                                         getDate(2011, 4, 9, 22, 45, 0),
-                                        new TIPTool("TestTool", "http://interoperability-now.org/", "1.0")),
-                        TIPResponseMessage.Success, ""),
+                                        new TIPPTool("TestTool", "http://interoperability-now.org/", "1.0")),
+                        TIPPResponseMessage.Success, ""),
                      manifest.getTask());
-        assertEquals(new TIPCreator("Test Testerson", 
+        assertEquals(new TIPPCreator("Test Testerson", 
                                 "http://interoperability-now.org", 
                                 getDate(2011, 4, 18, 19, 3, 15), 
-                                new TIPTool("Test Workbench", 
+                                new TIPPTool("Test Workbench", 
                                         "http://interoperability-now.org", "2.0")),
                      manifest.getCreator());
-        TIPTaskResponse response = ((TIPTaskResponse)manifest.getTask());
-        assertEquals(TIPResponseMessage.Success, 
+        TIPPTaskResponse response = ((TIPPTaskResponse)manifest.getTask());
+        assertEquals(TIPPResponseMessage.Success, 
                 response.getMessage());
         assertEquals("", response.getComment());
         // TODO: verify response
@@ -186,19 +186,19 @@ public class TestTIPManifest {
         return c.getTime();
     }
 
-    private static void expectObjectSection(TIPManifest manifest,
-            String type, List<TIPObjectFile> files) {
-        TIPObjectSection section = manifest.getObjectSection(type);
+    private static void expectObjectSection(Manifest manifest,
+            String type, List<TIPPObjectFile> files) {
+        TIPPObjectSection section = manifest.getObjectSection(type);
         assertNotNull(section);
         assertEquals(type, section.getType());
         assertEquals(files,
-                new ArrayList<TIPObjectFile>(section.getObjectFiles()));
+                new ArrayList<TIPPObjectFile>(section.getObjectFiles()));
     }
     
-    private TIPPackage getSamplePackage(String path) throws Exception {
+    private TIPP getSamplePackage(String path) throws Exception {
         InputStream is = 
             getClass().getResourceAsStream(path);
-        return TIPPackageFactory.openFromStream(is);
+        return TIPPFactory.openFromStream(is);
     }
 
 }

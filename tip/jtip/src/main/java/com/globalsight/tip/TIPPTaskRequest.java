@@ -1,17 +1,17 @@
 package com.globalsight.tip;
 
-class TIPTaskRequest extends TIPTask {
+class TIPPTaskRequest extends TIPPTask {
 
-    TIPTaskRequest() { super(); }
+    TIPPTaskRequest() { super(); }
     
-    public TIPTaskRequest(String taskType, String sourceLocale, String targetLocale) {
+    public TIPPTaskRequest(String taskType, String sourceLocale, String targetLocale) {
         super(taskType, sourceLocale, targetLocale);
     }
     
     @Override
     public boolean equals(Object o) {
         return super.equals(o) && 
-                (o instanceof TIPTaskRequest);
+                (o instanceof TIPPTaskRequest);
     }
     
     @Override

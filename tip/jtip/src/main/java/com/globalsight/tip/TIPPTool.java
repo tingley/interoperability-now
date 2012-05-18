@@ -1,14 +1,14 @@
 package com.globalsight.tip;
 
-public class TIPTool {
+public class TIPPTool {
 
     private String name;
     private String id;
     private String version;
     
-    TIPTool() { }
+    TIPPTool() { }
 
-    public TIPTool(String name, String id, String version) {
+    public TIPPTool(String name, String id, String version) {
         this.name = name;
         this.id = id;
         this.version = version;
@@ -44,8 +44,8 @@ public class TIPTool {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (o == null || !(o instanceof TIPTool)) return false;
-        TIPTool t = (TIPTool)o;
+        if (o == null || !(o instanceof TIPPTool)) return false;
+        TIPPTool t = (TIPPTool)o;
         return getName().equals(t.getName()) &&
                getId().equals(t.getId()) &&
                getVersion().equals(t.getVersion());

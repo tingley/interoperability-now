@@ -3,16 +3,16 @@ package com.globalsight.tip;
 /**
  * Base class for all exceptions generated within TIP.
  */
-public class TIPException extends Exception {
+public class TIPPException extends Exception {
     private static final long serialVersionUID = 1L;
 
-    TIPException(String message) {
+    TIPPException(String message) {
         super(message);
     }
-    TIPException(Throwable cause) {
+    TIPPException(Throwable cause) {
         super(cause);
     }
-    TIPException(String message, Throwable cause) {
+    TIPPException(String message, Throwable cause) {
         super(cause);
     }
 }

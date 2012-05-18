@@ -2,7 +2,7 @@ package com.globalsight.tip;
 
 import java.util.Set;
 
-public interface TIPTaskType {
+public interface TIPPTaskType {
 	
 	public String getType();
 	

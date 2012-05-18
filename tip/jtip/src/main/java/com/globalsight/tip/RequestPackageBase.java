@@ -1,13 +1,13 @@
 package com.globalsight.tip;
 
-class RequestPackageBase extends PackageBase implements TIPRequestPackage {
+class RequestPackageBase extends PackageBase implements RequestTIPP {
 
 	RequestPackageBase(PackageSource packageSource) {
 		super(packageSource);
 	}
 	
 	@Override
-	void setManifest(TIPManifest manifest) {
+	void setManifest(Manifest manifest) {
 		if (!manifest.isRequest()) {
 			throw new IllegalStateException(
 					"Constructing a request package with response manifest");

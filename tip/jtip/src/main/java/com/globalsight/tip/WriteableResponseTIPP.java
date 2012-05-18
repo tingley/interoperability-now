@@ -1,8 +1,8 @@
 package com.globalsight.tip;
 
-public class TIPWriteableResponsePackage extends ResponsePackageBase implements TIPResponsePackage {
+public class WriteableResponseTIPP extends ResponsePackageBase implements ResponseTIPP {
 
-	TIPWriteableResponsePackage(PackageSource packageSource) {
+	WriteableResponseTIPP(PackageSource packageSource) {
 		super(packageSource);
 	}
 	
@@ -12,12 +12,12 @@ public class TIPWriteableResponsePackage extends ResponsePackageBase implements 
 	}
 	
 	@Override
-	public void setRequestCreator(TIPCreator requestCreator) {
+	public void setRequestCreator(TIPPCreator requestCreator) {
 		super.setRequestCreator(requestCreator);
 	}
 
 	@Override
-	public void setMessage(TIPResponseMessage message) {
+	public void setMessage(TIPPResponseMessage message) {
 		super.setMessage(message);
 	}
 	
