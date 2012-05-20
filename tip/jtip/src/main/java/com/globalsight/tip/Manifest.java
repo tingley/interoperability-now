@@ -333,9 +333,10 @@ class Manifest {
     }
 
     /**
-     * Return a collection of all object sections with a given type.  
+     * Return the object section with a given type, if it exists.  
      * @param type section type
-     * @return (possibly empty) collection of object sections
+     * @return object section for the specified section type, or
+     *         null if no section with that type exists in the TIPP
      */
     public TIPPObjectSection getObjectSection(String type) {
         return objectSections.get(type);
