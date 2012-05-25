@@ -1,0 +1,15 @@
+<!-- 
+   - Stub STS created with the tool at
+   -   http://www.btsbuilder.linport.org/stss/edit/
+  -->
+<structuredTranslationSpecification encoding="utf-8" xmlns:lang="http://www.ttt.org/lang">
+  <linguistic>
+    <source id="source" />
+    <target id="target" />
+  </linguistic>
+  <production id="production" />
+  <environment id="environment" />
+  <relationships id="relationships">
+    <submissions id="submissions" status="incomplete" />
+  </relationships>
+</structuredTranslationSpecification>
