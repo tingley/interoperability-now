@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Build the tip package (unencrypted) in build/
 
@@ -13,11 +13,8 @@ else
     mkdir $BUILD_DIR
 fi
 cd $BUILD_DIR
-cp -a ../input .
-cp -a ../output .
-cp -a ../reference .
 cp -a ../bilingual .
 find . -name \.svn|xargs rm -Rf
-zip -r pobjects.zip input output reference bilingual
+zip -r pobjects.zip bilingual
 cp ../manifest.xml .
 zip -r sample-response.tipp manifest.xml pobjects.zip
