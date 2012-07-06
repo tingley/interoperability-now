@@ -1,0 +1,22 @@
+#This is a list of companies, individuals, and organizations known to be working on, or actively planning, Translation Interoperability Protocol (TIP) implementations.
+
+= Tool Vendors Working on TIP Implementations =
+  * XTM Int'l - XTM Cloud
+    * For translators: download bilingual packages from XTM Cloud, translate in another tool, upload to XTM
+    * For LSPs: import multilingual TIP projects from your client's TMS, manage in XTM, return project to client's TMS 
+  * ONTRAM AG - ONTRAM Enterprise TMS
+    * For translators: download bilingual packages from ONTRAM, translate in another tool, upload to ONTRAM
+    * For TMS owners: manage translation projects in your TMS, hand off packages to your LSP, regardless of what TMS they use. You get the information you need back, they translate on the platform that meets their requirements. 
+  * Kilgray - memoQ translation environment
+    * Import translation projects from other TMSes, translate in memoQ
+    * Export projects from memoQ server, translate in other editors
+
+= LSPs Working on TIP Implementations =
+  * [http://www.aranchodoc.com Arancho Doc]
+    * Streamline workflow from client's online TMS to our offline translation environment (memoQ)
+
+= Enterprise Clients Working on TIP Implementations =
+  * Medtronic, Inc.
+    * Integrate commercial TMS with internal translation QA server to enable automated QA checking of translation documents as they move through workflow
+    * Integrate best-in-class TMS with best-in-class translation editor
+    * Integrate CMS with TMS (via task type of "translate-native-format")
