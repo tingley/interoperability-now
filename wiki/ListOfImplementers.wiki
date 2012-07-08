@@ -1,6 +1,12 @@
 #This is a list of companies, individuals, and organizations known to be working on, or actively planning, Translation Interoperability Protocol (TIP) implementations.
 
 = Tool Vendors Working on TIP Implementations =
+|| || *Product* || *Company* || *Description* || *Testimonial* ||
+|| [http://www.gala-global.org/files/images/MemberLogo_Kilgray.gif] || [http://www.kilgray.com MemoQ] || Kilgray || || ||
+|| [http://www.gala-global.org/files/webfm/memberlogos/7ca2a862_Andra_LogoforWeb.gif] || [http://www.andrae-ag.com ONTRAM] || Andrä AG || || ||
+|| [http://www.gala-global.org/files/webfm/memberlogos/small-XTM-international_0.gif] || [http://www.xtm-intl.com XTM Cloud] || XTM Int'l || || ||
+
+
   * XTM Int'l - XTM Cloud
     * For translators: download bilingual packages from XTM Cloud, translate in another tool, upload to XTM
     * For LSPs: import multilingual TIP projects from your client's TMS, manage in XTM, return project to client's TMS 
