@@ -11,6 +11,9 @@
 = LSPs Working on TIP Implementations =
   * [http://www.aranchodoc.com Arancho Doc]
     * Streamline workflow from client's online TMS to our offline translation environment (memoQ)
+  * [http://www.yamagata-europe.com Yamagata Europe]
+    * Automate hand-off of data from CoreSite CMS to memoQ translation tool
+    * Comment: "We implemented a TIPP export from within Sitecore CMS. Packages are dropped onto an FTP and then imported into memoQ using the API. Analysis results are also imported into our own ERP to create POs and Invoices."
 
 = Enterprise Clients Working on TIP Implementations =
   * Medtronic, Inc.
