@@ -3,7 +3,7 @@
 = Tool Vendors Working on TIP Implementations =
 || || *Product* || *Company* || *Description* || *Testimonial* ||
 || [http://www.gala-global.org/files/images/MemberLogo_Kilgray.gif] || [http://www.kilgray.com MemoQ] || Kilgray || || ||
-|| [http://www.gala-global.org/files/webfm/memberlogos/7ca2a862_Andra_LogoforWeb.gif] || [http://www.andrae-ag.com ONTRAM] || Andrä AG || || ||
+|| [http://www.gala-global.org/files/webfm/memberlogos/7ca2a862_Andra_LogoforWeb.gif] || [http://www.andrae-ag.com ONTRAM] || Andrä AG || ONTRAM is an Enterprise Translation Management Framework designes to support large scale translation processes. || "We support Interoperability Now! and the TIPP as it addresses one of the most painful and unnecessary obstacles within translation processes: The lack of lossless interchange of data and translation tasks between different tools. And it's the living proof that real collaboration can happen between translation technology providers!" ||
 || [http://www.gala-global.org/files/webfm/memberlogos/small-XTM-international_0.gif] || [http://www.xtm-intl.com XTM Cloud] || XTM Int'l || || ||
 
 
