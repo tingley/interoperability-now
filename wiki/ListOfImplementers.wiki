@@ -3,19 +3,10 @@
 = Tool Vendors Working on TIP Implementations =
 || || *Product* || *Company* || *Description* || *Testimonial* ||
 || [http://www.gala-global.org/files/images/MemberLogo_Kilgray.gif] || [http://www.kilgray.com MemoQ] || Kilgray || || ||
-|| [http://www.gala-global.org/files/webfm/memberlogos/7ca2a862_Andra_LogoforWeb.gif] || [http://www.andrae-ag.com ONTRAM] || Andrä AG || ONTRAM is an Enterprise Translation Management Framework designes to support large scale translation processes. || "We support Interoperability Now! and the TIPP as it addresses one of the most painful and unnecessary obstacles within translation processes: The lack of lossless interchange of data and translation tasks between different tools. And it's the living proof that real collaboration can happen between translation technology providers!" ||
+|| [http://www.gala-global.org/files/webfm/memberlogos/7ca2a862_Andra_LogoforWeb.gif] || [http://www.andrae-ag.com ONTRAM] || Andrä AG || ONTRAM is an Enterprise Translation Management Framework designes to support large scale translation processes. || "We support Interoperability Now! and the TIPP as it addresses one of the most painful and unnecessary obstacles within translation processes: The lack of lossless interchange of data and translation tasks between different tools. And it's the living proof that real collaboration can happen between translation technology providers!" Sven C. Andrä (Founder and CEO) ||
 || [http://www.gala-global.org/files/webfm/memberlogos/small-XTM-international_0.gif] || [http://www.xtm-intl.com XTM Cloud] || XTM Int'l || || ||
 
 
-  * XTM Int'l - XTM Cloud
-    * For translators: download bilingual packages from XTM Cloud, translate in another tool, upload to XTM
-    * For LSPs: import multilingual TIP projects from your client's TMS, manage in XTM, return project to client's TMS 
-  * ONTRAM AG - ONTRAM Enterprise TMS
-    * For translators: download bilingual packages from ONTRAM, translate in another tool, upload to ONTRAM
-    * For TMS owners: manage translation projects in your TMS, hand off packages to your LSP, regardless of what TMS they use. You get the information you need back, they translate on the platform that meets their requirements. 
-  * Kilgray - memoQ translation environment
-    * Import translation projects from other TMSes, translate in memoQ
-    * Export projects from memoQ server, translate in other editors
 
 = LSPs Working on TIP Implementations =
   * [http://www.aranchodoc.com Arancho Doc]
