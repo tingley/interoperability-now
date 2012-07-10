@@ -15,7 +15,7 @@
 
 
 = Enterprise Clients Working on TIP Implementations =
-  * Medtronic, Inc.
-    * Integrate commercial TMS with internal translation QA server to enable automated QA checking of translation documents as they move through workflow
-    * Integrate best-in-class TMS with best-in-class translation editor
-    * Integrate CMS with TMS (via task type of "translate-native-format")
+|| || *Company* || *Sector* || *TIPP Status* || *TIPP Implementation Comment* ||
+|| || [http://www.medtronic.com Medtronic, Inc.] || Medical Devices/Life Sciences || In Progress || TMS <> Offline Editor Integration: We are using the TIPP task type of translate-strict-bilingual to allow our external language resources (MLVs and SLVs) to download a package from our XTM server that they can translate in memoQ (offline). The package they download includes a full preview, TM matches, TB matches (per TU!), and more. The advantage for us is that we can be confident they see all the TM and TB matches they would see if they were accessing the online TMS directly, and when they return the package to us, all the revision history, TU statuses, notes, and match rate information is transferred back into XTM without any information loss. The advantage to the translators is that they can use their favorite editor offline, or edit online with XTM, without losing functionality, and without wasting time on conversions and workarounds. Expected deployment: Q4CY12 ||
+|| || || || In Progress || TMS <> QA Checker Integration: We are using the TIPP task type of translate-strict-bilingual to automate a translation QA check between XTM and an internally maintained QA Checking tool. At the appropriate point in the workflow, XTM generates a TIPP package and sends a request to the QA server to check it. The QA server processes the TIPP, runs a QA Check, and embeds the results into each affected TU in the TIPP's XLIFF:doc payload. XTM reads the TIPP response back in, and presents results to linguists, and also stores a copy of the XLIFF:doc as evidence of the check. Expected deployment: Q4CY12 ||
+|| || || || In Progress ||  CMS <> TMS Integration: We will use the TIPP task type of translate-native-format to extract files for translation from an XML-based CMS, and to populate it with completed translations. Expected deployment: Q2CY13 ||
