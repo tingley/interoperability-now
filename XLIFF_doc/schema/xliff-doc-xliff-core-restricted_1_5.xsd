@@ -1746,9 +1746,8 @@ Extracted type definition to complexType to for further redefinition
 			<xsd:attribute name="uid" type="xsd:NMTOKEN"/>
 		</xsd:complexType>
 	</xsd:element>
-	<xsd:element name="note">
-		<xsd:complexType>
-			<xsd:simpleContent>
+	<xsd:complexType name="note">
+	<xsd:simpleContent>
 				<xsd:extension base="xsd:string">
 					<xsd:attribute ref="xml:lang" use="optional"/>
 					<xsd:attribute name="priority" type="xlf:AttrType_priority" use="optional" default="1"/>
@@ -1756,7 +1755,8 @@ Extracted type definition to complexType to for further redefinition
 					<xsd:attribute name="annotates" type="xlf:AttrType_annotates" use="optional" default="general"/>
 				</xsd:extension>
 			</xsd:simpleContent>
-		</xsd:complexType>
+	</xsd:complexType>
+	<xsd:element name="note" type="xlf:note">
 	</xsd:element>
 	<xsd:element name="phase-group">
 		<xsd:complexType>
