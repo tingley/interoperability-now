@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: correct the schema location to something like
+     http://interoperability-now.org/schema/TIPP/TIPPManifest-1-4.xsd -->
+<TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
+  <GlobalDescriptor>
+    <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
+    <!-- This is the information about the creator of this package -->
+    <PackageCreator>
+      <Name>Interoperability Now!</Name>
+      <ID>http://interoperability-now.org</ID>
+      <Update>2011-05-09T22:45:00Z</Update>
+      <Tool>
+        <ToolName>TIPP Test Tool</ToolName>
+        <ToolID>http://interoperability-now.org</ToolID>
+        <ToolVersion>1.0</ToolVersion>
+      </Tool>
+    </PackageCreator>
+    <TaskRequest>
+      <Task>
+        <!-- The Request describes the task -->
+        <TaskType>http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext</TaskType>
+        <SourceLanguage>en-US</SourceLanguage>
+        <TargetLanguage>fr-FR</TargetLanguage>
+      </Task>
+    </TaskRequest>
+  </GlobalDescriptor>
+
+  <PackageObjects>
+    <!-- This section contains Structured Translation Specification data. -->
+    <PackageObjectSection name="sts"
+        type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/sts">
+      <ObjectFile sequence="1">
+        <Name>specifications.xml</Name>
+        <Location>specifications.xml</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+
+    <!-- This section contains bilingual resources.  For the "translate"
+       - task type, this section must contain one single XLIFF:doc file. -->
+    <PackageObjectSection name="bilingual" 
+        type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/bilingual">
+      <ObjectFile sequence="1">
+        <Name>Peanut_Buffer.xlf</Name>
+        <Location>Peanut_Butter.xlf</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+
+    <!-- The "translate-strict-bitext" task allows additional resources to be included 
+       - in the TIPP for use in the XLIFF:doc preview process. Those 
+       - resources are stored here.  -->
+    <PackageObjectSection name="preview" 
+       type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/preview">
+      <ObjectFile sequence="1">
+        <Location>Peanut_Butter.html.skl</Location>
+      </ObjectFile>
+      <ObjectFile sequence="2">
+        <Name>resources/20px-Padlock-silver.svg.png</Name>
+        <Location>resources/1.png</Location>
+      </ObjectFile>
+      <ObjectFile sequence="3">
+        <Name>resources/load.php</Name>
+        <Location>resources/2.php</Location>
+      </ObjectFile>
+      <ObjectFile sequence="4">
+        <Name>resources/290px-PeanutButter.jpg</Name>
+        <Location>resources/3.jpg</Location>
+      </ObjectFile>
+      <ObjectFile sequence="5">
+        <Name>resources/load(1).php</Name>
+        <Location>resources/4.php</Location>
+      </ObjectFile>
+      <ObjectFile sequence="6">
+        <Name>resources/magnify-clip.png</Name>
+        <Location>resources/5.png</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+
+    <!-- The "reference" section contains supplemental resources that may assist the translator.
+       - This package contains the original source HTML.
+      -->
+    <PackageObjectSection name="reference" 
+       type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/reference">
+      <ObjectFile sequence="1">
+        <Name>Peanut_Butter.html</Name>
+        <Location>Peanut_Butter.html</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+
+  </PackageObjects>
+
+</TIPPManifest>
