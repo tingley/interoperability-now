@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
+  xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd" version="1.5">
   <GlobalDescriptor>
     <UniquePackageID>urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239</UniquePackageID>
     <!-- This is the information about the creator of this package -->
@@ -17,7 +17,7 @@
     <TaskResponse>
       <!-- The Response repeats what the task was -->
       <Task>
-        <TaskType>http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext</TaskType>
+        <TaskType>http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-strict-bitext</TaskType>
         <SourceLanguage>en-US</SourceLanguage>
         <TargetLanguage>fr-FR</TargetLanguage>
       </Task>
@@ -52,7 +52,7 @@
   <PackageObjects>
 
     <PackageObjectSection name="bilingual" 
-      type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/bilingual">
+      type="http://schema.interoperability-now.org/tipp/v1.5/sections/bilingual">
       <ObjectFile sequence="1">
         <Name>Peanut_Buffer.xlf</Name>
         <Location>Peanut_Butter.xlf</Location>
