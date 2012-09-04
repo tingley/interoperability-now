@@ -108,7 +108,11 @@
 	<xs:simpleType name="ResponseMessage">
         <xs:restriction base="xs:string">
             <xs:enumeration value="Success" />
-            <xs:enumeration value="Failure" />
+            <xs:enumeration value="Invalid Manifest" />
+            <xs:enumeration value="Invalid Payload" />
+            <xs:enumeration value="Security Failure" />
+            <xs:enumeration value="Unsupported Task Type" />
+            <xs:enumeration value="Task Failure" />
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="TaskResponse">
@@ -177,7 +181,9 @@
                                 <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/sts" />
                                 <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/preview" />
                                 <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/tm" />
+                                <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/terminology" />
                                 <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/reference" />
+                                <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/metrics" />
                                 <xs:enumeration value="http://schema.interoperability-now.org/tipp/v1.5/sections/custom" />
                             </xs:restriction>
                         </xs:simpleType>
