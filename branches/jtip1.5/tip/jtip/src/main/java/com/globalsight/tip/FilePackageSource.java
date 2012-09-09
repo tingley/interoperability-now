@@ -36,7 +36,7 @@ class FilePackageSource extends PackageSource {
     }
 
     @Override
-    void open() throws IOException {
+    void open(TIPPLoadStatus status) throws IOException {
         // XXX Anything to do here?  Verify existence of manifest?
     }
     

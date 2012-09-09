@@ -14,7 +14,7 @@ class TempFilePackageSource extends FilePackageSource {
     }
 
     @Override
-    void open() throws IOException {
+    void open(TIPPLoadStatus status) throws IOException {
         File packageDir = FileUtil.createTempDir("tip");
         setPackageDir(packageDir);        
     }

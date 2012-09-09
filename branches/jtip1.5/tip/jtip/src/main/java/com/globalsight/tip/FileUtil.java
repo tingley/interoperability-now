@@ -55,14 +55,17 @@ class FileUtil {
      * the stream when done.
      * @param zipStream ZIP contents
      * @param destDir destination directory.  Must exist (and be a directory).
+     * @return true if successful, false is this was an empty zip archive or
+     *         not a zip archive (the two are indistinguishable) 
      * @throws IOException
      * @throws ZipException
      * @throws IllegalStateException if the archive tree can not be 
      *          replicated on disk
      */
-    public static void expandZipArchive(ZipInputStream zipStream, File destDir)
+    public static boolean expandZipArchive(ZipInputStream zipStream, File destDir)
                 throws IOException, ZipException {
         
+        // TODO: return false if there are no entries
         for (ZipEntry entry = zipStream.getNextEntry(); entry != null; 
                                             entry = zipStream.getNextEntry()) {
             if (entry.isDirectory()) {
@@ -91,6 +94,7 @@ class FileUtil {
             zipStream.closeEntry();
         }
         zipStream.close();
+        return true;
     }
     
     /**

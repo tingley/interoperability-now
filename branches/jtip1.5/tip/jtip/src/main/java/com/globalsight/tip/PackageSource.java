@@ -10,7 +10,7 @@ import java.io.IOException;
 
 abstract class PackageSource {
 
-    abstract void open() throws IOException;
+    abstract void open(TIPPLoadStatus status) throws IOException;
     
     abstract boolean close() throws IOException;
     
@@ -51,7 +51,6 @@ abstract class PackageSource {
     	return new BufferedOutputStream(new FileOutputStream(f));
     }
     
-    // TODO: this needs to throw a better exception
     File findObjectsFile() throws IOException {
         // Very important that we check for the secure file 
         // first so that somebody can't poison the package by
@@ -65,8 +64,7 @@ abstract class PackageSource {
         if (insecureFile.exists()) {
             return insecureFile;
         }
-        throw new IllegalArgumentException(
-                "Package did not contain an objects file");
+        throw new IllegalStateException("Package contains no payload");
     }
 
 }

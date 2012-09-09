@@ -125,7 +125,7 @@ class Manifest {
     }
     
     // XXX This should blow away any existing settings 
-    void loadFromStream(InputStream manifestStream) 
+    void loadFromStream(InputStream manifestStream, TIPPLoadStatus status) 
                 throws TIPPValidationException, IOException {
     	try {
 	        Document document = parse(manifestStream);

@@ -3,6 +3,7 @@ package com.globalsight.tip;
 import org.junit.*;
 
 import static org.junit.Assert.*;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,33 +25,45 @@ public class TestTIPManifest {
     @Test
     public void testManifest() throws Exception {
         Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
         manifest.loadFromStream(getClass().getResourceAsStream(
-                "data/peanut_butter.xml"));
+                "data/peanut_butter.xml"), status);
+        assertEquals(0, status.getAllErrors().size());
         verifyRequestManifest(manifest);
     }
 
     @Test
     public void testManifestSave() throws Exception {
         Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
         manifest.loadFromStream(getClass().getResourceAsStream(
-                "data/peanut_butter.xml"));
-        Manifest roundtrip = roundtripManifest(manifest);
+                "data/peanut_butter.xml"), status);
+        assertEquals(0, status.getAllErrors().size());
+        status = new TIPPLoadStatus();
+        Manifest roundtrip = roundtripManifest(manifest, status);
+        assertEquals(0, status.getAllErrors().size());
         verifyRequestManifest(roundtrip);
     }
 
     @Test
     public void testResponseManifest() throws Exception {
         Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
         manifest.loadFromStream(getClass().getResourceAsStream(
-                "data/peanut_butter_response.xml"));
+                "data/peanut_butter_response.xml"), status);
+        assertEquals(0, status.getAllErrors().size());
         verifySampleResponseManifest(manifest);
-        Manifest roundtrip = roundtripManifest(manifest);
+        status = new TIPPLoadStatus();
+        Manifest roundtrip = roundtripManifest(manifest, status);
+        assertEquals(0, status.getAllErrors().size());
         verifySampleResponseManifest(roundtrip);
     }
 
     @Test
     public void testResponseCreationFromRequest() throws Exception {
-    	TIPP requestPackage = getSamplePackage("data/test_package.zip");
+        TIPPLoadStatus status = new TIPPLoadStatus();
+    	TIPP requestPackage = getSamplePackage("data/test_package.zip", status);
+    	assertEquals(0, status.getAllErrors().size());
         Manifest responseManifest = Manifest.newResponseManifest(null, requestPackage);
         assertFalse(responseManifest.isRequest());
         assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(), 
@@ -82,7 +95,9 @@ public class TestTIPManifest {
         TIPPObjectSection section = manifest.addObjectSection("bilingual",
                 StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
         section.addObject(file);
-        Manifest roundtrip = roundtripManifest(manifest);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        Manifest roundtrip = roundtripManifest(manifest, status);
+        assertEquals(0, status.getAllErrors().size());
         assertEquals("urn:uuid:12345", roundtrip.getPackageId());
         assertEquals(manifest.getCreator(), roundtrip.getCreator());
         assertEquals(manifest.getTask(), roundtrip.getTask());
@@ -91,12 +106,12 @@ public class TestTIPManifest {
                 Collections.singletonList(file));
     }
 
-    private Manifest roundtripManifest(Manifest src) throws Exception {
+    private Manifest roundtripManifest(Manifest src, TIPPLoadStatus status) throws Exception {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         src.saveToStream(output);
         Manifest roundtrip = new Manifest(null);
         roundtrip
-                .loadFromStream(new ByteArrayInputStream(output.toByteArray()));
+                .loadFromStream(new ByteArrayInputStream(output.toByteArray()), status);
         return roundtrip;
     }
 
@@ -195,10 +210,10 @@ public class TestTIPManifest {
                 new ArrayList<TIPPObjectFile>(section.getObjectFiles()));
     }
     
-    private TIPP getSamplePackage(String path) throws Exception {
+    private TIPP getSamplePackage(String path, TIPPLoadStatus status) throws Exception {
         InputStream is = 
             getClass().getResourceAsStream(path);
-        return TIPPFactory.openFromStream(is);
+        return TIPPFactory.openFromStream(is, status);
     }
 
 }
