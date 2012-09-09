@@ -8,7 +8,8 @@ public class TIPPError {
         INVALID_PACKAGE_ZIP(FATAL),
         INVALID_PAYLOAD_ZIP(ERROR),
         MISSING_MANIFEST(FATAL),
-        MISSING_PAYLOAD(ERROR);
+        MISSING_PAYLOAD(ERROR),
+        INVALID_SECTION_TYPE(ERROR);
         
         private TIPPErrorSeverity severity;
         Type(TIPPErrorSeverity severity) {

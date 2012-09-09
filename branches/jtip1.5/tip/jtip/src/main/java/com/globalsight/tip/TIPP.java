@@ -54,10 +54,10 @@ public interface TIPP {
 	String getTargetLocale();
 	
 	/**
-	 * Return the type URIs of all sections in this package.
-	 * @return set of section uris
+	 * Return the types of all sections in this package.
+	 * @return set of section types
 	 */
-	Set<String> getSections();
+	Set<TIPPObjectSectionType> getSections();
 	
 	/**
 	 * Return the name used to identify the specified section in this
@@ -65,16 +65,16 @@ public interface TIPP {
 	 * @return section name, or null if there is no section of the specified 
 	 * 		type
 	 */
-	String getSectionName(String sectionTypeUri);
+	String getSectionName(TIPPObjectSectionType sectionType);
 	
 	/**
 	 * Return a list of all the objects in the specified section, ordered 
 	 * according to the sequence values of the objects.  If the section does not
 	 * exist in the package or contains no objects, an empty list is returned.
 	 * 
-	 * @param sectionTypeUri the type uri of this section
+	 * @param sectionType the type of the section to fetch objects for
 	 * @return list of package objects, or an empty list.
 	 */
-	List<TIPPObjectFile> getSectionObjects(String sectionTypeUri);
+	List<TIPPObjectFile> getSectionObjects(TIPPObjectSectionType sectionType);
 
 }

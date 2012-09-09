@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -86,9 +85,9 @@ abstract class PackageBase implements WriteableTIPP {
 	}
 
 	// For now, this sorts every time
-	public List<TIPPObjectFile> getSectionObjects(String sectionTypeUri) {
+	public List<TIPPObjectFile> getSectionObjects(TIPPObjectSectionType sectionType) {
 		TIPPObjectSection section = 
-				getManifest().getObjectSection(sectionTypeUri);
+				getManifest().getObjectSection(sectionType);
 		if (section == null) {
 			return Collections.emptyList();
 		}
@@ -102,27 +101,27 @@ abstract class PackageBase implements WriteableTIPP {
 		return list;
 	}
 	
-	public Set<String> getSections() {
-		Set<String> sections = new HashSet<String>();
+	public Set<TIPPObjectSectionType> getSections() {
+		Set<TIPPObjectSectionType> sections = new HashSet<TIPPObjectSectionType>();
 		for (TIPPObjectSection s : getManifest().getObjectSections()) {
 			sections.add(s.getType());
 		}
 		return sections;
 	}
 	
-	public String getSectionName(String sectionTypeUri) {
+	public String getSectionName(TIPPObjectSectionType sectionType) {
 		TIPPObjectSection section = 
-				getManifest().getObjectSection(sectionTypeUri);
+				getManifest().getObjectSection(sectionType);
 		return (section == null) ? null : section.getName();
 	}
 
-	public TIPPObjectFile addSectionObject(String sectionTypeUri, 
+	public TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, 
 			String objectName, InputStream objectData) throws IOException, TIPPException {
-		TIPPObjectSection section = manifest.getObjectSection(sectionTypeUri);
+		TIPPObjectSection section = manifest.getObjectSection(sectionType);
 		if (section == null) {
 			// Create the section.  Derive the section name from the uri.
-			section = manifest.addObjectSection(
-					sectionNameFromUri(sectionTypeUri), sectionTypeUri);
+			section = manifest.addObjectSection(sectionType.getDefaultName(),
+					sectionType);
 		}
 		// TODO: path normalization, etc
 		TIPPObjectFile objectFile = new TIPPObjectFile(objectName, objectName);
@@ -135,17 +134,10 @@ abstract class PackageBase implements WriteableTIPP {
 		return objectFile;
 	}
 	
-	public TIPPObjectFile addSectionObject(String sectionTypeUri, 
+	public TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, 
 			String objectName, File objectData) throws IOException, TIPPException {
-		return addSectionObject(sectionTypeUri, objectName, 
+		return addSectionObject(sectionType, objectName, 
 				new BufferedInputStream(new FileInputStream(objectData)));
-	}
-	
-	private String sectionNameFromUri(String uri) {
-		if (uri.endsWith("/")) {
-			uri = uri.substring(0, uri.length() - 1);
-		}
-		return uri.substring(uri.lastIndexOf('/'), uri.length());
 	}
 	
     /**

@@ -6,5 +6,5 @@ public interface TIPPTaskType {
 
     public String getType();
 
-    public Set<String> getSupportedSectionTypes();
+    public Set<TIPPObjectSectionType> getSupportedSectionTypes();
 }

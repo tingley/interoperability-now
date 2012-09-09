@@ -46,8 +46,8 @@ class Manifest {
     private TIPPTask task; // Either request or response
     private TIPPCreator creator = new TIPPCreator();
     
-    private Map<String, TIPPObjectSection> objectSections = 
-        new HashMap<String, TIPPObjectSection>();    
+    private Map<TIPPObjectSectionType, TIPPObjectSection> objectSections = 
+        new HashMap<TIPPObjectSectionType, TIPPObjectSection>();    
     
     Manifest(PackageBase tipPackage) {
         this.tipPackage = tipPackage;
@@ -130,18 +130,18 @@ class Manifest {
     	try {
 	        Document document = parse(manifestStream);
 	        validate(document);
-	        loadManifest(document);
+	        loadManifest(document, status);
     	}
     	catch (ParserConfigurationException e) {
     		throw new RuntimeException(e);
     	}
     }    
     
-    private void loadManifest(Document document) 
+    private void loadManifest(Document document, TIPPLoadStatus status) 
                             throws TIPPValidationException {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
-        loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS));
+        loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS), status);
     }
     
     private void loadDescriptor(Element descriptor) 
@@ -223,14 +223,14 @@ class Manifest {
         return tool;
     }
     
-    private void loadPackageObjects(Element parent) 
+    private void loadPackageObjects(Element parent, TIPPLoadStatus status) 
                             throws TIPPValidationException {
         // parse all the sections
         NodeList children = 
             parent.getElementsByTagName(PACKAGE_OBJECT_SECTION);
         for (int i = 0; i < children.getLength(); i++) {
             TIPPObjectSection section = 
-                loadPackageObjectSection((Element)children.item(i));
+                loadPackageObjectSection((Element)children.item(i), status);
             // Don't allow duplicate sections
             if (objectSections.containsKey(section.getType())) {
                 throw new TIPPValidationException("Duplicate object section: " +
@@ -240,11 +240,17 @@ class Manifest {
         }
     }
     
-    private TIPPObjectSection loadPackageObjectSection(Element section) 
-                    throws TIPPValidationException {
+    private TIPPObjectSection loadPackageObjectSection(Element section,
+            TIPPLoadStatus status) throws TIPPValidationException {
+        String typeUri = section.getAttribute(ATTR_SECTION_TYPE);
+        TIPPObjectSectionType type = TIPPObjectSectionType.byURI(typeUri);
+        if (type == null) {
+            status.addError(new TIPPError(TIPPError.Type.INVALID_SECTION_TYPE, 
+                    "Invalid section type: " + typeUri));
+            throw new TIPPValidationException("Invalid section type: " + typeUri);
+        }
         TIPPObjectSection objectSection = new TIPPObjectSection(
-                section.getAttribute(ATTR_SECTION_NAME),
-                section.getAttribute(ATTR_SECTION_TYPE));
+                section.getAttribute(ATTR_SECTION_NAME), type);
         objectSection.setPackage(tipPackage);
         NodeList children = section.getElementsByTagName(OBJECT_FILE);
         for (int i = 0; i < children.getLength(); i++) {
@@ -290,7 +296,7 @@ class Manifest {
     void validate(Document dom) throws TIPPValidationException {
         try {
             InputStream is = 
-                getClass().getResourceAsStream("/TIPPManifest-1_4.xsd");
+                getClass().getResourceAsStream("/TIPPManifest-1_5.xsd");
             SchemaFactory factory = 
                 SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
             Schema schema = factory.newSchema(new StreamSource(is));
@@ -338,7 +344,7 @@ class Manifest {
      * @return object section for the specified section type, or
      *         null if no section with that type exists in the TIPP
      */
-    public TIPPObjectSection getObjectSection(String type) {
+    public TIPPObjectSection getObjectSection(TIPPObjectSectionType type) {
         return objectSections.get(type);
     }
     
@@ -350,7 +356,7 @@ class Manifest {
         return objectSections.values();
     }
     
-    public TIPPObjectSection addObjectSection(String name, String type) {
+    public TIPPObjectSection addObjectSection(String name, TIPPObjectSectionType type) {
     	// If we were created with a task type object, restrict the 
     	// section type to one of the choices for this task type.
     	if (taskType != null) {

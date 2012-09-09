@@ -93,7 +93,7 @@ public class TestTIPManifest {
         final TIPPObjectFile file = 
                 new TIPPObjectFile("test.xlf", "test.xlf");
         TIPPObjectSection section = manifest.addObjectSection("bilingual",
-                StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL);
+                TIPPObjectSectionType.BILINGUAL);
         section.addObject(file);
         TIPPLoadStatus status = new TIPPLoadStatus();
         Manifest roundtrip = roundtripManifest(manifest, status);
@@ -102,7 +102,7 @@ public class TestTIPManifest {
         assertEquals(manifest.getCreator(), roundtrip.getCreator());
         assertEquals(manifest.getTask(), roundtrip.getTask());
         expectObjectSection(roundtrip, 
-        		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
+                TIPPObjectSectionType.BILINGUAL,
                 Collections.singletonList(file));
     }
 
@@ -130,15 +130,15 @@ public class TestTIPManifest {
                 getDate(2011, 4, 9, 22, 45, 0), new TIPPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                 manifest.getCreator());
-        assertEquals(new TIPPTaskRequest(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
+        assertEquals(new TIPPTaskRequest(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(),
                 "en-US", "fr-FR"), manifest.getTask());
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
+        expectObjectSection(manifest, TIPPObjectSectionType.BILINGUAL,
                 Collections.singletonList(
                         new TIPPObjectFile("Peanut_Butter.xlf")));
-        expectObjectSection(manifest, StandardTaskTypeConstants.TranslateStrictBitext.PREVIEW,
+        expectObjectSection(manifest, TIPPObjectSectionType.PREVIEW,
                 new ArrayList<TIPPObjectFile>() {
                     {
                         add(new TIPPObjectFile(
@@ -167,7 +167,7 @@ public class TestTIPManifest {
         assertNotNull(manifest.getTask());
         assertTrue(manifest.getTask() instanceof TIPPTaskResponse);
         assertEquals(new TIPPTaskResponse(
-        				StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
+        				StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(),
                         "en-US", 
                         "fr-FR",
                         "urn:uuid:12345-abc-6789-aslkjd-19193la-as9911",
@@ -202,7 +202,7 @@ public class TestTIPManifest {
     }
 
     private static void expectObjectSection(Manifest manifest,
-            String type, List<TIPPObjectFile> files) {
+            TIPPObjectSectionType type, List<TIPPObjectFile> files) {
         TIPPObjectSection section = manifest.getObjectSection(type);
         assertNotNull(section);
         assertEquals(type, section.getType());

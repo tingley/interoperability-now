@@ -2,7 +2,7 @@
 <!-- Need to get real schema location (host in google code?) and schema
    - version. -->
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
+    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd" version="1.5">
   <GlobalDescriptor>
     <!-- We need to specify semantics for generating these, whether it
        - be a GUID algorithm or something else. 
@@ -21,7 +21,7 @@
     </PackageCreator>
     <TaskRequest>
       <Task>
-        <TaskType>http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext</TaskType>
+        <TaskType>http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-strict-bitext</TaskType>
         <SourceLanguage>en-US</SourceLanguage>
         <TargetLanguage>fr-FR</TargetLanguage>
       </Task>
@@ -29,7 +29,7 @@
   </GlobalDescriptor>
   <PackageObjects>
     <PackageObjectSection name="bilingual"
-        type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/bilingual">
+        type="http://schema.interoperability-now.org/tipp/v1.5/sections/bilingual">
       <ObjectFile sequence="1">
         <Name>Peanut_Butter.xlf</Name>
         <Location>Peanut_Butter.xlf</Location>
@@ -37,7 +37,7 @@
     </PackageObjectSection>
     
     <PackageObjectSection name="preview"
-        type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/preview">
+        type="http://schema.interoperability-now.org/tipp/v1.5/sections/preview">
       <ObjectFile sequence="1">
         <Location>Peanut_Butter.html.skl</Location>
       </ObjectFile>

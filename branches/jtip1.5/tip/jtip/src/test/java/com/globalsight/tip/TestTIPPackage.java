@@ -37,8 +37,7 @@ public class TestTIPPackage {
         assertEquals(0, status.getAllErrors().size());
         verifyRequestPackage(tip);
         for (TIPPObjectFile file : 
-        	 tip.getSectionObjects(StandardTaskTypeConstants
-        			 .TranslateStrictBitext.BILINGUAL)) {
+        	 tip.getSectionObjects(TIPPObjectSectionType.BILINGUAL)) {
             // Just instantiating the input stream is the real test..
             InputStream is = file.getInputStream();
             assertNotNull(is);
@@ -153,7 +152,7 @@ public class TestTIPPackage {
         tip.setTargetLocale("fr-FR");
                
         TIPPObjectFile f1 = tip.addSectionObject(
-        		StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
+                TIPPObjectSectionType.BILINGUAL,
         		"test1.xlf", 
         		new ByteArrayInputStream("test".getBytes("UTF-8"))); 
         
@@ -202,14 +201,14 @@ public class TestTIPPackage {
     }
     
     private void comparePackageParts(TIPP p1, TIPP p2) throws Exception {
-        Set<String> s1 = p1.getSections();
-        Set<String> s2 = p2.getSections();
+        Set<TIPPObjectSectionType> s1 = p1.getSections();
+        Set<TIPPObjectSectionType> s2 = p2.getSections();
         assertNotNull(s1);
         assertNotNull(s2);
         assertEquals(s1, s2);
-        for (String uri : s1) {
-        	List<TIPPObjectFile> o1 = p1.getSectionObjects(uri);
-        	List<TIPPObjectFile> o2 = p2.getSectionObjects(uri);
+        for (TIPPObjectSectionType type : s1) {
+        	List<TIPPObjectFile> o1 = p1.getSectionObjects(type);
+        	List<TIPPObjectFile> o2 = p2.getSectionObjects(type);
         	assertNotNull(o1);
         	assertNotNull(o2);
         	assertEquals(o1, o2);
@@ -242,17 +241,17 @@ public class TestTIPPackage {
                 TestTIPManifest.getDate(2011, 4, 9, 22, 45, 0), new TIPPTool("TestTool",
                         "http://interoperability-now.org/", "1.0")),
                         tip.getCreator());
-        assertEquals(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
+        assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(),
         			 tip.getTaskType());
         assertEquals("en-US", tip.getSourceLocale());
         assertEquals("fr-FR", tip.getTargetLocale());
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(tip, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
+        expectObjectSection(tip, TIPPObjectSectionType.BILINGUAL,
                 Collections.singletonList(
                         new TIPPObjectFile("Peanut_Butter.xlf", 1)));
-        expectObjectSection(tip, StandardTaskTypeConstants.TranslateStrictBitext.PREVIEW,
+        expectObjectSection(tip, TIPPObjectSectionType.PREVIEW,
                 new ArrayList<TIPPObjectFile>() {
                     {
                         add(new TIPPObjectFile(
@@ -283,20 +282,20 @@ public class TestTIPPackage {
                         tip.getRequestCreator());
         assertEquals("urn:uuid:12345-abc-6789-aslkjd-19193la-as9911",
         			 tip.getRequestPackageId());
-        assertEquals(StandardTaskTypeConstants.TRANSLATE_STRICT_BITEXT_URI,
+        assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(),
         			 tip.getTaskType());
         assertEquals("en-US", tip.getSourceLocale());
         assertEquals("fr-FR", tip.getTargetLocale());
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(tip, StandardTaskTypeConstants.TranslateStrictBitext.BILINGUAL,
+        expectObjectSection(tip, TIPPObjectSectionType.BILINGUAL,
                 Collections.singletonList(
                         new TIPPObjectFile("Peanut_Butter.xlf", 1)));
     }
     
     private static void expectObjectSection(TIPP tip,
-            String type, List<TIPPObjectFile> files) {
+            TIPPObjectSectionType type, List<TIPPObjectFile> files) {
         assertNotNull(tip.getSectionName(type));
         assertEquals(files,
                 new ArrayList<TIPPObjectFile>(tip.getSectionObjects(type)));

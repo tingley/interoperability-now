@@ -128,7 +128,7 @@ class ManifestDOMBuilder {
         Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getName());
-        sectionEl.setAttribute(ATTR_SECTION_TYPE, section.getType());
+        sectionEl.setAttribute(ATTR_SECTION_TYPE, section.getType().getType());
         for (TIPPObjectFile file : section.getObjectFiles()) {
             sectionEl.appendChild(makeObjectFile(file));
         }

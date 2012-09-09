@@ -26,8 +26,9 @@ public enum TIPPErrorSeverity {
      * least semi-intact (and thus may be useful for reporting).  Errors
      * include invalid success/failure codes, TIPPs that contain
      * inappropriate files for a standard task type, objects that are
-     * listed in the manifest but not present in the TIPP, or objects that
-     * are present in the TIPP but not listed in the manifest.
+     * listed in the manifest but not present in the TIPP, invalid
+     * section types, or objects that are present in the TIPP but not 
+     * listed in the manifest.
      */
     ERROR,
 
