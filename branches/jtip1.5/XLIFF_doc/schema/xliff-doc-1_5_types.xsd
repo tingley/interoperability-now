@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dx="http://schema.interoperability-now.org" xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" targetNamespace="http://schema.interoperability-now.org" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<xsd:attribute name="version">
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string">
+				<xsd:pattern value="[0-9]*\.[0-9]{1,2}"/>
+			</xsd:restriction>
+		</xsd:simpleType>
+	</xsd:attribute>
+	<xsd:simpleType name="AttrType_YesNo">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="yes"/>
+			<xsd:enumeration value="no"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="language">
+		<xsd:restriction base="xsd:language">
+			<xsd:pattern value="(([a-z]{2,3})-([A-Z]{2,3}))|([a-z]{2,3})"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="content">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="internal-preview" mixed="true">
+		<xsd:sequence>
+			<xsd:element name="content" type="dx:content" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="internal-preview" type="dx:internal-preview"/>
+	<xsd:element name="external-preview" type="xsd:anyURI"/>
+	<xsd:element name="external-xsl" type="xsd:anyURI"/>
+	<xsd:attribute name="allow-tu-join" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-tu-split" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-tm-match-addition" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-tm-match-deletion" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-tb-match-addition" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-tb-match-deletion" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-qa-match-addition" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-qa-match-deletion" type="dx:AttrType_YesNo"/>
+	<xsd:attribute name="allow-revision-history-deletion" type="dx:AttrType_YesNo"/>
+	<xsd:complexType name="attribute">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="name" type="xsd:string" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="attributes">
+		<xsd:sequence>
+			<xsd:element name="attribute" type="dx:attribute" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="attributes" type="dx:attributes"/>
+	<xsd:simpleType name="AttrType_SourceTargetBoth">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="source"/>
+			<xsd:enumeration value="target"/>
+			<xsd:enumeration value="both"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttrType_QaCategory">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="number">
+				<xsd:annotation>
+					<xsd:documentation>A number found in the source is different or missing in the translation; a number found in the
+translation is missing or different in the source; a number is found in both source and translation,
+but the units of measurement do not match.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="pattern">
+				<xsd:annotation>
+					<xsd:documentation>A regular-expression pattern or other pattern (as defined in the QA checker) found a match (or
+failed to find a match, depending on usage)</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="punctuation">
+				<xsd:annotation>
+					<xsd:documentation>Differences in spacing, punctuation, brackets, tab characters, or capitalization</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="tags">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="date">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="time">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="internationalization">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="omission">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="inconsistency">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="terminology">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="other">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttrType_QaLevel">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="error">
+				<xsd:annotation>
+					<xsd:documentation/>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="warning"/>
+			<xsd:enumeration value="non-error"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="qa-hit">
+		<xsd:attribute name="qa-origin" type="dx:AttrType_SourceTargetBoth" use="required"/>
+		<xsd:attribute name="qa-ignorable" type="dx:AttrType_YesNo" use="required"/>
+		<xsd:attribute name="qa-shorttext" type="xsd:string" use="required"/>
+		<xsd:attribute name="qa-category" type="dx:AttrType_QaCategory" use="required"/>
+		<xsd:attribute name="qa-level" type="dx:AttrType_QaLevel" use="required"/>
+		<xsd:attribute name="qa-code" type="xsd:string" use="optional"/>
+		<xsd:attribute name="qa-tgt-startpos" type="xsd:nonNegativeInteger" use="optional"/>
+		<xsd:attribute name="qa-tgt-length" type="xsd:nonNegativeInteger" use="optional"/>
+		<xsd:attribute name="qa-src-startpos" type="xsd:nonNegativeInteger" use="optional"/>
+		<xsd:attribute name="qa-src-length" type="xsd:nonNegativeInteger" use="optional"/>
+	</xsd:complexType>
+	<xsd:simpleType name="AttrType_MatchQuality">
+		<xsd:restriction base="xsd:nonNegativeInteger">
+			<xsd:minInclusive value="0"/>
+			<xsd:maxInclusive value="100"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttrType_Origin">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="TM"/>
+			<xsd:enumeration value="MT"/>
+			<xsd:enumeration value="XLIFF"/>
+			<xsd:enumeration value="manual"/>
+			<xsd:enumeration value="sourcetext"/>
+			<xsd:enumeration value="pseudo-trans"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttrType_MatchPenalty">
+		<xsd:restriction base="xsd:float">
+			<xsd:minInclusive value="0"/>
+			<xsd:maxInclusive value="100"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:attribute name="match-quality" type="dx:AttrType_MatchQuality"/>
+	<xsd:attribute name="glorious-match" type="dx:AttrType_YesNo" default="no"/>
+	<xsd:attribute name="repetition" type="dx:AttrType_YesNo" default="no"/>
+	<xsd:attribute name="origin" type="dx:AttrType_Origin"/>
+	<xsd:attribute name="origin-shorttext" type="xsd:string"/>
+	<xsd:attribute name="match-penalty" type="dx:AttrType_MatchPenalty"/>
+	<xsd:attribute name="modified-by" type="xsd:string"/>
+	<xsd:attribute name="modified-at" type="xsd:dateTime"/>
+	<xsd:attribute name="term-id" type="xsd:string"/>
+	<xsd:complexType name="term-hit">
+		<xsd:attribute name="id" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="qa-hits">
+		<xsd:sequence>
+			<xsd:element name="qa-hit" type="dx:qa-hit" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="qa-hits" type="dx:qa-hits"/>
+	<xsd:complexType name="term-hits">
+		<xsd:sequence>
+			<xsd:element name="term-hit" type="dx:term-hit" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="term-hits" type="dx:term-hits"/>
+	<xsd:simpleType name="AttrType_InlinePlaceholders">
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="image">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a inline image.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="pb">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a page break.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="lb">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a line break.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="x-xref"/>
+			<xsd:enumeration value="x-tab"/>
+			<xsd:enumeration value="x-other"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttrType_InlineDelimiters">
+		<xsd:annotation>
+			<xsd:documentation>Values for the attribute 'ctype' when used other elements than &lt;ph&gt; or &lt;x&gt;.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:enumeration value="bold">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a run of bolded text.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="italic">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a run of text in italics.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="underlined">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a run of underlined text.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="link">
+				<xsd:annotation>
+					<xsd:documentation>Indicates a run of hyper-text.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="x-superscript"/>
+			<xsd:enumeration value="x-subscript"/>
+			<xsd:enumeration value="x-fixed"/>
+			<xsd:enumeration value="x-font"/>
+			<xsd:enumeration value="x-fontsize"/>
+			<xsd:enumeration value="x-header"/>
+			<xsd:enumeration value="x-title"/>
+			<xsd:enumeration value="x-other-format"/>
+			<xsd:enumeration value="x-other"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:attribute name="orig-markup" type="xsd:string"/>
+	<xsd:attribute name="equiv-markup" type="xsd:string"/>
+	<xsd:attribute name="equiv-text" type="xsd:string"/>
+	<xsd:attribute name="orig-markup-open" type="xsd:string"/>
+	<xsd:attribute name="equiv-markup-open" type="xsd:string"/>
+	<xsd:attribute name="orig-markup-close" type="xsd:string"/>
+	<xsd:attribute name="equiv-markup-close" type="xsd:string"/>
+	<xsd:element name="utx-glossary" type="dx:utx-glossary"/>
+	<xsd:complexType name="utx-glossary">
+		<xsd:sequence>
+			<xsd:element name="utx-term" type="dx:utx-term" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="version" type="xsd:string" use="required"/>
+		<xsd:attribute name="src-lang" type="xsd:language" use="required"/>
+		<xsd:attribute name="tgt-lang" type="xsd:language" use="required"/>
+		<xsd:attribute name="date-created" type="xsd:dateTime" use="required"/>
+		<xsd:attribute name="creator" type="xsd:string" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="utx-term">
+		<xsd:sequence>
+			<xsd:element name="utx-src" type="dx:utx-src"/>
+			<xsd:element name="utx-tgt" type="dx:utx-tgt"/>
+			<xsd:element name="utx-comment" type="dx:utx-comment" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="entry-id" type="xsd:string" use="required"/>
+		<xsd:attribute name="concept-id" type="xsd:string" use="optional"/>
+	</xsd:complexType>
+	<xsd:simpleType name="AttrType_UtxPos">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="noun"/>
+			<xsd:enumeration value="properNoun"/>
+			<xsd:enumeration value="verb"/>
+			<xsd:enumeration value="adjective"/>
+			<xsd:enumeration value="adverb"/>
+			<xsd:enumeration value="sentence"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="AttrType_UtxStatus">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="provisional"/>
+			<xsd:enumeration value="approved"/>
+			<xsd:enumeration value="non-standard"/>
+			<xsd:enumeration value="forbidden"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="utx-src">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="pos" type="dx:AttrType_UtxPos" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="utx-tgt">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="status" type="dx:AttrType_UtxStatus" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="utx-comment">
+		<xsd:restriction base="xsd:string"/>
+	</xsd:simpleType>
+</xsd:schema>

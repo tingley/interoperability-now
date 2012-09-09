@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+DIR=`dirname $0`
+export CLASSPATH="$DIR/../target/*:$CLASSPATH"
+
+java com.globalsight.tip.samples.TIPExplode $*

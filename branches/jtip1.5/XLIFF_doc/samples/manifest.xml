@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
+  <GlobalDescriptor>
+    <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9912</UniquePackageID>
+    <PackageCreator>
+      <Name>Interoperability Now!</Name>
+      <ID>http://interoperability-now.org</ID>
+      <Update>2012-03-28T06:15:00Z</Update>
+      <Tool>
+        <!-- TODO: dummy tool -->
+        <ToolName>Interoperability Now</ToolName>
+        <ToolID>http://interoperability-now.org</ToolID>
+        <ToolVersion>1.0</ToolVersion>
+      </Tool>
+    </PackageCreator>
+    <TaskRequest>
+      <Task>
+        <!-- The Request describes the task -->
+        <TaskType>http://interoperability-now.org/TIPP/schema/tasks/v1/translate</TaskType>
+        <SourceLanguage>en-US</SourceLanguage>
+        <TargetLanguage>fr-FR</TargetLanguage>
+      </Task>
+    </TaskRequest>
+  </GlobalDescriptor>
+
+  <PackageObjects>
+    <!-- This section contains bilingual resources.  For the "translate"
+       - task type, this section must contain one single XLIFF:doc file. -->
+    <PackageObjectSection name="bilingual" 
+      type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/bilingual">
+      <ObjectFile sequence="1">
+        <Name>20K_Leagues_2_DitaFiles_XLIFFdoc.xlf</Name>
+        <Location>20K_Leagues_2_DitaFiles_XLIFFdoc.xlf</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+
+    <!-- The "translate" task allows additional resources to be included 
+       - in the TIPP for use in the XLIFF:doc preview process. Those 
+       - resources are stored here.  -->
+    <PackageObjectSection name="preview" 
+      type="http://interoperability-now.org/TIPP/schema/tasks/v1/translate/preview">
+      <ObjectFile sequence="1">
+        <Name>d2e485.xml.skl</Name>
+        <Location>d2e485.xml.skl</Location>
+      </ObjectFile>
+      <ObjectFile sequence="2">
+        <Name>d2e9.xml.skl</Name>
+        <Location>d2e9.xml.skl</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+    <PackageObjectSection name="reference" 
+      type="http://interoperability-now.org/schema/tasks/v1/translate/reference">
+      <ObjectFile sequence="1">
+        <Name>d2e485.xml</Name>
+        <Location>d2e485.xml</Location>
+      </ObjectFile>
+      <ObjectFile sequence="2">
+        <Name>d2e9.xml</Name>
+        <Location>d2e9.xml</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+  </PackageObjects>
+
+</TIPPManifest>

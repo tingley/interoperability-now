@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Need to get real schema location (host in google code?) and schema
+   - version. -->
+<TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_4.xsd" version="1.4">
+  <GlobalDescriptor>
+    <!-- We need to specify semantics for generating these, whether it
+       - be a GUID algorithm or something else. 
+       Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
+       -->
+    <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
+    <PackageCreator>
+      <Name>Test Company</Name>
+      <ID>http://127.0.0.1/test</ID>
+      <Update>2011-05-09T22:45:00Z</Update>
+      <Tool>
+        <ToolName>TestTool</ToolName>
+        <ToolID>http://interoperability-now.org/</ToolID>
+        <ToolVersion>1.0</ToolVersion>
+      </Tool>
+    </PackageCreator>
+    <TaskRequest>
+      <Task>
+        <TaskType>http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext</TaskType>
+        <SourceLanguage>en-US</SourceLanguage>
+        <TargetLanguage>fr-FR</TargetLanguage>
+      </Task>
+    </TaskRequest>
+  </GlobalDescriptor>
+  <PackageObjects>
+    <PackageObjectSection name="bilingual"
+        type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/bilingual">
+      <ObjectFile sequence="1">
+        <Name>Peanut_Butter.xlf</Name>
+        <Location>Peanut_Butter.xlf</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+    
+    <PackageObjectSection name="preview"
+        type="http://schema.interoperability-now.org/tipp/v1.4/tasks/translate-strict-bitext/preview">
+      <ObjectFile sequence="1">
+        <Location>Peanut_Butter.html.skl</Location>
+      </ObjectFile>
+      <ObjectFile sequence="2">
+        <Location>resources/20px-Padlock-silver.svg.png</Location>
+      </ObjectFile>
+      <ObjectFile sequence="3">
+        <Location>resources/load.php</Location>
+      </ObjectFile>
+      <ObjectFile sequence="4">
+        <Location>resources/290px-PeanutButter.jpg</Location>
+      </ObjectFile>
+      <ObjectFile sequence="5">
+        <Location>resources/load(1).php</Location>
+      </ObjectFile>
+      <ObjectFile sequence="6">
+        <Location>resources/magnify-clip.png</Location>
+      </ObjectFile>
+    </PackageObjectSection>
+  </PackageObjects>
+</TIPPManifest>
