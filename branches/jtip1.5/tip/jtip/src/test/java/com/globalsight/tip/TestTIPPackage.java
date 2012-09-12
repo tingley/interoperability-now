@@ -86,6 +86,16 @@ public class TestTIPPackage {
     }
 
     @Test
+    public void testManifestPayloadMismatch() throws Exception {
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        TIPP tipp = getSamplePackage("data/manifest_payload_mismatch.zip", status);
+        assertNotNull(tipp);
+        checkErrors(status, 2);
+        assertEquals(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, status.getAllErrors().get(0).getErrorType());
+        assertEquals(TIPPError.Type.UNEXPECTED_PAYLOAD_RESOURCE, status.getAllErrors().get(1).getErrorType());
+    }
+    
+    @Test
     public void testVerifyCorruptPackageZip() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/corrupt_package_zip.zip", status);
@@ -177,25 +187,6 @@ public class TestTIPPackage {
         temp.delete();
         tip.close();
     }
-    
-    
-    /*
-    @Test
-    public void testPackageSaveToDirectory() throws Exception {
-        TIPPackage tip = getSamplePackage("data/test_package.zip");        
-        File dir = FileUtil.createTempDir("tiptest");
-        System.out.println("Using dir " + dir);
-        tip.saveToDirectory(dir);
-        TIPRequestPackage roundtrip = TIPPackage.openFromDirectory(dir);
-        verifyRequestPackage(roundtrip);
-        comparePackageParts(tip, roundtrip);
-        assertTrue("Could not clean up package", tip.close());
-        assertTrue("Could not clean up package", roundtrip.close());
-        // Cleanup our temp directory
-        assertTrue("Could not clean up temp directory",
-                   FileUtil.recursiveDelete(dir));
-    }
-    */
     
     private TIPP getSamplePackage(String path, TIPPLoadStatus status) throws Exception {
         InputStream is = 
