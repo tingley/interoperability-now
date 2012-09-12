@@ -7,8 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 abstract class PackageSource {
+    
+    static final String SEPARATOR = "/"; 
 
     abstract void open(TIPPLoadStatus status) throws IOException;
     
@@ -18,6 +22,9 @@ abstract class PackageSource {
     
     abstract File getPackageFile(String path);
     
+    protected abstract File getPackageDir();
+    
+    // XXX What's the difference between this and the next one?
     BufferedInputStream getPackageStream(String path) throws FileNotFoundException {
     	return getInputStream(getPackageFile(path));
     }
@@ -29,6 +36,27 @@ abstract class PackageSource {
     protected BufferedInputStream getInputStream(File file) 
     					throws FileNotFoundException {
 		return new BufferedInputStream(new FileInputStream(file));
+    }
+    
+    Set<String> getPackageObjects() {
+        Set<String> objects = new HashSet<String>();
+        // Recursively iterate through all the directories in the 
+        // package object directory and create a package object
+        // for every file (not directory).
+        createPackageObjects(SEPARATOR, getPackageDir(), objects);
+        return objects;
+    }
+    
+    void createPackageObjects(String prefix, File directory, Set<String> objects) {
+        for (File file : directory.listFiles()) {
+            if (file.isDirectory()) {
+                createPackageObjects(prefix + file.getName() + SEPARATOR, 
+                                     file, objects);
+            }
+            else {
+                objects.add(prefix + file.getName());
+            }
+        }
     }
     
     /**

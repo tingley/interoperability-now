@@ -37,12 +37,13 @@ class PackageReader {
                     file.setPackage(tip);
                 }
             }
+            // Verify the manifest against the package contents
+            new PayloadValidator().validate(manifest, source, status);
             return tip;
         }
         catch (FileNotFoundException e) {
             status.addError(new TIPPError(TIPPError.Type.MISSING_MANIFEST));
             throw new ReportedException(e);
         }
-        // TODO: verify the package objects
     }
 }

@@ -29,6 +29,11 @@ class StreamPackageSource extends PackageSource {
     }
     
     @Override
+    protected File getPackageDir() {
+        return packageObjectsDir;
+    }
+    
+    @Override
     void open(TIPPLoadStatus status) throws IOException {
         packageDir = FileUtil.createTempDir("tipPkg");
         try {

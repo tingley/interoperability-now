@@ -2,6 +2,7 @@ package com.globalsight.tip;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * Package source backed by a set of files in local file system.
@@ -21,6 +22,7 @@ class FilePackageSource extends PackageSource {
         this.packageDir = packageDir;
     }
     
+    @Override
     protected File getPackageDir() {
         return packageDir;
     }
@@ -34,7 +36,7 @@ class FilePackageSource extends PackageSource {
     File getPackageObjectFile(String path) {
         return getPackageFile(path);
     }
-
+    
     @Override
     void open(TIPPLoadStatus status) throws IOException {
         // XXX Anything to do here?  Verify existence of manifest?

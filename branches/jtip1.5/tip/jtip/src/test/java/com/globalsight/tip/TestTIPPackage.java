@@ -11,30 +11,35 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
 import org.junit.*;
 
-import com.globalsight.tip.FileUtil;
 import com.globalsight.tip.TIPPObjectFile;
-import com.globalsight.tip.TIPPObjectSection;
 import com.globalsight.tip.TIPP;
 
 import static org.junit.Assert.*;
 
 public class TestTIPPackage {
     
+    private void checkErrors(TIPPLoadStatus status, int expectedErrorCount) {
+        if (expectedErrorCount != status.getAllErrors().size()) {
+            System.out.println("Expected " + expectedErrorCount + 
+                    " errors but found " + status.getAllErrors().size());
+            for (TIPPError error : status.getAllErrors()) {
+                System.out.println("> " + error);
+            }
+        }
+        assertEquals(expectedErrorCount, status.getAllErrors().size());
+    }
+    
     @Test
     public void testPackageLoad() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
-        TIPP tip = getSamplePackage("data/test_package.zip", status);
-        assertEquals(0, status.getAllErrors().size());
+        TIPP tip = getSamplePackage("data/test_package.zip", status); // XXX This package has bad stuff in it
+        checkErrors(status, 0);
         verifyRequestPackage(tip);
         for (TIPPObjectFile file : 
         	 tip.getSectionObjects(TIPPObjectSectionType.BILINGUAL)) {
@@ -51,7 +56,7 @@ public class TestTIPPackage {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/missing_manifest.zip", status);
         assertNull(tipp);
-        assertEquals(1, status.getAllErrors().size());
+        checkErrors(status, 1);
         assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
         TIPPError error = status.getAllErrors().get(0);
         assertEquals(TIPPError.Type.MISSING_MANIFEST, error.getErrorType());
@@ -62,23 +67,22 @@ public class TestTIPPackage {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/missing_payload.zip", status);
         assertNull(tipp);
-        assertEquals(1, status.getAllErrors().size());
+        checkErrors(status, 1);
         //assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
         TIPPError error = status.getAllErrors().get(0);
         assertEquals(TIPPError.Type.MISSING_PAYLOAD, error.getErrorType());
     }
     
-    // TODO: this one needs to be fixed.
     @Test
     public void testVerifyCorruptPayloadZip() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/corrupt_payload_zip.zip", status);
-//        assertNull(tipp);
-        assertEquals(1, status.getAllErrors().size());
-        //assertEquals(TIPPErrorSeverity.ERROR, status.getSeverity());
-        TIPPError error = status.getAllErrors().get(0);
-        // HUH?
-        assertEquals(TIPPError.Type.MISSING_MANIFEST, error.getErrorType());
+        assertNotNull(tipp);
+        checkErrors(status, 7);
+        assertEquals(TIPPErrorSeverity.ERROR, status.getSeverity());
+        for (TIPPError error : status.getAllErrors()) {
+            assertEquals(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, error.getErrorType());
+        }
     }
 
     @Test
@@ -117,7 +121,7 @@ public class TestTIPPackage {
     public void testResponsePackage() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tip = getSamplePackage("data/test_response_package.zip", status);
-        assertEquals(0, status.getAllErrors().size());
+        checkErrors(status, 0);
         assertFalse(tip.isRequest());
         verifyResponsePackage((ResponseTIPP)tip);
         File temp = File.createTempFile("tiptest", ".zip");
@@ -151,8 +155,7 @@ public class TestTIPPackage {
         tip.setSourceLocale("en-US");
         tip.setTargetLocale("fr-FR");
                
-        TIPPObjectFile f1 = tip.addSectionObject(
-                TIPPObjectSectionType.BILINGUAL,
+        tip.addSectionObject(TIPPObjectSectionType.BILINGUAL,
         		"test1.xlf", 
         		new ByteArrayInputStream("test".getBytes("UTF-8"))); 
         
@@ -269,7 +272,6 @@ public class TestTIPPackage {
                 });
     }
     
-    @SuppressWarnings("serial")
     static void verifyResponsePackage(ResponseTIPP tip) {
         assertEquals("urn:uuid:84983-zzz-0091-alpppq-184903b-aj1239", tip.getPackageId());
         assertEquals(new TIPPCreator("Test Testerson", "http://interoperability-now.org",

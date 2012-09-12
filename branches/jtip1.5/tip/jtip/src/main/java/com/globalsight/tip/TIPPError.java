@@ -9,7 +9,10 @@ public class TIPPError {
         INVALID_PAYLOAD_ZIP(ERROR),
         MISSING_MANIFEST(FATAL),
         MISSING_PAYLOAD(ERROR),
-        INVALID_SECTION_TYPE(ERROR);
+        INVALID_SECTION_TYPE(ERROR),
+        MISSING_PAYLOAD_RESOURCE(ERROR),
+        UNEXPECTED_PAYLOAD_RESOURCE(ERROR),
+        DUPLICATE_RESOURCE_IN_MANIFEST(ERROR);
         
         private TIPPErrorSeverity severity;
         Type(TIPPErrorSeverity severity) {
@@ -71,4 +74,8 @@ public class TIPPError {
                      message != null && message.equals(e.getMessage())));
     } 
     
+    @Override
+    public String toString() {
+        return errorType + "(" + message + ")";
+    }
 }
