@@ -11,7 +11,19 @@ public class TIPPLoadStatus {
     public TIPPLoadStatus() {
     }
 
-    void addError(TIPPError error) {
+    void addError(TIPPError.Type type) {
+        addError(new TIPPError(type));
+    }
+
+    void addError(TIPPError.Type type, String message) {
+        addError(new TIPPError(type, message));
+    }
+    
+    void addError(TIPPError.Type type, String message, Exception e) {
+        addError(new TIPPError(type, message, e));
+    }
+    
+    private void addError(TIPPError error) {
         errors.add(error);
         if (error.getErrorType().getSeverity().ordinal() > severity.ordinal()) {
             severity = error.getErrorType().getSeverity();

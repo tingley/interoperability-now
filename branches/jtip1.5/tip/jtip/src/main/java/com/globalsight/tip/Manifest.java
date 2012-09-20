@@ -29,7 +29,6 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import com.globalsight.tip.TIPPConstants.ContributorTool;
 import com.globalsight.tip.TIPPConstants.Creator;
@@ -38,7 +37,6 @@ import com.globalsight.tip.TIPPConstants.ObjectFile;
 class Manifest {
 
 	// Only for construction
-	// XXX Should this go in the TIPTask somehow?
 	private TIPPTaskType taskType;
 	
     private PackageBase tipPackage;
@@ -125,12 +123,20 @@ class Manifest {
     }
     
     // XXX This should blow away any existing settings 
-    void loadFromStream(InputStream manifestStream, TIPPLoadStatus status) 
+    boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status) 
                 throws TIPPValidationException, IOException {
+        if (manifestStream == null) {
+            status.addError(TIPPError.Type.MISSING_MANIFEST);
+            return false;
+        }
     	try {
-	        Document document = parse(manifestStream);
+	        Document document = parse(manifestStream, status);
+	        if (document == null) {
+	            return false;
+	        }
 	        validate(document);
 	        loadManifest(document, status);
+	        return true;
     	}
     	catch (ParserConfigurationException e) {
     		throw new RuntimeException(e);
@@ -245,8 +251,8 @@ class Manifest {
         String typeUri = section.getAttribute(ATTR_SECTION_TYPE);
         TIPPObjectSectionType type = TIPPObjectSectionType.byURI(typeUri);
         if (type == null) {
-            status.addError(new TIPPError(TIPPError.Type.INVALID_SECTION_TYPE, 
-                    "Invalid section type: " + typeUri));
+            status.addError(TIPPError.Type.INVALID_SECTION_TYPE, 
+                    "Invalid section type: " + typeUri);
             throw new TIPPValidationException("Invalid section type: " + typeUri);
         }
         TIPPObjectSection objectSection = new TIPPObjectSection(
@@ -277,16 +283,17 @@ class Manifest {
         return object;
     }
 
-    Document parse(InputStream is) throws ParserConfigurationException, 
-                                    TIPPValidationException, IOException {
+    Document parse(InputStream is, TIPPLoadStatus status) throws ParserConfigurationException, 
+                                    IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             return builder.parse(is);
         }
-        catch (SAXException e) {
-            throw new TIPPValidationException(e);
+        catch (Exception e) {
+            status.addError(TIPPError.Type.CORRUPT_MANIFEST, "Could not parse manifest", e);
+            return null;
         }
         finally {
             is.close();

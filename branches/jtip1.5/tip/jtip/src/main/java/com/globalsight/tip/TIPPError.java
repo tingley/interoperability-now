@@ -7,8 +7,12 @@ public class TIPPError {
     public enum Type {
         INVALID_PACKAGE_ZIP(FATAL),
         INVALID_PAYLOAD_ZIP(ERROR),
+        // package (not payload) contains an unexpected file
+        UNEXPECTED_PACKAGE_CONTENTS(ERROR),
+        // manifest was not present
         MISSING_MANIFEST(FATAL),
-        MISSING_PAYLOAD(ERROR),
+        // manifest was present but unparseable
+        CORRUPT_MANIFEST(FATAL),
         INVALID_SECTION_TYPE(ERROR),
         MISSING_PAYLOAD_RESOURCE(ERROR),
         UNEXPECTED_PAYLOAD_RESOURCE(ERROR),

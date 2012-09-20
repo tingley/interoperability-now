@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 public class TestTIPManifest {
 
@@ -30,6 +31,19 @@ public class TestTIPManifest {
                 "data/peanut_butter.xml"), status);
         assertEquals(0, status.getAllErrors().size());
         verifyRequestManifest(manifest);
+    }
+    
+    @Test
+    public void testDuplicateResourcesInManifest() throws Exception {
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        Manifest manifest = new Manifest(null);
+        manifest.loadFromStream(getClass().getResourceAsStream(
+                "data/duplicate_resources.xml"), status);
+        new PayloadValidator().validate(manifest, 
+                new TestStore(Collections.singleton("bilingual/Peanut_Butter.xlf")), status);
+        TestTIPPackage.checkErrors(status, 1);
+        assertEquals(TIPPError.Type.DUPLICATE_RESOURCE_IN_MANIFEST, 
+                status.getAllErrors().get(0).getErrorType());
     }
 
     @Test
@@ -213,7 +227,28 @@ public class TestTIPManifest {
     private TIPP getSamplePackage(String path, TIPPLoadStatus status) throws Exception {
         InputStream is = 
             getClass().getResourceAsStream(path);
-        return TIPPFactory.openFromStream(is, status);
+        return TIPPFactory.openFromStream(is, new InMemoryBackingStore(), status);
     }
 
+    /**
+     * Dummy backing store that exposes 0-length input streams
+     * for resources with the specified paths.
+     */
+    class TestStore extends InMemoryBackingStore {
+        private Set<String> paths;
+        TestStore(Set<String> paths) {
+            this.paths = paths;
+        }
+        @Override
+        public InputStream getObjectFileData(String path) {
+            if (paths.contains(path)) {
+                return new ByteArrayInputStream(new byte[0]);
+            }
+            return null;
+        }
+        @Override
+        public Set<String> getObjectFilePaths() {
+            return paths;
+        }
+    }
 }

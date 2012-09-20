@@ -36,7 +36,7 @@ class ManifestDOMBuilder {
         return document;
     }
     
-    Element makeDescriptor() {
+    private Element makeDescriptor() {
         Element descriptor = document.createElement(GLOBAL_DESCRIPTOR);
         appendElementChildWithText(document, 
                 descriptor, UNIQUE_PACKAGE_ID, manifest.getPackageId());
@@ -45,7 +45,7 @@ class ManifestDOMBuilder {
         return descriptor;
     }
     
-    Element makePackageCreator(TIPPCreator creator) {
+    private Element makePackageCreator(TIPPCreator creator) {
         Element creatorEl = document.createElement(PACKAGE_CREATOR);
         appendElementChildWithText(document, 
                 creatorEl, Creator.NAME, creator.getName());
@@ -57,7 +57,7 @@ class ManifestDOMBuilder {
         return creatorEl;
     }
     
-    Element makeContributorTool(TIPPTool tool) {
+    private Element makeContributorTool(TIPPTool tool) {
         Element toolEl = document.createElement(TOOL);
         appendElementChildWithText(document,
                 toolEl, ContributorTool.NAME, tool.getName());
@@ -68,7 +68,7 @@ class ManifestDOMBuilder {
         return toolEl;
     }
     
-    Element makeTaskRequestOrResponse(TIPPTask task) {
+    private Element makeTaskRequestOrResponse(TIPPTask task) {
         if (task instanceof TIPPTaskRequest) {
             return makeTaskRequest((TIPPTaskRequest)task);
         }
@@ -77,13 +77,13 @@ class ManifestDOMBuilder {
         }
     }
     
-    Element makeTaskRequest(TIPPTaskRequest request) {
+    private Element makeTaskRequest(TIPPTaskRequest request) {
         Element requestEl = document.createElement(TASK_REQUEST);
         requestEl.appendChild(makeTask(request));
         return requestEl;
     }
     
-    Element makeTask(TIPPTask task) {
+    private Element makeTask(TIPPTask task) {
         Element taskEl = document.createElement(TASK);
         appendElementChildWithText(document, taskEl, 
                 Task.TYPE, task.getTaskType());
@@ -94,7 +94,7 @@ class ManifestDOMBuilder {
         return taskEl;
     }
     
-    Element makeTaskResponse(TIPPTaskResponse response) {
+    private Element makeTaskResponse(TIPPTaskResponse response) {
         Element responseEl = document.createElement(TASK_RESPONSE);
         responseEl.appendChild(makeTask(response));
         responseEl.appendChild(makeInResponseTo(response));
@@ -107,7 +107,7 @@ class ManifestDOMBuilder {
         return responseEl;
     }
     
-    Element makeInResponseTo(TIPPTaskResponse response) {
+    private Element makeInResponseTo(TIPPTaskResponse response) {
         Element inReEl = document.createElement(TaskResponse.IN_RESPONSE_TO);
         appendElementChildWithText(document, inReEl,
                 UNIQUE_PACKAGE_ID, response.getRequestPackageId());
@@ -116,7 +116,7 @@ class ManifestDOMBuilder {
     }
     
     
-    Element makePackageObjects() {
+    private Element makePackageObjects() {
         Element objects = document.createElement(PACKAGE_OBJECTS);
         for (TIPPObjectSection section : manifest.getObjectSections()) {
             objects.appendChild(makeObjectSection(section));
@@ -124,7 +124,7 @@ class ManifestDOMBuilder {
         return objects;
     }
     
-    Element makeObjectSection(TIPPObjectSection section) {
+    private Element makeObjectSection(TIPPObjectSection section) {
         Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getName());
@@ -135,9 +135,8 @@ class ManifestDOMBuilder {
         return sectionEl;
     }
     
-    Element makeObjectFile(TIPPObjectFile file) {
+    private Element makeObjectFile(TIPPObjectFile file) {
         Element fileEl = document.createElement(OBJECT_FILE);
-        // TODO: is sequence optional?
         fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));
         appendElementChildWithText(document, fileEl, ObjectFile.NAME,
                                    file.getName());

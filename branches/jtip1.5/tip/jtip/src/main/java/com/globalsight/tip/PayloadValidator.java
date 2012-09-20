@@ -17,23 +17,20 @@ class PayloadValidator {
      * @param status
      * @return true if successful, false if an error was found
      */
-    boolean validate(Manifest manifest, PackageSource source, TIPPLoadStatus status) {
-       
-        // TODO: catch things that are listed in the manifest twice!
+    boolean validate(Manifest manifest, PackageStore store, TIPPLoadStatus status) {
         int originalErrorCount = status.getAllErrors().size();
-        Set<String> objectPaths = source.getPackageObjects();
+        Set<String> objectPaths = store.getObjectFilePaths();
         Set<String> pathsInManifest = new HashSet<String>();
         for (TIPPObjectSection section : manifest.getObjectSections()) {
             for (TIPPObjectFile obj : section.getObjectFiles()) {
-                String expectedPath = PackageSource.SEPARATOR + section.getName() + 
-                        PackageSource.SEPARATOR + obj.getLocation();
+                String expectedPath = obj.getCanonicalObjectPath();
                 if (pathsInManifest.contains(expectedPath)) {
-                    status.addError(new TIPPError(TIPPError.Type.DUPLICATE_RESOURCE_IN_MANIFEST,
-                            "Duplicate resource in manifest: " + expectedPath));
+                    status.addError(TIPPError.Type.DUPLICATE_RESOURCE_IN_MANIFEST,
+                            "Duplicate resource in manifest: " + expectedPath);
                 }
                 if (!objectPaths.contains(expectedPath)) {
-                    status.addError(new TIPPError(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, 
-                            "Missing resource: " + expectedPath));
+                    status.addError(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, 
+                            "Missing resource: " + expectedPath);
                 }
                 pathsInManifest.add(expectedPath);
             }
@@ -41,8 +38,8 @@ class PayloadValidator {
         // Now check in the other direction
         for (String objectPath : objectPaths) {
             if (!pathsInManifest.contains(objectPath)) {
-                status.addError(new TIPPError(TIPPError.Type.UNEXPECTED_PAYLOAD_RESOURCE, 
-                                "Unexpected package resource: " + objectPath));
+                status.addError(TIPPError.Type.UNEXPECTED_PAYLOAD_RESOURCE, 
+                                "Unexpected package resource: " + objectPath);
             }
         }
         return (originalErrorCount == status.getAllErrors().size());

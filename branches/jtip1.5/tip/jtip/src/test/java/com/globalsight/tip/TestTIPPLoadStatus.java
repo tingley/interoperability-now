@@ -22,9 +22,9 @@ public class TestTIPPLoadStatus {
     @Test
     public void testSeverity() {
         TIPPLoadStatus status = new TIPPLoadStatus();
-        status.addError(new TIPPError(INVALID_PAYLOAD_ZIP));
-        status.addError(new TIPPError(MISSING_MANIFEST));
-        status.addError(new TIPPError(MISSING_PAYLOAD_RESOURCE));
+        status.addError(INVALID_PAYLOAD_ZIP);
+        status.addError(MISSING_MANIFEST);
+        status.addError(MISSING_PAYLOAD_RESOURCE);
         assertEquals(3, status.getAllErrors().size());
         assertEquals(FATAL, status.getSeverity());
         Set<TIPPError> errors = new HashSet<TIPPError>(status.getAllErrors());

@@ -1,6 +1,5 @@
 package com.globalsight.tip;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -17,15 +16,6 @@ public interface TIPP {
      */
 	boolean close() throws IOException;
 	
-	/**
-     * Write the contents of this package to a directory on disk. 
-     * @param outputDirectory top-level directory to contain the package.
-     *        This directory should be empty.
-     * @throws IOException
-     * @throws TIPPException
-     */
-    void saveToDirectory(File outputDirectory) throws IOException, TIPPException;
-    
     /**
      * Write this package to an output stream as a ZIP archive
      * @param outputStream

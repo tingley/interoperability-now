@@ -8,14 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
 class FileUtil {
@@ -48,53 +40,6 @@ class FileUtil {
         else {
             return new ZipInputStream(inputStream);
         }
-    }
-    
-    /**
-     * Expand the contents of a ZIP file to a directory on disk.  Closes
-     * the stream when done.
-     * @param zipStream ZIP contents
-     * @param destDir destination directory.  Must exist (and be a directory).
-     * @return true if successful, false is this was an empty zip archive or
-     *         not a zip archive (the two are indistinguishable) 
-     * @throws IOException
-     * @throws ZipException
-     * @throws IllegalStateException if the archive tree can not be 
-     *          replicated on disk
-     */
-    public static boolean expandZipArchive(ZipInputStream zipStream, File destDir)
-                throws IOException, ZipException {
-        
-        // TODO: return false if there are no entries
-        for (ZipEntry entry = zipStream.getNextEntry(); entry != null; 
-                                            entry = zipStream.getNextEntry()) {
-            if (entry.isDirectory()) {
-                File subDir = new File(destDir, entry.getName());
-                if (!subDir.exists()) {
-                    if (!subDir.mkdirs()) {
-                        throw new IllegalStateException(
-                                "Could not create child directory " + subDir);
-                    }
-                }
-                continue;
-            }
-            File child = new File(destDir, entry.getName());
-            File parent = child.getParentFile();
-            if (!parent.exists()) {
-                if (!parent.mkdirs()) {
-                    throw new IllegalArgumentException(
-                            "Could not create directory " + parent);
-                }
-            }
-            if (!child.createNewFile()) {
-                throw new IllegalStateException(
-                            "Could not create child file " + child);
-            }
-            copyStreamToFile(zipStream, child);
-            zipStream.closeEntry();
-        }
-        zipStream.close();
-        return true;
     }
     
     /**
@@ -175,5 +120,18 @@ class FileUtil {
             os.write(buffer, 0, read);
         }
         os.flush();
+    }
+    
+    /**
+     * Copy contents of an input stream to an output stream.  Close the 
+     * output stream.
+     * @param is input stream
+     * @param os output stream
+     * @throws IOException
+     */
+    public static void copyStreamToStreamAndCloseDest(InputStream is, 
+            OutputStream os) throws IOException {
+        copyStreamToStream(is, os);
+        os.close();
     }
 }

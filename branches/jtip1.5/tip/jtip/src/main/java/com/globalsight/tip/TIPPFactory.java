@@ -14,40 +14,42 @@ public class TIPPFactory {
      * @return new TIPPackage
      * @throws IOException 
      */
+    // TODO - split the expand and the open operations up, so I can open just
+    // from the store.  This involves change to the PackageReader.
     public static TIPP openFromStream(InputStream inputStream, 
-            TIPPLoadStatus status) throws TIPPException, IOException {
+            PackageStore store, TIPPLoadStatus status) throws TIPPException, IOException {
         try {
-            return new PackageReader(new StreamPackageSource(inputStream)).load(status);
+            // XXX Not clear that open, close are still needed
+            // TODO: move this elsewhere
+            PackageSource source = new StreamPackageSource(inputStream);
+            source.open(status); 
+            source.copyToStore(store);
+            source.close();
+
+            return new PackageReader(store).load(status);
         }
         catch (ReportedException e) {
             return null;
         }
     }
 
-    public static WriteableRequestTIPP newRequestPackage(TIPPTaskType type) 
+    public static WriteableRequestTIPP newRequestPackage(TIPPTaskType type, PackageStore store) 
             throws TIPPException, IOException {
-        PackageSource source = new TempFilePackageSource();
-        // TODO: hacky that I have to pass null here
-        source.open(null);
-        WriteableRequestTIPP tipPackage = new WriteableRequestTIPP(source);
+        WriteableRequestTIPP tipPackage = new WriteableRequestTIPP(store);
         tipPackage.setManifest(Manifest.newRequestManifest(tipPackage, type));
         return tipPackage;
     }
 
-    public static WriteableResponseTIPP newResponsePackage(TIPPTaskType type)
+    public static WriteableResponseTIPP newResponsePackage(TIPPTaskType type, PackageStore store)
             throws TIPPException, IOException {
-        PackageSource source = new TempFilePackageSource();
-        source.open(null);
-        WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(source);
+        WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(store);
         tipPackage.setManifest(Manifest.newResponseManifest(tipPackage, type));
         return tipPackage;
     }
 
-    public static WriteableResponseTIPP newResponsePackage(RequestTIPP requestPackage)
+    public static WriteableResponseTIPP newResponsePackage(RequestTIPP requestPackage, PackageStore store)
             throws TIPPException, IOException {
-        PackageSource source = new TempFilePackageSource();
-        source.open(null);
-        WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(source);
+        WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(store);
         tipPackage.setManifest(Manifest.newResponseManifest(tipPackage, 
                 requestPackage));
         return tipPackage;	

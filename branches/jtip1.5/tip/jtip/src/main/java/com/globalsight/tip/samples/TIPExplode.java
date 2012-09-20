@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.globalsight.tip.FileSystemBackingStore;
 import com.globalsight.tip.TIPP;
+import com.globalsight.tip.PackageStore;
 import com.globalsight.tip.TIPPError;
 import com.globalsight.tip.TIPPFactory;
 import com.globalsight.tip.TIPPLoadStatus;
@@ -29,10 +31,10 @@ public class TIPExplode {
         }
         File tipFile = verifyPackageFile(args[0]);
         File targetDir = prepareTargetDirectory(args[1]);
-        
+        PackageStore store = new FileSystemBackingStore(targetDir);
         InputStream is = new BufferedInputStream(new FileInputStream(tipFile));
         TIPPLoadStatus status = new TIPPLoadStatus();
-        TIPP tip = TIPPFactory.openFromStream(is, status);
+        TIPP tip = TIPPFactory.openFromStream(is, store, status);
         is.close();
         List<TIPPError> errors = status.getAllErrors();
         if (errors.size() > 0) {
@@ -41,7 +43,6 @@ public class TIPExplode {
                 System.out.println(e);
             }
         }
-        tip.saveToDirectory(targetDir);
         tip.close();
         System.out.println("Wrote package contents to " + targetDir);
     }
