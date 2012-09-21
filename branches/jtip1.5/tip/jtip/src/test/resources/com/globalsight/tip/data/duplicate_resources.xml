@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Need to get real schema location (host in google code?) and schema
-   - version. -->
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd" version="1.5">
   <GlobalDescriptor>
-    <!-- We need to specify semantics for generating these, whether it
-       - be a GUID algorithm or something else. 
-       Chase & Sven: is there an ISO standard on GUID? If not perhaps combination of Generator ID and timestamp
-       -->
     <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
     <PackageCreator>
       <Name>Test Company</Name>

@@ -13,10 +13,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
-// TODO Tests to add
-// - custom task types
-// - enforce section types for every standard task type
-//   - check for required + optional tasks?
 public class TestTIPManifest {
 
 	@Test
@@ -69,6 +65,21 @@ public class TestTIPManifest {
         assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
         assertEquals(TIPPError.Type.INVALID_MANIFEST, status.getAllErrors().get(0).getErrorType());
     }
+
+    @Test
+    public void testCustomTaskType() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        try {
+            manifest.loadFromStream(getClass().getResourceAsStream(
+                    "data/custom_task.xml"), status);
+        }
+        catch (ReportedException e) {
+            fail();
+        }
+        assertEquals(0, status.getAllErrors().size());
+        assertEquals("http://spartansoftware.com/tasks/test", manifest.getTask().getTaskType());
+    }
     
     @Test
     public void testDuplicateSectionInManifest() throws Exception {
@@ -85,7 +96,6 @@ public class TestTIPManifest {
         assertEquals(TIPPErrorSeverity.ERROR, status.getSeverity());
         assertEquals(TIPPError.Type.DUPLICATE_SECTION_IN_MANIFEST, status.getAllErrors().get(0).getErrorType());
     }
-    
     
     @Test
     public void testDuplicateResourcesInManifest() throws Exception {

@@ -15,20 +15,27 @@
     </PackageCreator>
     <TaskRequest>
       <Task>
-        <TaskType>http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-strict-bitext</TaskType>
+        <TaskType>http://spartansoftware.com/tasks/test</TaskType>
         <SourceLanguage>en-US</SourceLanguage>
-        <TargetLanguage>fr-FR</TargetLanguage>
+        <TargetLanguage>de-DE</TargetLanguage>
       </Task>
     </TaskRequest>
   </GlobalDescriptor>
   <PackageObjects>
-    <PackageObjectSection name="bilingual"
-        type="http://schema.interoperability-now.org/tipp/v1.5/sections/bilingual">
-      <ObjectFile sequence="po">
-        <Name>Peanut_Butter.xlf</Name>
-        <Location>Peanut_Butter.xlf</Location>
+    <PackageObjectSection name="custom"
+        type="http://schema.interoperability-now.org/tipp/v1.5/sections/custom">
+      <ObjectFile sequence="1">
+        <Name>file1</Name>
+        <Location>file1</Location>
+      </ObjectFile>
+      <ObjectFile sequence="2">
+        <Name>file2</Name>
+        <Location>file2</Location>
+      </ObjectFile>
+      <ObjectFile sequence="3">
+        <Name>file3</Name>
+        <Location>file3</Location>
       </ObjectFile>
     </PackageObjectSection>
-    
   </PackageObjects>
 </TIPPManifest>
