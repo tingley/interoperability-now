@@ -13,6 +13,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
 
+// TODO Tests to add
+// - custom task types
+// - enforce section types for every standard task type
+//   - check for required + optional tasks?
 public class TestTIPManifest {
 
 	@Test
@@ -34,6 +38,56 @@ public class TestTIPManifest {
     }
     
     @Test
+    public void testInvalidResponseMessage() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        try {
+            manifest.loadFromStream(getClass().getResourceAsStream(
+                    "data/invalid_repsonse_message.xml"), status);
+        }
+        catch (ReportedException e) {
+            // expected
+        }
+        assertEquals(1, status.getAllErrors().size());
+        assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
+        assertEquals(TIPPError.Type.INVALID_MANIFEST, status.getAllErrors().get(0).getErrorType());
+    }
+    
+    @Test
+    public void testInvalidSequenceValue() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        try {
+            manifest.loadFromStream(getClass().getResourceAsStream(
+                    "data/invalid_sequence.xml"), status);
+        }
+        catch (ReportedException e) {
+            // expected
+        }
+        // This shows up as a validation error
+        assertEquals(1, status.getAllErrors().size());
+        assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
+        assertEquals(TIPPError.Type.INVALID_MANIFEST, status.getAllErrors().get(0).getErrorType());
+    }
+    
+    @Test
+    public void testDuplicateSectionInManifest() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        try {
+            manifest.loadFromStream(getClass().getResourceAsStream(
+                    "data/duplicate_section_request.xml"), status);
+        }
+        catch (ReportedException e) {
+            // expected
+        }
+        assertEquals(1, status.getAllErrors().size());
+        assertEquals(TIPPErrorSeverity.ERROR, status.getSeverity());
+        assertEquals(TIPPError.Type.DUPLICATE_SECTION_IN_MANIFEST, status.getAllErrors().get(0).getErrorType());
+    }
+    
+    
+    @Test
     public void testDuplicateResourcesInManifest() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         Manifest manifest = new Manifest(null);
@@ -46,6 +100,22 @@ public class TestTIPManifest {
                 status.getAllErrors().get(0).getErrorType());
     }
 
+    @Test
+    public void testInvalidSectionInManifest() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        try {
+            manifest.loadFromStream(getClass().getResourceAsStream(
+                    "data/invalid_section_request.xml"), status);
+        }
+        catch (ReportedException e) {
+            // expected
+        }
+        assertEquals(1, status.getAllErrors().size());
+        assertEquals(TIPPError.Type.INVALID_MANIFEST, status.getAllErrors().get(0).getErrorType());
+        assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
+    }
+    
     @Test
     public void testManifestSave() throws Exception {
         Manifest manifest = new Manifest(null);

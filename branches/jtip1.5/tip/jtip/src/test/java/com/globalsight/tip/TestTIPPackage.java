@@ -52,6 +52,42 @@ public class TestTIPPackage {
     }
     
     @Test
+    public void testOpenFromInMemoryStore() throws Exception {
+        testOpenFromStore(new InMemoryBackingStore());
+    }
+    
+    @Test
+    public void testOpenFromTempFileBackingStore() throws Exception {
+        testOpenFromStore(new TempFileBackingStore());
+    }
+    
+    @Test
+    public void testOpenFromFileBackingStore() throws Exception {
+        // This is actually equivalent to the TempFileBackingStore 
+        // in the current implementation..
+        File temp = FileUtil.createTempDir("jtip-test");
+        assertNotNull(temp);
+        assertTrue(temp.exists());
+        assertTrue(temp.isDirectory());
+        testOpenFromStore(new FileSystemBackingStore(temp));
+        FileUtil.recursiveDelete(temp);
+    }
+    
+    private void testOpenFromStore(PackageStore store) throws Exception {
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        InputStream is = getClass().getResourceAsStream("data/test_package.zip");
+        TIPP tipp = TIPPFactory.openFromStream(is, store, status);
+        checkErrors(status, 0);
+        verifyRequestPackage(tipp);
+        // now open it again from the store that was populated with the first call
+        status = new TIPPLoadStatus();
+        TIPP tipp2 = TIPPFactory.openFromStore(store, status);
+        checkErrors(status, 0);
+        verifyRequestPackage(tipp2);
+        store.close();
+    }
+    
+    @Test
     public void testVerifyMissingManifest() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/missing_manifest.zip", status);

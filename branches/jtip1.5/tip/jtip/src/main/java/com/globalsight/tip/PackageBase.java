@@ -146,7 +146,6 @@ abstract class PackageBase implements WriteableTIPP {
      * @throws IOException
      */
     public void saveToStream(OutputStream outputStream) throws TIPPException, IOException {
-        // XXX What if this has no backing on disk?
         ZipOutputStream zos = new ZipOutputStream(outputStream);
 
         // Write out the manifest

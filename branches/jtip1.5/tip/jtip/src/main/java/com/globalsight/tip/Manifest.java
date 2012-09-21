@@ -107,7 +107,12 @@ class Manifest {
     void saveToStream(OutputStream saveStream) throws TIPPException { 
         try {
             Document document = new ManifestDOMBuilder(this).makeDocument();
-            validate(document);
+            TIPPLoadStatus status = new TIPPLoadStatus();
+            validate(document, status);
+            if (status.getSeverity() != TIPPErrorSeverity.NONE) {
+                // XXX What to do with the errors?
+                throw new TIPPException("Saved manifest was invalid");
+            }
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -124,7 +129,7 @@ class Manifest {
     
     // XXX This should blow away any existing settings 
     boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status) 
-                throws TIPPValidationException, IOException {
+                throws IOException {
         if (manifestStream == null) {
             status.addError(TIPPError.Type.MISSING_MANIFEST);
             return false;
@@ -134,7 +139,7 @@ class Manifest {
 	        if (document == null) {
 	            return false;
 	        }
-	        validate(document);
+	        validate(document, status);
 	        loadManifest(document, status);
 	        return true;
     	}
@@ -143,15 +148,13 @@ class Manifest {
     	}
     }    
     
-    private void loadManifest(Document document, TIPPLoadStatus status) 
-                            throws TIPPValidationException {
+    private void loadManifest(Document document, TIPPLoadStatus status) {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
         loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS), status);
     }
     
-    private void loadDescriptor(Element descriptor) 
-                            throws TIPPValidationException {
+    private void loadDescriptor(Element descriptor) {
         packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
         
         creator = loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
@@ -171,8 +174,7 @@ class Manifest {
         return creator;
     }
     
-    private TIPPTask loadTaskRequestOrResponse(Element descriptor) 
-                        throws TIPPValidationException {
+    private TIPPTask loadTaskRequestOrResponse(Element descriptor) {
         Element requestEl = getFirstChildByName(descriptor, TASK_REQUEST);
         if (requestEl != null) {
             return loadTaskRequest(requestEl);
@@ -194,8 +196,7 @@ class Manifest {
         return request;
     }
     
-    private TIPPTaskResponse loadTaskResponse(Element responseEl) 
-                                throws TIPPValidationException {
+    private TIPPTaskResponse loadTaskResponse(Element responseEl) {
         TIPPTaskResponse response = new TIPPTaskResponse();
         loadTask(getFirstChildByName(responseEl, TASK), response);
         Element inResponseTo = getFirstChildByName(responseEl, 
@@ -209,10 +210,6 @@ class Manifest {
         String rawMessage = getChildTextByName(responseEl, 
                             TaskResponse.MESSAGE);
         TIPPResponseMessage msg = TIPPResponseMessage.valueOf(rawMessage);
-        if (msg == null) {
-            throw new TIPPValidationException(
-                    "Invalid ResponseMessage value: " + msg);
-        }
         response.setMessage(msg);
         return response;
     }
@@ -229,44 +226,45 @@ class Manifest {
         return tool;
     }
     
-    private void loadPackageObjects(Element parent, TIPPLoadStatus status) 
-                            throws TIPPValidationException {
+    private void loadPackageObjects(Element parent, TIPPLoadStatus status) {
         // parse all the sections
         NodeList children = 
             parent.getElementsByTagName(PACKAGE_OBJECT_SECTION);
         for (int i = 0; i < children.getLength(); i++) {
             TIPPObjectSection section = 
                 loadPackageObjectSection((Element)children.item(i), status);
+            if (section == null) {
+                continue;
+            }
             // Don't allow duplicate sections
             if (objectSections.containsKey(section.getType())) {
-                throw new TIPPValidationException("Duplicate object section: " +
-                                                  section.getType());
+                status.addError(TIPPError.Type.DUPLICATE_SECTION_IN_MANIFEST, 
+                        "Duplicate section: " + section.getType());
+                continue;
             }
             objectSections.put(section.getType(), section);
         }
     }
     
     private TIPPObjectSection loadPackageObjectSection(Element section,
-            TIPPLoadStatus status) throws TIPPValidationException {
+            TIPPLoadStatus status) {
         String typeUri = section.getAttribute(ATTR_SECTION_TYPE);
+        // The schema guarantees that this should always be a section
+        // type we know about
         TIPPObjectSectionType type = TIPPObjectSectionType.byURI(typeUri);
-        if (type == null) {
-            status.addError(TIPPError.Type.INVALID_SECTION_TYPE, 
-                    "Invalid section type: " + typeUri);
-            throw new TIPPValidationException("Invalid section type: " + typeUri);
-        }
         TIPPObjectSection objectSection = new TIPPObjectSection(
                 section.getAttribute(ATTR_SECTION_NAME), type);
         objectSection.setPackage(tipPackage);
         NodeList children = section.getElementsByTagName(OBJECT_FILE);
         for (int i = 0; i < children.getLength(); i++) {
-            objectSection.addObject(loadObjectFile((Element)children.item(i)));
+            objectSection.addObject(loadObjectFile((Element)children.item(i),
+                                                   status));
         }
         return objectSection;
     }
     
-    private TIPPObjectFile loadObjectFile(Element file) 
-                            throws TIPPValidationException {
+    private TIPPObjectFile loadObjectFile(Element file,
+                            TIPPLoadStatus status) {
         TIPPObjectFile object = new TIPPObjectFile();
         object.setPackage(tipPackage);
         String rawSequence = file.getAttribute(ObjectFile.ATTR_SEQUENCE);
@@ -274,8 +272,7 @@ class Manifest {
             object.setSequence(Integer.parseInt(rawSequence));
         }
         catch (NumberFormatException e) {
-            throw new TIPPValidationException(
-                    "Invalid sequence value: '" + rawSequence + "'");
+            // This should be caught by validation
         }
         object.setLocation(getChildTextByName(file, ObjectFile.LOCATION));
         String name = getChildTextByName(file, ObjectFile.NAME);
@@ -300,7 +297,7 @@ class Manifest {
         }
     }
     
-    void validate(Document dom) throws TIPPValidationException {
+    void validate(Document dom, TIPPLoadStatus status) {
         try {
             InputStream is = 
                 getClass().getResourceAsStream("/TIPPManifest-1_5.xsd");
@@ -313,7 +310,8 @@ class Manifest {
             is.close();
         }
         catch (Exception e) {
-            throw new TIPPValidationException(e);
+            status.addError(TIPPError.Type.INVALID_MANIFEST, "Invalid manifest", e);
+            throw new ReportedException(e);
         }
     }
 

@@ -13,7 +13,12 @@ public class TIPPError {
         MISSING_MANIFEST(FATAL),
         // manifest was present but unparseable
         CORRUPT_MANIFEST(FATAL),
-        INVALID_SECTION_TYPE(ERROR),
+        // manifest failed schema validation
+        INVALID_MANIFEST(FATAL),
+        // manifest contained a duplicate section
+        DUPLICATE_SECTION_IN_MANIFEST(ERROR),
+        // invalid section type for a known task type
+        INVALID_SECTION_FOR_TASK(ERROR),
         MISSING_PAYLOAD_RESOURCE(ERROR),
         UNEXPECTED_PAYLOAD_RESOURCE(ERROR),
         DUPLICATE_RESOURCE_IN_MANIFEST(ERROR);

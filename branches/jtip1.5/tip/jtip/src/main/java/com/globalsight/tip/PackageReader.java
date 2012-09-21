@@ -9,7 +9,7 @@ class PackageReader {
         this.store = store;
     }
 
-    PackageBase load(TIPPLoadStatus status) throws TIPPException, IOException {
+    PackageBase load(TIPPLoadStatus status) throws IOException {
         try {
             Manifest manifest = new Manifest(null);
             if (!manifest.loadFromStream(store.getManifestData(), status)) {
