@@ -115,6 +115,22 @@ public class TestTIPManifest {
         assertEquals(TIPPError.Type.INVALID_MANIFEST, status.getAllErrors().get(0).getErrorType());
         assertEquals(TIPPErrorSeverity.FATAL, status.getSeverity());
     }
+
+    @Test
+    public void testInvalidSectionForTaskType() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        try {
+            manifest.loadFromStream(getClass().getResourceAsStream(
+                    "data/invalid_section_strict_bitext.xml"), status);
+        }
+        catch (ReportedException e) {
+            // expected
+        }
+        assertEquals(1, status.getAllErrors().size());
+        assertEquals(TIPPError.Type.INVALID_SECTION_FOR_TASK, status.getAllErrors().get(0).getErrorType());
+        assertEquals(TIPPErrorSeverity.ERROR, status.getSeverity());
+    }
     
     @Test
     public void testManifestSave() throws Exception {

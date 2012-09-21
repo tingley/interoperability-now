@@ -152,6 +152,17 @@ class Manifest {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
         loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS), status);
+        // Perform additional validation that isn't covered by the schema
+        TIPPTaskType taskType = getTaskType();
+        if (taskType != null) {
+            for (TIPPObjectSection section : getObjectSections()) {
+                if (!taskType.getSupportedSectionTypes().contains(section.getType())) {
+                    status.addError(TIPPError.Type.INVALID_SECTION_FOR_TASK, 
+                            "Invalid section for task type: " + 
+                                section.getType());
+                }
+            }
+        }
     }
     
     private void loadDescriptor(Element descriptor) {
