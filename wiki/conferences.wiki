@@ -13,4 +13,10 @@
   * [http://www.localizationworld.com/lwparis2012/programDescription.php#D4 The Case for Interoperability: Efficiency and Freedom of Choice in the Translation Supply Chain] Sven Christian Andrä (ONTRAM Inc), Micah Bly (Medtronic, Inc.), Gergely Vándor (Kilgray), Andrzej Zydroń (XTM International)
 
 ==Localization World Seattle 2012==
-  * Although there is no official IN! presentation in Seattle, several members of the IN! and LINPORT teams will be attending and/or presenting on other topics. We are planning to host at least one informal session on IN! for people implementing, or planning to implement TIPP/Linport. IN! attendees include the following: Sven Christian Andrä (ONTRAM Inc), Bob Willans (XTM International), Jörg Shütz (Bioloom), Chase Tingley (Spartan Consulting). 
+  * Although there is no official IN! presentation in Seattle, several members of the IN! and LINPORT teams will be attending and/or presenting on other topics. We are planning to host at least one informal session on IN! for people implementing, or planning to implement TIPP/Linport. IN! attendees include the following:
+    * Sven Christian Andrä (ONTRAM Inc)
+    * Bob Willans (XTM International)
+    * Jörg Shütz (Bioloom)
+    * Chase Tingley (Spartan Consulting)
+    * Peter Reynolds (Kilgray)
+Alan Melby and Arle Lommel from Linport will also be attending, so it's a great opportunity to learn about the big picture of localization interoperability. 
