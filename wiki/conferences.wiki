@@ -17,6 +17,6 @@
     * Sven Christian Andrä (ONTRAM Inc)
     * Bob Willans (XTM International)
     * Jörg Shütz (Bioloom)
-    * Chase Tingley (Spartan Consulting)
+    * Chase Tingley (Spartan Software)
     * Peter Reynolds (Kilgray)
 Alan Melby and Arle Lommel from Linport will also be attending, so it's a great opportunity to learn about the big picture of localization interoperability. 
