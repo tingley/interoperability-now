@@ -1,0 +1,24 @@
+#summary Information about version 1.5 of TIPP
+
+= Introduction =
+
+Version 1.5 of the TIPP format is currently under development.  All work related to 1.5 is stored in Subversion.
+  * Draft 2 of the TIPP format document can be found in [http://code.google.com/p/interoperability-now/source/browse/#svn%2Ftrunk%2Ftip trunk/tip/] and is also available for direct download [http://code.google.com/p/interoperability-now/downloads/detail?name=The_TMS_Interoperability_Protocol_Package-1.5.doc&can=2&q=#makechanges on the downloads page].  
+  * The draft 1.5 XML Schema is available in [http://interoperability-now.googlecode.com/svn/trunk/tip/schema/TIPPManifest-1_5.xsd trunk/tip/schema/TIPPManifest-1_5.xsd].  
+  * Updates to the [jtip] reference implementation are available on the jtip1.5 branch ([http://code.google.com/p/interoperability-now/source/browse/#svn%2Fbranches%2Fjtip1.5%2Ftip%2Fjtip /branches/jtip1.5/tip/jtip]).
+
+= What's new in TIPP 1.5 =
+
+Most of the changes in TIPP 1.5 are the result of our ongoing work with the [http://linport.org Linport Project].
+  * The completely free-form section model of version 1.4 has been dialed back to a more restrained approach.  Valid section types are now enumerated by the schema; custom task types should either use an existing section type, or place files within a reserved "Custom".  Task types can still specify whether a given section type is required or optional for a that task, as well as what behavior is expected concerning its contents.
+  * Additional response messages have been added, replacing the single "Failure" value with several possible failure modes.
+  * New section types for terminology and metrics data.
+  * Rewritten language on compliance.
+  * Many clarifications and corrections to the text of the specification itself.
+
+= What's left to do? =
+
+There are a few things we're still trying to tackle in the 1.5 timeframe.
+  * A system for referencing remote resources from a package Manifest, rather than requiring all objects to be stored inline.
+  * Answering unresolved questions about TIPPs with multiple target languages.
+  * Fully specify the use of XML-DSIG to authenticate packages.
