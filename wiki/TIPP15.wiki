@@ -1,4 +1,5 @@
 #summary Information about version 1.5 of TIPP
+#labels Featured
 
 = Introduction =
 
