@@ -11,7 +11,7 @@
 
 ==Localization World Paris 2012==
   * [http://www.localizationworld.com/lwparis2012/programDescription.php#D4 The Case for Interoperability: Efficiency and Freedom of Choice in the Translation Supply Chain] Sven Christian Andrä (ONTRAM Inc), Micah Bly (Medtronic, Inc.), Gergely Vándor (Kilgray), Andrzej Zydroń (XTM International)
-  * [http://code.google.com/p/interoperability-now/downloads/detail?name=Interoperability_Now_LocWorld_Paris_2012.pdf View the presentation (PDF)]
+  * [http://interoperability-now.googlecode.com/files/Interoperability_Now_LocWorld_Paris_2012.pdf View the presentation (PDF)]
 
 ==Localization World Seattle 2012==
   * Although there is no official IN! presentation in Seattle, several members of the IN! and LINPORT teams will be attending and/or presenting on other topics. We are planning to host at least one informal session on IN! for people implementing, or planning to implement TIPP/Linport. IN! attendees include the following:
