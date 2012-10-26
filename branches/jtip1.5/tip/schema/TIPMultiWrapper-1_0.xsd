@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            XML Schema of the TIP Multilingual Wrapper.  The Wrapped
+contains one or more TIP packages, each corresponding to a single target locale.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="TIPMultiWrapper">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Packages" type="Packages" minOccurs="1"
+                            maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:attribute name="version" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:enumeration value="1.0" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="Packages">
+        <xs:sequence>
+            <xs:element name="Package" type="Package" minOccurs="1"
+                        maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="sourceLocale" use="required" type="xs:string" />
+    </xs:complexType>
+    <xs:complexType name="Package">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="targetLocale" use="required" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+</xs:schema>

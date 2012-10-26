@@ -17,7 +17,15 @@
 <!--						   General streamlining and cleanup -->
 <!--                2012-07-22 Draft 1.5 -->
 <!--                           For now, this is unchanged from 1.4 -->
-<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!--                2012-10-26 Revised Draft 1.5 -->
+<!--                           Updated section type mechanism. -->
+<!--                           Introduction of XML-DSIG and <Signature>. -->
+<!--                           Revised ResponseMessage values. -->
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <xsd:import namespace="http://www.w3.org/2000/09/xmldsig#"
+            schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
     <xs:annotation>
         <xs:documentation xml:lang="en">
            XML Schema of the TIPP Manifest. The Manifest specifies the entire content of an
@@ -43,6 +51,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
+                <xs:element name="Signature" type="ds:SignatureType" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="version" use="required">
                 <xs:simpleType>
@@ -97,7 +106,8 @@
     </xs:complexType>
     <xs:complexType name="TaskRequest">
     	<xs:sequence>
-    		<xs:element name="Task" type="Task" />    	</xs:sequence>
+            <xs:element name="Task" type="Task" />
+        </xs:sequence>
     </xs:complexType>
     <xs:complexType name="InResponseTo">
       	<xs:sequence>
