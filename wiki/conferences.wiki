@@ -15,7 +15,7 @@
   * [http://interoperability-now.googlecode.com/files/Interoperability_Now_LocWorld_Paris_2012.pdf View the presentation (PDF)]
 
 ==TAUS User Conference Seattle 2012==
-  * Sven Christian Andrä (ONTRAM Inc) presented a short pitch for interoperability. 
+  * Sven Christian Andrä (ONTRAM Inc) presented a short pitch for interoperability. ([http://www.youtube.com/watch?v=yWiGM4l5v1A view the video on YouTube])
   * [http://interoperability-now.googlecode.com/files/IN%21%203%20minutes%20pitch.pptx View the presentation (PPTX)]
 
 ==Localization World Seattle 2012==
