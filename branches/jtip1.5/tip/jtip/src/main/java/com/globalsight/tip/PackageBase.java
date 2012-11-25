@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -146,12 +147,17 @@ abstract class PackageBase implements WriteableTIPP {
      * @throws IOException
      */
     public void saveToStream(OutputStream outputStream) throws TIPPException, IOException {
+        saveToStream(new ManifestWriter(), outputStream);
+    }
+    
+    public void saveToStream(OutputStream outputStream, KeyPair keyPair) throws TIPPException, IOException {
+        ManifestWriter mw = new ManifestWriter();
+        mw.setKeyPair(keyPair);
+        saveToStream(mw, outputStream);
+    }
+    
+    private void saveToStream(ManifestWriter mw, OutputStream outputStream) throws TIPPException, IOException {
         ZipOutputStream zos = new ZipOutputStream(outputStream);
-
-        // Write out the manifest
-        zos.putNextEntry(new ZipEntry(MANIFEST));
-        manifest.saveToStream(zos);
-        zos.closeEntry();
 
         // For some reason writing the zip stream out within another
         // zip stream gives me strange zip corruption errors.  Write
@@ -160,11 +166,19 @@ abstract class PackageBase implements WriteableTIPP {
         writeObjects(tempOutputStream);
         tempOutputStream.close();
         
-        // Now write out all the parts as an inner archive
+        // Write out all the parts as an inner archive
         zos.putNextEntry(new ZipEntry(INSECURE_OBJECTS_FILE));
         FileUtil.copyStreamToStream(store.getTransientData("output-stream"), zos);
         zos.closeEntry();
-        
+
+        // Now write out the manifest.  We do this last so we can
+        // pass the objects reference.
+        // Add the payload as well, in case we are signing.
+        mw.setPayload(store.removeTransientData("output-stream"));
+        zos.putNextEntry(new ZipEntry(MANIFEST));
+        mw.saveToStream(manifest, zos);
+        zos.closeEntry();
+
         zos.flush();
         zos.close();
     }

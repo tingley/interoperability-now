@@ -24,6 +24,8 @@ class ManifestDOMBuilder {
     
     Document makeDocument() throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        // Namespaces are required for xml-dsig
+        //factory.setNamespaceAware(true);
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         document = docBuilder.newDocument();
         Element root = document.createElement(MANIFEST);

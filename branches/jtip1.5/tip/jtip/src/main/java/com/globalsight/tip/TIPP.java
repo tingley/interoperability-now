@@ -2,6 +2,7 @@ package com.globalsight.tip;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.security.KeyPair;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +24,17 @@ public interface TIPP {
      * @throws IOException
      */
     void saveToStream(OutputStream outputStream) throws TIPPException, IOException;
-	
+
+    /**
+     * Write this package to an output stream as a ZIP archive, signed using the 
+     * provided KeyPair.
+     * @param outputStream
+     * @param keyPair a public/private keypair for generating a digital signature.
+     * @throws TIPPException
+     * @throws IOException
+     */
+    void saveToStream(OutputStream outputStream, KeyPair keyPair) throws TIPPException, IOException;
+
 	/**
 	 * Is this package a request?  If true, the package may be safely
 	 * cast to TIPRequestPackage; if false, teh package may be safely

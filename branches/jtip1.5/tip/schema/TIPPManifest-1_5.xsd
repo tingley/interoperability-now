@@ -22,9 +22,8 @@
 <!--                           Introduction of XML-DSIG and <Signature>. -->
 <!--                           Revised ResponseMessage values. -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-    <xsd:import namespace="http://www.w3.org/2000/09/xmldsig#"
+    <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
             schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
     <xs:annotation>
         <xs:documentation xml:lang="en">

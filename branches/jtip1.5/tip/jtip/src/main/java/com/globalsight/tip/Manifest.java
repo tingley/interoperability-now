@@ -29,6 +29,9 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
 
 import com.globalsight.tip.TIPPConstants.ContributorTool;
 import com.globalsight.tip.TIPPConstants.Creator;
@@ -36,6 +39,11 @@ import com.globalsight.tip.TIPPConstants.ObjectFile;
 
 class Manifest {
 
+    static final String XMLDSIG_SCHEMA_URI = 
+            "http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd";
+    static final String XMLDSIG_NS_PREFIX =
+            "http://www.w3.org/2000/09/xmldsig#";
+    
 	// Only for construction
 	private TIPPTaskType taskType;
 	
@@ -102,29 +110,6 @@ class Manifest {
     
     TIPPTaskType getTaskType() {
     	return taskType;
-    }
-    
-    void saveToStream(OutputStream saveStream) throws TIPPException { 
-        try {
-            Document document = new ManifestDOMBuilder(this).makeDocument();
-            TIPPLoadStatus status = new TIPPLoadStatus();
-            validate(document, status);
-            if (status.getSeverity() != TIPPErrorSeverity.NONE) {
-                // XXX What to do with the errors?
-                throw new TIPPException("Saved manifest was invalid");
-            }
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer = factory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(
-                    "{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.transform(new DOMSource(document), 
-                    new StreamResult(saveStream));
-        }
-        catch (Exception e) {
-            throw new TIPPException(e);
-        }
     }
     
     // XXX This should blow away any existing settings 
@@ -308,12 +293,27 @@ class Manifest {
         }
     }
     
-    void validate(Document dom, TIPPLoadStatus status) {
+    void validate(final Document dom, TIPPLoadStatus status) {
         try {
             InputStream is = 
                 getClass().getResourceAsStream("/TIPPManifest-1_5.xsd");
             SchemaFactory factory = 
                 SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
+            factory.setResourceResolver(new LSResourceResolver() {
+                public LSInput resolveResource(String type, String namespaceURI, 
+                        String publicId, String systemId, String baseURI)  {
+                    LSInput input = ((DOMImplementationLS)dom
+                            .getImplementation()).createLSInput();
+                    if (XMLDSIG_SCHEMA_URI.equalsIgnoreCase(baseURI) ||
+                        XMLDSIG_NS_PREFIX.equalsIgnoreCase(namespaceURI)) {
+                        input.setByteStream(getClass().getResourceAsStream("/xmldsig-core-schema.xsd"));
+                    }
+                    else {
+                        return null;
+                    }
+                    return input;
+                }
+            });
             Schema schema = factory.newSchema(new StreamSource(is));
             // need an error handler
             Validator validator = schema.newValidator();
@@ -322,6 +322,7 @@ class Manifest {
         }
         catch (Exception e) {
             status.addError(TIPPError.Type.INVALID_MANIFEST, "Invalid manifest", e);
+            e.printStackTrace();
             throw new ReportedException(e);
         }
     }

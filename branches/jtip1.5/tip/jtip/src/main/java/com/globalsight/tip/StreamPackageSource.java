@@ -70,7 +70,7 @@ class StreamPackageSource extends PackageSource {
         // read it back as a zip archive.
         FileUtil.copyStreamToStreamAndCloseDest(is, 
                             store.storeTransientData("payload"));
-        ZipInputStream zis = FileUtil.getZipInputStream(store.getTransientData("payload"));
+        ZipInputStream zis = FileUtil.getZipInputStream(store.removeTransientData("payload"));
         for (ZipEntry entry = zis.getNextEntry(); entry != null; 
                 entry = zis.getNextEntry()) {
             if (entry.isDirectory()) {

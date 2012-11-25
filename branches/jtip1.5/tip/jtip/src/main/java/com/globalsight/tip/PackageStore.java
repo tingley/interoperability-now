@@ -25,6 +25,8 @@ public interface PackageStore {
     
     public InputStream getTransientData(String id) throws IOException;
     
+    public InputStream removeTransientData(String id) throws IOException;
+    
     public Set<String> getObjectFilePaths();
     
     // TODO: is this ever called?

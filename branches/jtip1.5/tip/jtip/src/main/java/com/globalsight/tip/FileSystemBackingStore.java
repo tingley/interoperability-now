@@ -62,6 +62,11 @@ public class FileSystemBackingStore implements PackageStore {
     
     public InputStream getTransientData(String id) throws IOException {
         File temp = transientData.get(id);
+        return new FileInputStream(temp);
+    }
+    
+    public InputStream removeTransientData(String id) throws IOException {
+        File temp = transientData.get(id);
         transientData.remove(id);
         return new FileInputStream(temp);
     }

@@ -61,9 +61,15 @@ public class InMemoryBackingStore implements PackageStore {
 
     public InputStream getTransientData(String id) throws IOException {
         InputStream is = getStream(temp);
+        return is;
+    }
+    
+    public InputStream removeTransientData(String id) throws IOException {
+        InputStream is = getStream(temp);
         temp = null;
         return is;
     }
+
 
     private ByteArrayInputStream getStream(byte[] b) {
         return b != null ? new ByteArrayInputStream(b) : null;
