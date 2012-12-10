@@ -50,7 +50,7 @@
                         </xs:documentation>
                     </xs:annotation>
                 </xs:element>
-                <xs:element name="Signature" type="ds:SignatureType" minOccurs="0" maxOccurs="1" />
+                <xs:element ref="ds:Signature" minOccurs="0" maxOccurs="1" />
             </xs:sequence>
             <xs:attribute name="version" use="required">
                 <xs:simpleType>
