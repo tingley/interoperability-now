@@ -37,4 +37,8 @@ public class TIPPLoadStatus {
     public List<TIPPError> getAllErrors() {
         return errors;
     }
+    
+    public String toString() {
+        return "TIPPLoadStatus(" + severity + ", " + errors.toString() + ")";
+    }
 }

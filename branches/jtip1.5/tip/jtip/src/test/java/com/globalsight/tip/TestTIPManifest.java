@@ -2,6 +2,8 @@ package com.globalsight.tip;
 
 import org.junit.*;
 
+import com.globalsight.tip.TIPPError.Type;
+
 import static org.junit.Assert.*;
 
 import java.io.*;
@@ -14,6 +16,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Set;
+
+import javax.xml.crypto.KeySelector;
 
 public class TestTIPManifest {
 
@@ -212,7 +216,22 @@ public class TestTIPManifest {
         fos.flush();
         fos.close();
         
-        // ok, now validate the signature
+        // Make sure that the signer gives us a warning if the signature
+        // exists but we don't provide the key
+        Manifest roundtrip = new Manifest(null);
+        TIPPLoadStatus roundtripStatus = new TIPPLoadStatus();
+        FileInputStream fis = new FileInputStream(temp);
+        roundtrip.loadFromStream(fis, roundtripStatus);
+        TestUtils.expectLoadStatus(roundtripStatus, 1, TIPPErrorSeverity.WARN);
+        assertEquals(Type.UNABLE_TO_VERIFY_SIGNATURE, 
+                roundtripStatus.getAllErrors().get(0).getErrorType());
+        
+        // Now verify the signature for real
+        roundtrip = new Manifest(null);
+        roundtripStatus = new TIPPLoadStatus();
+        fis = new FileInputStream(temp);
+        roundtrip.loadFromStream(fis, roundtripStatus, KeySelector.singletonKeySelector(kp.getPublic()));
+        TestUtils.expectLoadStatus(roundtripStatus, 0, TIPPErrorSeverity.NONE);
     }
     
     //@Test

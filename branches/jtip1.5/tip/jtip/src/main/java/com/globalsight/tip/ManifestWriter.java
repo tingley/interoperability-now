@@ -43,7 +43,7 @@ class ManifestWriter {
                 new ManifestSigner().sign(document, getPayload(), keyPair);
             }
             TIPPLoadStatus status = new TIPPLoadStatus();
-            //          validate(document, status);
+            //validate(document, status);
             if (status.getSeverity() != TIPPErrorSeverity.NONE) {
                 // XXX What to do with the errors?
                 throw new TIPPException("Saved manifest was invalid");

@@ -6,7 +6,6 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,11 +15,7 @@ import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -36,6 +31,9 @@ import org.w3c.dom.ls.LSResourceResolver;
 import com.globalsight.tip.TIPPConstants.ContributorTool;
 import com.globalsight.tip.TIPPConstants.Creator;
 import com.globalsight.tip.TIPPConstants.ObjectFile;
+import com.globalsight.tip.TIPPError.Type;
+
+import javax.xml.crypto.KeySelector;
 
 class Manifest {
 
@@ -112,8 +110,14 @@ class Manifest {
     	return taskType;
     }
     
+    boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status)
+            throws IOException {
+        return loadFromStream(manifestStream, status, null);
+    }
+    
     // XXX This should blow away any existing settings 
-    boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status) 
+    boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status,
+                           KeySelector keySelector) 
                 throws IOException {
         if (manifestStream == null) {
             status.addError(TIPPError.Type.MISSING_MANIFEST);
@@ -124,7 +128,10 @@ class Manifest {
 	        if (document == null) {
 	            return false;
 	        }
+	        // Validate the schema
 	        validate(document, status);
+	        // Validate the XML Signature if we are given a key
+            validateSignature(document, status, keySelector);
 	        loadManifest(document, status);
 	        return true;
     	}
@@ -327,6 +334,23 @@ class Manifest {
         }
     }
 
+    void validateSignature(final Document doc, TIPPLoadStatus status,
+                           KeySelector keySelector) {
+        ManifestSigner signer = new ManifestSigner();
+        if (signer.hasSignature(doc)) {
+            if (keySelector != null) {
+                if (!signer.validateSignature(doc, keySelector)) {
+                    status.addError(Type.INVALID_SIGNATURE);
+                }
+            }
+            else {
+                // The manifest has a signature, but we're not able to 
+                // validate it because no key was provided by the user.
+                status.addError(Type.UNABLE_TO_VERIFY_SIGNATURE);
+            }
+        }
+    }
+    
     public String getPackageId() {
         return packageId;
     }
