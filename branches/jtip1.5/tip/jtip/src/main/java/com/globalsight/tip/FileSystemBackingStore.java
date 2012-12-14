@@ -30,6 +30,10 @@ public class FileSystemBackingStore implements PackageStore {
         return new File(dir, PackageBase.MANIFEST);
     }
     
+    private File getPayload() {
+        return new File(dir, PackageBase.PAYLOAD_FILE);
+    }
+    
     public OutputStream storeManifestData() throws IOException {
         return new FileOutputStream(getManifest());
     }
@@ -75,6 +79,7 @@ public class FileSystemBackingStore implements PackageStore {
         Set<String> paths = new HashSet<String>();
         getPackageObjectPaths("", dir, paths);
         paths.remove(PackageBase.MANIFEST);
+        paths.remove(PackageBase.PAYLOAD_FILE);
         return paths;
     }
 
@@ -93,6 +98,14 @@ public class FileSystemBackingStore implements PackageStore {
     public boolean close() throws IOException {
         // TODO what is the correct behavior here
         return false;
+    }
+
+    public OutputStream storeRawPayloadData() throws IOException {
+        return new FileOutputStream(getPayload());
+    }
+
+    public InputStream getRawPayloadData() throws IOException {
+        return new FileInputStream(getPayload());
     }
     
 }

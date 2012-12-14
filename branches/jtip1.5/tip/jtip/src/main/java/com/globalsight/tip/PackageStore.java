@@ -19,9 +19,13 @@ public interface PackageStore {
     
     public OutputStream storeTransientData(String id) throws IOException;
     
+    public OutputStream storeRawPayloadData() throws IOException;
+    
     public InputStream getManifestData() throws IOException;
     
     public InputStream getObjectFileData(String path) throws IOException;
+    
+    public InputStream getRawPayloadData() throws IOException;
     
     public InputStream getTransientData(String id) throws IOException;
     

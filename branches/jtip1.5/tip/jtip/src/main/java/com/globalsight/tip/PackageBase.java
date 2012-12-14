@@ -33,8 +33,7 @@ abstract class PackageBase implements WriteableTIPP {
     }
     
     static final String MANIFEST = "manifest.xml";
-    static final String INSECURE_OBJECTS_FILE = "pobjects.zip";
-    static final String SECURE_OBJECTS_FILE = "pobjects.zip.enc";
+    static final String PAYLOAD_FILE = "pobjects.zip";
 
     Manifest getManifest() {
         return manifest;
@@ -150,6 +149,14 @@ abstract class PackageBase implements WriteableTIPP {
         saveToStream(new ManifestWriter(), outputStream);
     }
     
+    /**
+     * Write this package to an output stream as a ZIP archive, including 
+     * digital signature information in the Manifest using the specified keypair.
+     * @param outputStream
+     * @param keyPair keypair with which to sign the manifest
+     * @throws TIPPException
+     * @throws IOException
+     */
     public void saveToStream(OutputStream outputStream, KeyPair keyPair) throws TIPPException, IOException {
         ManifestWriter mw = new ManifestWriter();
         mw.setKeyPair(keyPair);
@@ -167,7 +174,7 @@ abstract class PackageBase implements WriteableTIPP {
         tempOutputStream.close();
         
         // Write out all the parts as an inner archive
-        zos.putNextEntry(new ZipEntry(INSECURE_OBJECTS_FILE));
+        zos.putNextEntry(new ZipEntry(PAYLOAD_FILE));
         FileUtil.copyStreamToStream(store.getTransientData("output-stream"), zos);
         zos.closeEntry();
 

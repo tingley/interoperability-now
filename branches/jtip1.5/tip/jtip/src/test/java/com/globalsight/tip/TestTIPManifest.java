@@ -230,7 +230,8 @@ public class TestTIPManifest {
         roundtrip = new Manifest(null);
         roundtripStatus = new TIPPLoadStatus();
         fis = new FileInputStream(temp);
-        roundtrip.loadFromStream(fis, roundtripStatus, KeySelector.singletonKeySelector(kp.getPublic()));
+        roundtrip.loadFromStream(fis, roundtripStatus, KeySelector.singletonKeySelector(kp.getPublic()),
+                                 null);
         TestUtils.expectLoadStatus(roundtripStatus, 0, TIPPErrorSeverity.NONE);
     }
     

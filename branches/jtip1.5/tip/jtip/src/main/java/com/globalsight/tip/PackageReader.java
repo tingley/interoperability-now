@@ -3,16 +3,19 @@ package com.globalsight.tip;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import javax.xml.crypto.KeySelector;
+
 class PackageReader {
     private PackageStore store;
     PackageReader(PackageStore store) {
         this.store = store;
     }
 
-    PackageBase load(TIPPLoadStatus status) throws IOException {
+    PackageBase load(TIPPLoadStatus status, KeySelector keySelector) throws IOException {
         try {
             Manifest manifest = new Manifest(null);
-            if (!manifest.loadFromStream(store.getManifestData(), status)) {
+            if (!manifest.loadFromStream(store.getManifestData(), status, keySelector, 
+                                         store.getRawPayloadData())) {
                 return null;
             }
             // What kind of manifest was it?

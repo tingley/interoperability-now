@@ -112,12 +112,12 @@ class Manifest {
     
     boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status)
             throws IOException {
-        return loadFromStream(manifestStream, status, null);
+        return loadFromStream(manifestStream, status, null, null);
     }
     
     // XXX This should blow away any existing settings 
     boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status,
-                           KeySelector keySelector) 
+                           KeySelector keySelector, InputStream payloadStream) 
                 throws IOException {
         if (manifestStream == null) {
             status.addError(TIPPError.Type.MISSING_MANIFEST);
@@ -131,7 +131,7 @@ class Manifest {
 	        // Validate the schema
 	        validate(document, status);
 	        // Validate the XML Signature if we are given a key
-            validateSignature(document, status, keySelector);
+            validateSignature(document, status, keySelector, payloadStream);
 	        loadManifest(document, status);
 	        return true;
     	}
@@ -335,11 +335,13 @@ class Manifest {
     }
 
     void validateSignature(final Document doc, TIPPLoadStatus status,
-                           KeySelector keySelector) {
+                           KeySelector keySelector,
+                           InputStream payloadStream) {
         ManifestSigner signer = new ManifestSigner();
         if (signer.hasSignature(doc)) {
             if (keySelector != null) {
-                if (!signer.validateSignature(doc, keySelector)) {
+                if (!signer.validateSignature(doc, keySelector,
+                            payloadStream)) {
                     status.addError(Type.INVALID_SIGNATURE);
                 }
             }

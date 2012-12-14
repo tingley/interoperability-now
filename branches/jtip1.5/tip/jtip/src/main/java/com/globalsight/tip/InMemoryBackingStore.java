@@ -16,6 +16,7 @@ public class InMemoryBackingStore implements PackageStore {
 
     private byte[] manifestData;
     private byte[] temp;
+    private byte[] rawPayload;
     private Map<String, byte[]> objectData = 
             new HashMap<String, byte[]>();
     
@@ -39,6 +40,17 @@ public class InMemoryBackingStore implements PackageStore {
             }
         };
     }
+
+    public OutputStream storeRawPayloadData()
+            throws IOException {
+        return new ByteArrayOutputStream() {
+            @Override
+            public void close() throws IOException {
+                super.close();
+                rawPayload = toByteArray();
+            }
+        };
+    }
     
     public InputStream getManifestData() {
         return getStream(manifestData);
@@ -49,7 +61,15 @@ public class InMemoryBackingStore implements PackageStore {
         return getStream(data);
     }
     
+    public InputStream getRawPayloadData() throws IOException {
+        return getStream(rawPayload);
+    }
+    
     public OutputStream storeTransientData(String id) throws IOException {
+        if (temp != null) {
+            // Laziness
+            throw new IllegalStateException("This class only supports one transient obj at a time");
+        }
         return new ByteArrayOutputStream() {
             @Override
             public void close() throws IOException {
