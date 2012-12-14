@@ -40,7 +40,7 @@ public class TestTIPPackage {
         assertEquals(expectedErrorCount, status.getAllErrors().size());
     }
     
-    //@Test
+    @Test
     public void testPackageLoad() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tip = getSamplePackage("data/test_package.zip", status);
@@ -56,17 +56,17 @@ public class TestTIPPackage {
         assertTrue("Could not clean up package", tip.close());
     }
     
-    //@Test
+    @Test
     public void testOpenFromInMemoryStore() throws Exception {
         testOpenFromStore(new InMemoryBackingStore());
     }
     
-    //@Test
+    @Test
     public void testOpenFromTempFileBackingStore() throws Exception {
         testOpenFromStore(new TempFileBackingStore());
     }
     
-    //@Test
+    @Test
     public void testOpenFromFileBackingStore() throws Exception {
         // This is actually equivalent to the TempFileBackingStore 
         // in the current implementation..
@@ -92,7 +92,7 @@ public class TestTIPPackage {
         store.close();
     }
     
-    //@Test
+    @Test
     public void testVerifyMissingManifest() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/missing_manifest.zip", status);
@@ -103,7 +103,7 @@ public class TestTIPPackage {
         assertEquals(TIPPError.Type.MISSING_MANIFEST, error.getErrorType());
     }
     
-    //@Test
+    @Test
     public void testVerifyCorruptManifest() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/corrupt_manifest.zip", status);
@@ -113,7 +113,7 @@ public class TestTIPPackage {
         assertEquals(TIPPError.Type.CORRUPT_MANIFEST, status.getAllErrors().get(0).getErrorType());
     }
     
-    //@Test
+    @Test
     public void testVerifyMissingPayload() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/missing_payload.zip", status);
@@ -130,7 +130,7 @@ public class TestTIPPackage {
         assertEquals(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, status.getAllErrors().get(6).getErrorType());
     }
     
-    //@Test
+    @Test
     public void testVerifyCorruptPayloadZip() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/corrupt_payload_zip.zip", status);
@@ -142,7 +142,7 @@ public class TestTIPPackage {
         }
     }
 
-    //@Test
+    @Test
     public void testManifestPayloadMismatch() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/manifest_payload_mismatch.zip", status);
@@ -152,7 +152,7 @@ public class TestTIPPackage {
         assertEquals(TIPPError.Type.UNEXPECTED_PAYLOAD_RESOURCE, status.getAllErrors().get(1).getErrorType());
     }
     
-    //@Test
+    @Test
     public void testVerifyCorruptPackageZip() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tipp = getSamplePackage("data/corrupt_package_zip.zip", status);
@@ -163,7 +163,7 @@ public class TestTIPPackage {
         assertEquals(TIPPError.Type.MISSING_MANIFEST, error.getErrorType());
     }
     
-    //@Test
+    @Test
     public void testPackageSave() throws Exception {
         // Load the package, save it out to a zip file, read it back.
         TIPPLoadStatus status = new TIPPLoadStatus();
@@ -185,7 +185,7 @@ public class TestTIPPackage {
         assertTrue("Could not clean up pacakge", roundtrip.close());
     }
     
-    //@Test
+    @Test
     public void testResponsePackage() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP tip = getSamplePackage("data/test_response_package.zip", status);
@@ -209,7 +209,7 @@ public class TestTIPPackage {
         assertTrue("Could not clean up pacakge", roundtrip.close());
     }
     
-    //@Test
+    @Test
     public void testNewPackage() throws Exception {
         PackageStore store = new InMemoryBackingStore();
         WriteableRequestTIPP tip = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT, store);
