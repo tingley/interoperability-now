@@ -30,7 +30,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-@SuppressWarnings("restriction")
 class ManifestSigner {
     
     XMLSignatureFactory factory;
