@@ -291,8 +291,7 @@
 				<source>As for relegating it to the realm of fiction, that charge had to be dropped.</source>
 				<target state="translated">Quant à la rejeter au rang des fables, il fallait y renoncer.</target>
 				<note from="Micah Bly" dx:modified-at="2011-03-04T15:25:00Z">This TU was translated manually (by copying from web page in this case). note the alt-trans which provides version history.</note>
-				<alt-trans alttranstype="previous-version" dx:modified-by="l10n-tool" dx:modified-at="2011-03-04T05:30:00Z">
-					<source>As for relegating it to the realm of fiction, that charge had to be dropped.</source>
+				<alt-trans alttranstype="previous-version" dx:match-quality="0" dx:origin="MT" dx:origin-shorttext="Pseudo Translation" dx:modified-by="l10n-tool" dx:modified-at="2011-03-04T05:30:00Z">
 					<target>XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX.</target>
 				</alt-trans>
 			</trans-unit>
