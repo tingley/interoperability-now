@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema elementFormDefault="unqualified"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
+            schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+           Common elements for TIPP packages.
+        </xs:documentation>
+    </xs:annotation>
+    
+    <xs:simpleType name="UniquePackageID">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The UniquePackageID is a URI that uniquely identifies
+                this package.  The simplest way to satisfy this requirement is to assign the 
+                package a UUID and express it as a URN, such as
+                    urn:uuid:ace950d0-73d8-417d-a5c0-b70c2974f244
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI" />
+    </xs:simpleType>
+
+    <xs:simpleType name="TaskType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A URI that represents the task type for a TIPP.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI" />
+    </xs:simpleType>
+
+    <xs:complexType name="Tool">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">ContributorTool identifies the tool that
+                created the package with name, identifier, and version.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ToolName" type="xs:string" />
+            <xs:element name="ToolID" type="xs:anyURI" />
+            <xs:element name="ToolVersion" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Creator">
+		<xs:annotation>
+            <xs:documentation xml:lang="en">PackageCreator describes the organization
+                that created the package and the tool that was used to create it.
+		    </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+            <xs:element name="Name" type="xs:string" />
+            <xs:element name="ID" type="xs:anyURI" />
+            <xs:element name="Date" type="xs:dateTime" />
+            <xs:element name="Tool" type="Tool">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="GlobalDescriptor">
+       <xs:annotation xml:lang="en">
+           <xs:documentation xml:lang="en">The GlobalDescriptor identifies the package with a
+                  unique UUID, and contains information on the creator of the package as well
+                  as the order action associated with the package.
+           </xs:documentation>
+       </xs:annotation>
+        <xs:sequence>
+            <xs:element name="UniquePackageID" type="UniquePackageID" />
+            <xs:element name="Creator" type="Creator" />
+            <xs:element name="Signature" type="ds:SignatureType" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
