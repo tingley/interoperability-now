@@ -17,7 +17,7 @@ class TIPPObjectSection {
     Collection<TIPPObjectFile> objects = new ArrayList<TIPPObjectFile>();
     
     TIPPObjectSection() { }
-    
+
     public TIPPObjectSection(String name, TIPPObjectSectionType type) {
         this.name = name;
         this.type = type;

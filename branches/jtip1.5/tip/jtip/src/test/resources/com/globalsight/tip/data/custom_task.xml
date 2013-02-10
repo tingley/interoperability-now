@@ -3,39 +3,36 @@
     xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd" version="1.5">
   <GlobalDescriptor>
     <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
-    <PackageCreator>
+    <Creator>
       <Name>Test Company</Name>
       <ID>http://127.0.0.1/test</ID>
-      <Update>2011-05-09T22:45:00Z</Update>
+      <Date>2011-05-09T22:45:00Z</Date>
       <Tool>
         <ToolName>TestTool</ToolName>
         <ToolID>http://interoperability-now.org/</ToolID>
         <ToolVersion>1.0</ToolVersion>
       </Tool>
-    </PackageCreator>
-    <TaskRequest>
-      <Task>
-        <TaskType>http://spartansoftware.com/tasks/test</TaskType>
-        <SourceLanguage>en-US</SourceLanguage>
-        <TargetLanguage>de-DE</TargetLanguage>
-      </Task>
-    </TaskRequest>
+    </Creator>
   </GlobalDescriptor>
-  <PackageObjects>
-    <PackageObjectSection name="custom"
-        type="http://schema.interoperability-now.org/tipp/v1.5/sections/custom">
-      <ObjectFile sequence="1">
+  <TaskRequest>
+    <TaskType>http://spartansoftware.com/tasks/test</TaskType>
+    <SourceLanguage>en-US</SourceLanguage>
+    <TargetLanguage>de-DE</TargetLanguage>
+  </TaskRequest>
+  <Resources>
+    <Extras name="extras">
+      <FileResource sequence="1">
         <Name>file1</Name>
         <Location>file1</Location>
-      </ObjectFile>
-      <ObjectFile sequence="2">
+      </FileResource>
+      <FileResource sequence="2">
         <Name>file2</Name>
         <Location>file2</Location>
-      </ObjectFile>
-      <ObjectFile sequence="3">
+      </FileResource>
+      <FileResource sequence="3">
         <Name>file3</Name>
         <Location>file3</Location>
-      </ObjectFile>
-    </PackageObjectSection>
-  </PackageObjects>
+      </FileResource>
+    </Extras>
+  </Resources>
 </TIPPManifest>

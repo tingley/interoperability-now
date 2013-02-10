@@ -4,39 +4,45 @@ package com.globalsight.tip;
  * Represents one of the section types allowed by the specification.
  */
 public enum TIPPObjectSectionType {
-    BILINGUAL("bilingual"),
-    INPUT("input"),
-    OUTPUT("output"),
-    STS("sts"),
-    TM("tm"),
-    TERMINOLOGY("terminology"),
-    REFERENCE("reference"),
-    PREVIEW("preview"),
-    METRICS("metrics"),
-    CUSTOM("custom");
+    BILINGUAL("Bilingual", "bilingual"),
+    INPUT("Input", "input"),
+    OUTPUT("Output", "output"),
+    STS("STS", "sts"),
+    TM("Tm", "tm"),
+    TERMINOLOGY("Terminology", "terminology"),
+    REFERENCE("Reference", "reference"),
+    PREVIEW("Preview", "preview"),
+    METRICS("Metrics", "metrics"),
+    CUSTOM("Extras", "extras");
 
-    private static final String PREFIX = 
-            "http://schema.interoperability-now.org/tipp/v1.5/sections/";
+    private String elementName;
+    private String defaultName;
     
-    private String type;
-    private String name;
-    
-    TIPPObjectSectionType(String name) {
-        this.type = PREFIX + name;
-        this.name = name;
+    TIPPObjectSectionType(String elementName, String defaultName) {
+        this.elementName = elementName;
+        this.defaultName = defaultName;
     }
     
-    public String getType() {
-        return type;
+    /**
+     * Name of the element for this section type.
+     * @return element name
+     */
+    public String getElementName() {
+        return elementName;
     }
     
+    /**
+     * The default value for the @name attribute to use when
+     * writing out a section of this type.
+     * @return default section name
+     */
     public String getDefaultName() {
-        return name;
+        return defaultName;
     }
     
-    public static TIPPObjectSectionType byURI(String uri) {
+    public static TIPPObjectSectionType byElementName(String elementName) {
         for (TIPPObjectSectionType t : values()) {
-            if (t.type.equals(uri)) {
+            if (t.elementName.equals(elementName)) {
                 return t;
             }
         }

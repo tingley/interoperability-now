@@ -170,11 +170,11 @@
     <xs:element name="Reference" type="ReferenceSectionType" substitutionGroup="ResourceSection" />
     <xs:complexType name="ReferenceSectionType">
         <xs:complexContent>
-            <xs:restriction base="ResourceSectionType">
+            <xs:extension base="ResourceSectionType">
                 <xs:sequence>
                     <xs:element ref="ReferenceFileResource" minOccurs="1" maxOccurs="unbounded" />
                 </xs:sequence>
-            </xs:restriction>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     

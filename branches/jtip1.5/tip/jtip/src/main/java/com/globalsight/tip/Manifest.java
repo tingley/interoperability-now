@@ -23,6 +23,7 @@ import javax.xml.validation.Validator;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSInput;
@@ -41,6 +42,8 @@ class Manifest {
             "http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd";
     static final String XMLDSIG_NS_PREFIX =
             "http://www.w3.org/2000/09/xmldsig#";
+    
+    
     
 	// Only for construction
 	private TIPPTaskType taskType;
@@ -143,7 +146,11 @@ class Manifest {
     private void loadManifest(Document document, TIPPLoadStatus status) {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
+        // Either load the request or the response, depending on which is
+        // present
+        task = loadTaskRequestOrResponse(manifest);
         loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS), status);
+        
         // Perform additional validation that isn't covered by the schema
         TIPPTaskType taskType = getTaskType();
         if (taskType != null) {
@@ -161,9 +168,6 @@ class Manifest {
         packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
         
         creator = loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
-        // Either load the request or the response, depending on which is
-        // present
-        task = loadTaskRequestOrResponse(descriptor);
     }
     
     private TIPPCreator loadCreator(Element creatorEl) {
@@ -195,13 +199,13 @@ class Manifest {
     
     private TIPPTaskRequest loadTaskRequest(Element requestEl) {
         TIPPTaskRequest request = new TIPPTaskRequest();
-        loadTask(getFirstChildByName(requestEl, TASK), request);
+        loadTask(requestEl, request);
         return request;
     }
     
     private TIPPTaskResponse loadTaskResponse(Element responseEl) {
         TIPPTaskResponse response = new TIPPTaskResponse();
-        loadTask(getFirstChildByName(responseEl, TASK), response);
+        loadTask(responseEl, response);
         Element inResponseTo = getFirstChildByName(responseEl, 
                                 TaskResponse.IN_RESPONSE_TO);
         response.setRequestPackageId(getChildTextByName(inResponseTo,
@@ -230,10 +234,13 @@ class Manifest {
     }
     
     private void loadPackageObjects(Element parent, TIPPLoadStatus status) {
+        NodeList children = parent.getChildNodes();
         // parse all the sections
-        NodeList children = 
-            parent.getElementsByTagName(PACKAGE_OBJECT_SECTION);
         for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
+            // TODO: need to distinguish by type
             TIPPObjectSection section = 
                 loadPackageObjectSection((Element)children.item(i), status);
             if (section == null) {
@@ -251,17 +258,19 @@ class Manifest {
     
     private TIPPObjectSection loadPackageObjectSection(Element section,
             TIPPLoadStatus status) {
-        String typeUri = section.getAttribute(ATTR_SECTION_TYPE);
-        // The schema guarantees that this should always be a section
-        // type we know about
-        TIPPObjectSectionType type = TIPPObjectSectionType.byURI(typeUri);
+        TIPPObjectSectionType type = 
+                TIPPObjectSectionType.byElementName(section.getNodeName());
+        if (type == null) {
+            return null; // Should never happen
+        }
+        // TODO: handle special case of reference 
         TIPPObjectSection objectSection = new TIPPObjectSection(
                 section.getAttribute(ATTR_SECTION_NAME), type);
         objectSection.setPackage(tipPackage);
-        NodeList children = section.getElementsByTagName(OBJECT_FILE);
+        NodeList children = section.getElementsByTagName(FILE_RESOURCE);
         for (int i = 0; i < children.getLength(); i++) {
             objectSection.addObject(loadObjectFile((Element)children.item(i),
-                                                   status));
+                    status));
         }
         return objectSection;
     }
@@ -311,9 +320,20 @@ class Manifest {
                         String publicId, String systemId, String baseURI)  {
                     LSInput input = ((DOMImplementationLS)dom
                             .getImplementation()).createLSInput();
-                    if (XMLDSIG_SCHEMA_URI.equalsIgnoreCase(baseURI) ||
+                    if (("TIPPCommon-1_5.xsd".equals(systemId) && W3C_XML_SCHEMA_NS_URI.equals(type)) ||
+                         COMMON_SCHEMA_LOCATION.equalsIgnoreCase(baseURI)) {
+                        input.setByteStream(getClass().getResourceAsStream("/TIPPCommon-1_5.xsd"));
+                    }
+                    else if (XMLDSIG_SCHEMA_URI.equalsIgnoreCase(baseURI) ||
                         XMLDSIG_NS_PREFIX.equalsIgnoreCase(namespaceURI)) {
                         input.setByteStream(getClass().getResourceAsStream("/xmldsig-core-schema.xsd"));
+                    }
+                    else if ("http://www.w3.org/2001/XMLSchema.dtd".equals(baseURI) ||
+                             "http://www.w3.org/2001/XMLSchema.dtd".equals(systemId)) {
+                        input.setByteStream(getClass().getResourceAsStream("/XMLSchema.dtd"));
+                    }
+                    else if ("datatypes.dtd".equals(systemId)) {
+                        input.setByteStream(getClass().getResourceAsStream("/datatypes.dtd"));
                     }
                     else {
                         return null;

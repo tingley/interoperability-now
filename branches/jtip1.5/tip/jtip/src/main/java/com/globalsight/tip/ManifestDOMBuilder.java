@@ -37,6 +37,7 @@ class ManifestDOMBuilder {
         // root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
         //      "noNamespaceSchemaLocation", SCHEMA_LOCATION);
         root.appendChild(makeDescriptor());
+        root.appendChild(makeTaskRequestOrResponse(manifest.getTask()));
         root.appendChild(makePackageObjects());
         return document;
     }
@@ -46,7 +47,6 @@ class ManifestDOMBuilder {
         appendElementChildWithText(document, 
                 descriptor, UNIQUE_PACKAGE_ID, manifest.getPackageId());
         descriptor.appendChild(makePackageCreator(manifest.getCreator()));
-        descriptor.appendChild(makeTaskRequestOrResponse(manifest.getTask()));
         return descriptor;
     }
     
@@ -84,24 +84,22 @@ class ManifestDOMBuilder {
     
     private Element makeTaskRequest(TIPPTaskRequest request) {
         Element requestEl = document.createElement(TASK_REQUEST);
-        requestEl.appendChild(makeTask(request));
+        appendTaskData(request, requestEl);
         return requestEl;
     }
     
-    private Element makeTask(TIPPTask task) {
-        Element taskEl = document.createElement(TASK);
-        appendElementChildWithText(document, taskEl, 
+    private Element appendTaskData(TIPPTask task, Element parent) {
+        appendElementChildWithText(document, parent, 
                 Task.TYPE, task.getTaskType());
-        appendElementChildWithText(document, taskEl, 
+        appendElementChildWithText(document, parent, 
                 Task.SOURCE_LANGUAGE, task.getSourceLocale());        
-        appendElementChildWithText(document, taskEl, 
+        appendElementChildWithText(document, parent, 
                 Task.TARGET_LANGUAGE, task.getTargetLocale());
-        return taskEl;
+        return parent;
     }
     
     private Element makeTaskResponse(TIPPTaskResponse response) {
         Element responseEl = document.createElement(TASK_RESPONSE);
-        responseEl.appendChild(makeTask(response));
         responseEl.appendChild(makeInResponseTo(response));
         appendElementChildWithText(document, responseEl,
                 TaskResponse.MESSAGE, response.getMessage().toString());
@@ -114,6 +112,7 @@ class ManifestDOMBuilder {
     
     private Element makeInResponseTo(TIPPTaskResponse response) {
         Element inReEl = document.createElement(TaskResponse.IN_RESPONSE_TO);
+        appendTaskData(response, inReEl);
         appendElementChildWithText(document, inReEl,
                 UNIQUE_PACKAGE_ID, response.getRequestPackageId());
         inReEl.appendChild(makePackageCreator(response.getRequestCreator()));
@@ -130,10 +129,9 @@ class ManifestDOMBuilder {
     }
     
     private Element makeObjectSection(TIPPObjectSection section) {
-        Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
+        Element sectionEl = document.createElement(section.getType().getElementName());
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getName());
-        sectionEl.setAttribute(ATTR_SECTION_TYPE, section.getType().getType());
         for (TIPPObjectFile file : section.getObjectFiles()) {
             sectionEl.appendChild(makeObjectFile(file));
         }
@@ -141,7 +139,7 @@ class ManifestDOMBuilder {
     }
     
     private Element makeObjectFile(TIPPObjectFile file) {
-        Element fileEl = document.createElement(OBJECT_FILE);
+        Element fileEl = document.createElement(FILE_RESOURCE);
         fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));
         appendElementChildWithText(document, fileEl, ObjectFile.NAME,
                                    file.getName());

@@ -179,7 +179,7 @@ public class TestTIPManifest {
     public void testResponseCreationFromRequest() throws Exception {
         TIPPLoadStatus status = new TIPPLoadStatus();
     	TIPP requestPackage = getSamplePackage("data/test_package.zip", status);
-    	assertEquals(0, status.getAllErrors().size());
+    	TestTIPPackage.checkErrors(status, 0);
         Manifest responseManifest = Manifest.newResponseManifest(null, requestPackage);
         assertFalse(responseManifest.isRequest());
         assertEquals(StandardTaskType.TRANSLATE_STRICT_BITEXT.getType(), 
@@ -265,6 +265,8 @@ public class TestTIPManifest {
     private Manifest roundtripManifest(Manifest src, TIPPLoadStatus status) throws Exception {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         new ManifestWriter().saveToStream(src, output);
+        // TODO: write it out to take a look
+        // - failing at a minimum because I'm putting the task inside the descriptor
         Manifest roundtrip = new Manifest(null);
         roundtrip
                 .loadFromStream(new ByteArrayInputStream(output.toByteArray()), status);

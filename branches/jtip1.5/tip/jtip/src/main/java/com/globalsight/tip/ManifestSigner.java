@@ -49,8 +49,8 @@ class ManifestSigner {
             // In accordance with the schema, place it last in the 
             // <GlobalDescriptor>
             DOMSignContext dsc = new DOMSignContext
-//                    (kp.getPrivate(), findGlobalDescriptorNode(manifest));
-                    (kp.getPrivate(), manifest.getDocumentElement());
+                    (kp.getPrivate(), findGlobalDescriptorNode(manifest));
+//                    (kp.getPrivate(), manifest.getDocumentElement());
             Reference ref = factory.newReference
                     ("", factory.newDigestMethod(DigestMethod.SHA1, null),
                       Collections.singletonList
