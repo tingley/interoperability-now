@@ -2,7 +2,6 @@ package com.globalsight.tip;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -48,15 +47,15 @@ public class TIPPObjectFile {
     }
     
     public BufferedInputStream getInputStream() throws IOException {
-    	return tipPackage.getPackageObjectInputStream(getObjectPath());
+    	return tipPackage.getPackageObjectInputStream(getCanonicalObjectPath());
     }
 
     public BufferedOutputStream getOutputStream() throws IOException, TIPPException {
-    	return tipPackage.getPackageObjectOutputStream(getObjectPath());
+    	return tipPackage.getPackageObjectOutputStream(getCanonicalObjectPath());
     }
     
-    private String getObjectPath() {
-    	return section.getName() + File.separator + location;
+    public String getCanonicalObjectPath() {
+    	return section.getName() + PackageSource.SEPARATOR + location;
     }
     
     void setPackage(PackageBase tipPackage) {

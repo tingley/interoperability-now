@@ -6,7 +6,6 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,11 +15,7 @@ import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -28,17 +23,27 @@ import javax.xml.validation.Validator;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSInput;
+import org.w3c.dom.ls.LSResourceResolver;
 
 import com.globalsight.tip.TIPPConstants.ContributorTool;
 import com.globalsight.tip.TIPPConstants.Creator;
 import com.globalsight.tip.TIPPConstants.ObjectFile;
+import com.globalsight.tip.TIPPError.Type;
+
+import javax.xml.crypto.KeySelector;
 
 class Manifest {
 
-	// Only for construction
-	// XXX Should this go in the TIPTask somehow?
+    static final String XMLDSIG_SCHEMA_URI = 
+            "http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd";
+    static final String XMLDSIG_NS_PREFIX =
+            "http://www.w3.org/2000/09/xmldsig#";
+    
+    // Only for construction
 	private TIPPTaskType taskType;
 	
     private PackageBase tipPackage;
@@ -46,8 +51,9 @@ class Manifest {
     private TIPPTask task; // Either request or response
     private TIPPCreator creator = new TIPPCreator();
     
-    private Map<String, TIPPObjectSection> objectSections = 
-        new HashMap<String, TIPPObjectSection>();    
+    private Map<TIPPObjectSectionType, TIPPObjectSection> objectSections = 
+        new HashMap<TIPPObjectSectionType, TIPPObjectSection>();
+    
     
     Manifest(PackageBase tipPackage) {
         this.tipPackage = tipPackage;
@@ -106,52 +112,61 @@ class Manifest {
     	return taskType;
     }
     
-    void saveToStream(OutputStream saveStream) throws TIPPException { 
-        try {
-            Document document = new ManifestDOMBuilder(this).makeDocument();
-            validate(document);
-            TransformerFactory factory = TransformerFactory.newInstance();
-            Transformer transformer = factory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(
-                    "{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.transform(new DOMSource(document), 
-                    new StreamResult(saveStream));
-        }
-        catch (Exception e) {
-            throw new TIPPException(e);
-        }
+    boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status)
+            throws IOException {
+        return loadFromStream(manifestStream, status, null, null);
     }
     
     // XXX This should blow away any existing settings 
-    void loadFromStream(InputStream manifestStream) 
-                throws TIPPValidationException, IOException {
+    boolean loadFromStream(InputStream manifestStream, TIPPLoadStatus status,
+                           KeySelector keySelector, InputStream payloadStream) 
+                throws IOException {
+        if (manifestStream == null) {
+            status.addError(TIPPError.Type.MISSING_MANIFEST);
+            return false;
+        }
     	try {
-	        Document document = parse(manifestStream);
-	        validate(document);
-	        loadManifest(document);
+	        Document document = parse(manifestStream, status);
+	        if (document == null) {
+	            return false;
+	        }
+	        // Validate the schema
+	        validate(document, status);
+	        // Validate the XML Signature if we are given a key
+            validateSignature(document, status, keySelector, payloadStream);
+	        loadManifest(document, status);
+	        return true;
     	}
     	catch (ParserConfigurationException e) {
     		throw new RuntimeException(e);
     	}
     }    
     
-    private void loadManifest(Document document) 
-                            throws TIPPValidationException {
+    private void loadManifest(Document document, TIPPLoadStatus status) {
         Element manifest = getFirstChildElement(document);
         loadDescriptor(getFirstChildByName(manifest, GLOBAL_DESCRIPTOR));
-        loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS));
+        // Either load the request or the response, depending on which is
+        // present
+        task = loadTaskRequestOrResponse(manifest);
+        loadPackageObjects(getFirstChildByName(manifest, PACKAGE_OBJECTS), status);
+        
+        // Perform additional validation that isn't covered by the schema
+        TIPPTaskType taskType = getTaskType();
+        if (taskType != null) {
+            for (TIPPObjectSection section : getObjectSections()) {
+                if (!taskType.getSupportedSectionTypes().contains(section.getType())) {
+                    status.addError(TIPPError.Type.INVALID_SECTION_FOR_TASK, 
+                            "Invalid section for task type: " + 
+                                section.getType());
+                }
+            }
+        }
     }
     
-    private void loadDescriptor(Element descriptor) 
-                            throws TIPPValidationException {
+    private void loadDescriptor(Element descriptor) {
         packageId = getChildTextByName(descriptor, UNIQUE_PACKAGE_ID);
         
         creator = loadCreator(getFirstChildByName(descriptor, PACKAGE_CREATOR));
-        // Either load the request or the response, depending on which is
-        // present
-        task = loadTaskRequestOrResponse(descriptor);
     }
     
     private TIPPCreator loadCreator(Element creatorEl) {
@@ -165,8 +180,7 @@ class Manifest {
         return creator;
     }
     
-    private TIPPTask loadTaskRequestOrResponse(Element descriptor) 
-                        throws TIPPValidationException {
+    private TIPPTask loadTaskRequestOrResponse(Element descriptor) {
         Element requestEl = getFirstChildByName(descriptor, TASK_REQUEST);
         if (requestEl != null) {
             return loadTaskRequest(requestEl);
@@ -184,14 +198,13 @@ class Manifest {
     
     private TIPPTaskRequest loadTaskRequest(Element requestEl) {
         TIPPTaskRequest request = new TIPPTaskRequest();
-        loadTask(getFirstChildByName(requestEl, TASK), request);
+        loadTask(requestEl, request);
         return request;
     }
     
-    private TIPPTaskResponse loadTaskResponse(Element responseEl) 
-                                throws TIPPValidationException {
+    private TIPPTaskResponse loadTaskResponse(Element responseEl) {
         TIPPTaskResponse response = new TIPPTaskResponse();
-        loadTask(getFirstChildByName(responseEl, TASK), response);
+        loadTask(responseEl, response);
         Element inResponseTo = getFirstChildByName(responseEl, 
                                 TaskResponse.IN_RESPONSE_TO);
         response.setRequestPackageId(getChildTextByName(inResponseTo,
@@ -203,10 +216,6 @@ class Manifest {
         String rawMessage = getChildTextByName(responseEl, 
                             TaskResponse.MESSAGE);
         TIPPResponseMessage msg = TIPPResponseMessage.valueOf(rawMessage);
-        if (msg == null) {
-            throw new TIPPValidationException(
-                    "Invalid ResponseMessage value: " + msg);
-        }
         response.setMessage(msg);
         return response;
     }
@@ -223,76 +232,138 @@ class Manifest {
         return tool;
     }
     
-    private void loadPackageObjects(Element parent) 
-                            throws TIPPValidationException {
+    private void loadPackageObjects(Element parent, TIPPLoadStatus status) {
+        NodeList children = parent.getChildNodes();
         // parse all the sections
-        NodeList children = 
-            parent.getElementsByTagName(PACKAGE_OBJECT_SECTION);
         for (int i = 0; i < children.getLength(); i++) {
+            if (children.item(i).getNodeType() != Node.ELEMENT_NODE) {
+                continue;
+            }
             TIPPObjectSection section = 
-                loadPackageObjectSection((Element)children.item(i));
+                loadPackageObjectSection((Element)children.item(i), status);
+            if (section == null) {
+                continue;
+            }
             // Don't allow duplicate sections
             if (objectSections.containsKey(section.getType())) {
-                throw new TIPPValidationException("Duplicate object section: " +
-                                                  section.getType());
+                status.addError(TIPPError.Type.DUPLICATE_SECTION_IN_MANIFEST, 
+                        "Duplicate section: " + section.getType());
+                continue;
             }
             objectSections.put(section.getType(), section);
         }
     }
     
-    private TIPPObjectSection loadPackageObjectSection(Element section) 
-                    throws TIPPValidationException {
-        TIPPObjectSection objectSection = new TIPPObjectSection(
-                section.getAttribute(ATTR_SECTION_NAME),
-                section.getAttribute(ATTR_SECTION_TYPE));
-        objectSection.setPackage(tipPackage);
-        NodeList children = section.getElementsByTagName(OBJECT_FILE);
-        for (int i = 0; i < children.getLength(); i++) {
-            objectSection.addObject(loadObjectFile((Element)children.item(i)));
+    private TIPPObjectSection loadPackageObjectSection(Element section,
+            TIPPLoadStatus status) {
+        TIPPObjectSectionType type = 
+                TIPPObjectSectionType.byElementName(section.getNodeName());
+        if (type == null) {
+            return null; // Should never happen
         }
-        return objectSection;
+        String sectionName = section.getAttribute(ATTR_SECTION_NAME);
+        if (type.equals(TIPPObjectSectionType.REFERENCE)) {
+            TIPPReferenceSection refSection = new TIPPReferenceSection(sectionName);
+            NodeList children = section.getElementsByTagName(FILE_RESOURCE);
+            for (int i = 0; i < children.getLength(); i++) {
+                refSection.addObject(loadReferenceFile((Element)children.item(i),
+                        status));
+            }
+            return refSection;
+        }
+        else {
+            TIPPObjectSection objSection = new TIPPObjectSection(sectionName, type);
+            objSection.setPackage(tipPackage);
+            NodeList children = section.getElementsByTagName(FILE_RESOURCE);
+            for (int i = 0; i < children.getLength(); i++) {
+                objSection.addObject(loadObjectFile((Element)children.item(i),
+                        status));
+            }
+            return objSection;
+        }
     }
     
-    private TIPPObjectFile loadObjectFile(Element file) 
-                            throws TIPPValidationException {
+    private TIPPObjectFile loadObjectFile(Element file,
+                            TIPPLoadStatus status) {
         TIPPObjectFile object = new TIPPObjectFile();
+        loadObjectFile(object, file, status);
+        return object;
+    }
+    
+    private TIPPReferenceObject loadReferenceFile(Element file,
+                            TIPPLoadStatus status) {
+        TIPPReferenceObject object = new TIPPReferenceObject();
+        loadObjectFile(object, file, status);
+        object.setLanguageChoice( 
+                TIPPReferenceObject.LanguageChoice.valueOf(
+                        file.getAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE)));
+        return object;
+    }
+    
+    private void loadObjectFile(TIPPObjectFile object, Element file,
+                                TIPPLoadStatus status) {  
         object.setPackage(tipPackage);
         String rawSequence = file.getAttribute(ObjectFile.ATTR_SEQUENCE);
         try {
             object.setSequence(Integer.parseInt(rawSequence));
         }
         catch (NumberFormatException e) {
-            throw new TIPPValidationException(
-                    "Invalid sequence value: '" + rawSequence + "'");
+            // This should be caught by validation
         }
         object.setLocation(getChildTextByName(file, ObjectFile.LOCATION));
         String name = getChildTextByName(file, ObjectFile.NAME);
         object.setName((name == null) ? object.getLocation() : name);
-        return object;
     }
-
-    Document parse(InputStream is) throws ParserConfigurationException, 
-                                    TIPPValidationException, IOException {
+    
+    Document parse(InputStream is, TIPPLoadStatus status) throws ParserConfigurationException, 
+                                    IOException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             return builder.parse(is);
         }
-        catch (SAXException e) {
-            throw new TIPPValidationException(e);
+        catch (Exception e) {
+            status.addError(TIPPError.Type.CORRUPT_MANIFEST, "Could not parse manifest", e);
+            return null;
         }
         finally {
             is.close();
         }
     }
     
-    void validate(Document dom) throws TIPPValidationException {
+    void validate(final Document dom, TIPPLoadStatus status) {
         try {
             InputStream is = 
-                getClass().getResourceAsStream("/TIPPManifest-1_4.xsd");
+                getClass().getResourceAsStream("/TIPPManifest-1_5.xsd");
             SchemaFactory factory = 
                 SchemaFactory.newInstance(W3C_XML_SCHEMA_NS_URI);
+            factory.setResourceResolver(new LSResourceResolver() {
+                public LSInput resolveResource(String type, String namespaceURI, 
+                        String publicId, String systemId, String baseURI)  {
+                    LSInput input = ((DOMImplementationLS)dom
+                            .getImplementation()).createLSInput();
+                    if (("TIPPCommon-1_5.xsd".equals(systemId) && W3C_XML_SCHEMA_NS_URI.equals(type)) ||
+                         COMMON_SCHEMA_LOCATION.equalsIgnoreCase(baseURI)) {
+                        input.setByteStream(getClass().getResourceAsStream("/TIPPCommon-1_5.xsd"));
+                    }
+                    else if (XMLDSIG_SCHEMA_URI.equalsIgnoreCase(baseURI) ||
+                        XMLDSIG_NS_PREFIX.equalsIgnoreCase(namespaceURI)) {
+                        input.setByteStream(getClass().getResourceAsStream("/xmldsig-core-schema.xsd"));
+                    }
+                    else if ("http://www.w3.org/2001/XMLSchema.dtd".equals(baseURI) ||
+                             "http://www.w3.org/2001/XMLSchema.dtd".equals(systemId)) {
+                        input.setByteStream(getClass().getResourceAsStream("/XMLSchema.dtd"));
+                    }
+                    else if ("datatypes.dtd".equals(systemId)) {
+                        input.setByteStream(getClass().getResourceAsStream("/datatypes.dtd"));
+                    }
+                    else {
+                        return null;
+                    }
+                    return input;
+                }
+            });
             Schema schema = factory.newSchema(new StreamSource(is));
             // need an error handler
             Validator validator = schema.newValidator();
@@ -300,10 +371,31 @@ class Manifest {
             is.close();
         }
         catch (Exception e) {
-            throw new TIPPValidationException(e);
+            status.addError(TIPPError.Type.INVALID_MANIFEST, "Invalid manifest", e);
+            e.printStackTrace();
+            throw new ReportedException(e);
         }
     }
 
+    void validateSignature(final Document doc, TIPPLoadStatus status,
+                           KeySelector keySelector,
+                           InputStream payloadStream) {
+        ManifestSigner signer = new ManifestSigner();
+        if (signer.hasSignature(doc)) {
+            if (keySelector != null) {
+                if (!signer.validateSignature(doc, keySelector,
+                            payloadStream)) {
+                    status.addError(Type.INVALID_SIGNATURE);
+                }
+            }
+            else {
+                // The manifest has a signature, but we're not able to 
+                // validate it because no key was provided by the user.
+                status.addError(Type.UNABLE_TO_VERIFY_SIGNATURE);
+            }
+        }
+    }
+    
     public String getPackageId() {
         return packageId;
     }
@@ -338,7 +430,7 @@ class Manifest {
      * @return object section for the specified section type, or
      *         null if no section with that type exists in the TIPP
      */
-    public TIPPObjectSection getObjectSection(String type) {
+    public TIPPObjectSection getObjectSection(TIPPObjectSectionType type) {
         return objectSections.get(type);
     }
     
@@ -350,7 +442,11 @@ class Manifest {
         return objectSections.values();
     }
     
-    public TIPPObjectSection addObjectSection(String name, String type) {
+    public TIPPReferenceSection getReferenceSection() {
+        return (TIPPReferenceSection)objectSections.get(TIPPObjectSectionType.REFERENCE);
+    }
+    
+    public TIPPObjectSection addObjectSection(String name, TIPPObjectSectionType type) {
     	// If we were created with a task type object, restrict the 
     	// section type to one of the choices for this task type.
     	if (taskType != null) {
@@ -359,7 +455,13 @@ class Manifest {
 					" is not supported for task type " + taskType.getType());
     		}
     	}
-        TIPPObjectSection section = new TIPPObjectSection(name, type);
+    	TIPPObjectSection section = null;
+    	if (type == TIPPObjectSectionType.REFERENCE) {
+    	    section = new TIPPReferenceSection(name);
+    	}
+    	else {
+    	    section = new TIPPObjectSection(name, type);
+    	}
         section.setPackage(tipPackage);
         objectSections.put(type, section);
         return section;
