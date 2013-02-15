@@ -4,10 +4,7 @@ public class TIPPReferenceObject extends TIPPObjectFile {
 
     public enum LanguageChoice {
         source,
-        target,
-        bilingual,
-        multilingual,
-        other;        
+        target;
     }
     
     private LanguageChoice languageChoice;

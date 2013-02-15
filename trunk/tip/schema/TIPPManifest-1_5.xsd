@@ -218,11 +218,8 @@
                 <xs:attribute name="languageChoice" use="optional">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:enumeration value="Source" />
-                            <xs:enumeration value="Target" />
-                            <xs:enumeration value="Bilingual" />
-                            <xs:enumeration value="Multilingual" />
-                            <xs:enumeration value="Other" />
+                            <xs:enumeration value="source" />
+                            <xs:enumeration value="target" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>

@@ -30,17 +30,21 @@
       </FileResource>
     </Bilingual>
     <Reference name="reference">
-      <ReferenceFileResource sequence="1" languageChoice="Source">
+      <ReferenceFileResource sequence="1" languageChoice="source">
         <Location>Sample.pdf</Location>
         <Description>Source Language PDF</Description>
       </ReferenceFileResource>
-      <ReferenceFileResource sequence="2" languageChoice="Bilingual">
+      <ReferenceFileResource sequence="2">
         <Location>PreviousTranslation.xlf</Location>
         <Description>Previous translation (XLIFF:doc format)</Description>
       </ReferenceFileResource>
       <ReferenceFileResource sequence="3">
         <Location>Style.pdf</Location>
         <Description>Style guide.</Description>
+      </ReferenceFileResource>
+      <ReferenceFileResource sequence="4" languageChoice="target">
+        <Location>PreviousTargetFile.xml</Location>
+        <Description>Previous target file (french).</Description>
       </ReferenceFileResource>
     </Reference>
     <Preview name="preview">
