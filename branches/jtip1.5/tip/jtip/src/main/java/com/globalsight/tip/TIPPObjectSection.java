@@ -2,6 +2,7 @@ package com.globalsight.tip;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents a TIP object section.  Object sections are identified by
@@ -14,11 +15,11 @@ class TIPPObjectSection {
     private PackageBase tip;
     private TIPPObjectSectionType type;
     private String name;
-    Collection<TIPPObjectFile> objects = new ArrayList<TIPPObjectFile>();
+    List<TIPPObjectFile> objects = new ArrayList<TIPPObjectFile>();
     
     TIPPObjectSection() { }
 
-    public TIPPObjectSection(String name, TIPPObjectSectionType type) {
+    TIPPObjectSection(String name, TIPPObjectSectionType type) {
         this.name = name;
         this.type = type;
     }
@@ -50,7 +51,8 @@ class TIPPObjectSection {
     public Collection<TIPPObjectFile> getObjectFiles() {
         return objects;
     }
-    
+
+    // TODO: need to strip off unsupported types/properties
     public TIPPObjectFile addObject(TIPPObjectFile object) {
         objects.add(object);
         object.setSequence(objects.size());

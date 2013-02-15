@@ -17,8 +17,6 @@ interface TIPPConstants {
     // GlobalDescriptor fields
     public static final String UNIQUE_PACKAGE_ID = "UniquePackageID";
     public static final String PACKAGE_CREATOR = "Creator";
-    public static final String TASK_REQUEST = "TaskRequest";
-    public static final String TASK_RESPONSE = "TaskResponse";
     
     // Creator fields
     static class Creator {
@@ -35,7 +33,8 @@ interface TIPPConstants {
         public static final String VERSION = "ToolVersion";
     }
     
-    public static final String TASK = "Task";
+    public static final String TASK_REQUEST = "TaskRequest";
+    public static final String TASK_RESPONSE = "TaskResponse";
     static class Task {
         public static final String TYPE = "TaskType";
         public static final String SOURCE_LANGUAGE = "SourceLanguage";

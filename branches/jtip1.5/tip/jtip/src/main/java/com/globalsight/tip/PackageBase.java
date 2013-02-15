@@ -123,6 +123,7 @@ abstract class PackageBase implements WriteableTIPP {
 					sectionType);
 		}
 		// TODO: path normalization, etc
+		// TODO: handle reference special case, and refactor with the Manifest code
 		TIPPObjectFile objectFile = new TIPPObjectFile(objectName, objectName);
 		section.addObject(objectFile);
 		// Copy the data

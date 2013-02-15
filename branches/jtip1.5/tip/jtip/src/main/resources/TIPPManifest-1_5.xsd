@@ -152,9 +152,9 @@
             <xs:documentation xml:lang="en">A collection of Resources.
             </xs:documentation>
         </xs:annotation>
-        <xs:sequence>
-            <xs:element ref="FileResource" minOccurs="1" maxOccurs="unbounded" />
-        </xs:sequence>
+        <xs:choice>
+            <xs:element ref="FileResource" minOccurs="0" maxOccurs="unbounded" />
+        </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required" />
     </xs:complexType>
     
@@ -171,9 +171,9 @@
     <xs:complexType name="ReferenceSectionType">
         <xs:complexContent>
             <xs:extension base="ResourceSectionType">
-                <xs:sequence>
-                    <xs:element ref="ReferenceFileResource" minOccurs="1" maxOccurs="unbounded" />
-                </xs:sequence>
+                <xs:choice>
+                    <xs:element ref="ReferenceFileResource" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

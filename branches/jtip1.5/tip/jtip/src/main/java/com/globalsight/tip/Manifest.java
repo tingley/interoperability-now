@@ -43,9 +43,7 @@ class Manifest {
     static final String XMLDSIG_NS_PREFIX =
             "http://www.w3.org/2000/09/xmldsig#";
     
-    
-    
-	// Only for construction
+    // Only for construction
 	private TIPPTaskType taskType;
 	
     private PackageBase tipPackage;
@@ -54,7 +52,8 @@ class Manifest {
     private TIPPCreator creator = new TIPPCreator();
     
     private Map<TIPPObjectSectionType, TIPPObjectSection> objectSections = 
-        new HashMap<TIPPObjectSectionType, TIPPObjectSection>();    
+        new HashMap<TIPPObjectSectionType, TIPPObjectSection>();
+    
     
     Manifest(PackageBase tipPackage) {
         this.tipPackage = tipPackage;
@@ -240,7 +239,6 @@ class Manifest {
             if (children.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-            // TODO: need to distinguish by type
             TIPPObjectSection section = 
                 loadPackageObjectSection((Element)children.item(i), status);
             if (section == null) {
@@ -263,21 +261,47 @@ class Manifest {
         if (type == null) {
             return null; // Should never happen
         }
-        // TODO: handle special case of reference 
-        TIPPObjectSection objectSection = new TIPPObjectSection(
-                section.getAttribute(ATTR_SECTION_NAME), type);
-        objectSection.setPackage(tipPackage);
-        NodeList children = section.getElementsByTagName(FILE_RESOURCE);
-        for (int i = 0; i < children.getLength(); i++) {
-            objectSection.addObject(loadObjectFile((Element)children.item(i),
-                    status));
+        String sectionName = section.getAttribute(ATTR_SECTION_NAME);
+        if (type.equals(TIPPObjectSectionType.REFERENCE)) {
+            TIPPReferenceSection refSection = new TIPPReferenceSection(sectionName);
+            NodeList children = section.getElementsByTagName(FILE_RESOURCE);
+            for (int i = 0; i < children.getLength(); i++) {
+                refSection.addObject(loadReferenceFile((Element)children.item(i),
+                        status));
+            }
+            return refSection;
         }
-        return objectSection;
+        else {
+            TIPPObjectSection objSection = new TIPPObjectSection(sectionName, type);
+            objSection.setPackage(tipPackage);
+            NodeList children = section.getElementsByTagName(FILE_RESOURCE);
+            for (int i = 0; i < children.getLength(); i++) {
+                objSection.addObject(loadObjectFile((Element)children.item(i),
+                        status));
+            }
+            return objSection;
+        }
     }
     
     private TIPPObjectFile loadObjectFile(Element file,
                             TIPPLoadStatus status) {
         TIPPObjectFile object = new TIPPObjectFile();
+        loadObjectFile(object, file, status);
+        return object;
+    }
+    
+    private TIPPReferenceObject loadReferenceFile(Element file,
+                            TIPPLoadStatus status) {
+        TIPPReferenceObject object = new TIPPReferenceObject();
+        loadObjectFile(object, file, status);
+        object.setLanguageChoice( 
+                TIPPReferenceObject.LanguageChoice.valueOf(
+                        file.getAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE)));
+        return object;
+    }
+    
+    private void loadObjectFile(TIPPObjectFile object, Element file,
+                                TIPPLoadStatus status) {  
         object.setPackage(tipPackage);
         String rawSequence = file.getAttribute(ObjectFile.ATTR_SEQUENCE);
         try {
@@ -289,9 +313,8 @@ class Manifest {
         object.setLocation(getChildTextByName(file, ObjectFile.LOCATION));
         String name = getChildTextByName(file, ObjectFile.NAME);
         object.setName((name == null) ? object.getLocation() : name);
-        return object;
     }
-
+    
     Document parse(InputStream is, TIPPLoadStatus status) throws ParserConfigurationException, 
                                     IOException {
         try {
@@ -419,6 +442,10 @@ class Manifest {
         return objectSections.values();
     }
     
+    public TIPPReferenceSection getReferenceSection() {
+        return (TIPPReferenceSection)objectSections.get(TIPPObjectSectionType.REFERENCE);
+    }
+    
     public TIPPObjectSection addObjectSection(String name, TIPPObjectSectionType type) {
     	// If we were created with a task type object, restrict the 
     	// section type to one of the choices for this task type.
@@ -428,7 +455,13 @@ class Manifest {
 					" is not supported for task type " + taskType.getType());
     		}
     	}
-        TIPPObjectSection section = new TIPPObjectSection(name, type);
+    	TIPPObjectSection section = null;
+    	if (type == TIPPObjectSectionType.REFERENCE) {
+    	    section = new TIPPReferenceSection(name);
+    	}
+    	else {
+    	    section = new TIPPObjectSection(name, type);
+    	}
         section.setPackage(tipPackage);
         objectSections.put(type, section);
         return section;

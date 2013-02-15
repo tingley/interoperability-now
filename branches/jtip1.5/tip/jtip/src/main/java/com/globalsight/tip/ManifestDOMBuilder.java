@@ -139,7 +139,19 @@ class ManifestDOMBuilder {
     }
     
     private Element makeObjectFile(TIPPObjectFile file) {
-        Element fileEl = document.createElement(FILE_RESOURCE);
+        Element fileEl = null;
+        // TODO: it would be nice if there were a better way to do this
+        if (file instanceof TIPPReferenceObject) {
+            fileEl = document.createElement(REFERENCE_FILE_RESOURCE);
+            TIPPReferenceObject refObj = (TIPPReferenceObject)file;
+            if (refObj.getLanguageChoice() != null) {
+                fileEl.setAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE, 
+                        refObj.getLanguageChoice().name());
+            }
+        }
+        else {
+            fileEl = document.createElement(FILE_RESOURCE);
+        }
         fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));
         appendElementChildWithText(document, fileEl, ObjectFile.NAME,
                                    file.getName());

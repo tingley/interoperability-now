@@ -248,6 +248,8 @@ public class TestTIPManifest {
         // Add a section
         final TIPPObjectFile file = 
                 new TIPPObjectFile("test.xlf", "test.xlf");
+        // XXX How to improve this?  Maybe I need to have some 
+        // sort of section factory that returns the right type...?
         TIPPObjectSection section = manifest.addObjectSection("bilingual",
                 TIPPObjectSectionType.BILINGUAL);
         section.addObject(file);
@@ -260,6 +262,18 @@ public class TestTIPManifest {
         expectObjectSection(roundtrip, 
                 TIPPObjectSectionType.BILINGUAL,
                 Collections.singletonList(file));
+    }
+    
+    @Test
+    public void testReferenceResources() throws Exception {
+        Manifest manifest = new Manifest(null);
+        TIPPLoadStatus status = new TIPPLoadStatus();
+        manifest.loadFromStream(getClass().getResourceAsStream(
+                "data/reference-request.xml"), status);
+        TestTIPPackage.checkErrors(status, 0);
+        TIPPReferenceSection refSection = manifest.getReferenceSection();
+        assertNotNull(refSection);
+        // TODO: more tests
     }
 
     private Manifest roundtripManifest(Manifest src, TIPPLoadStatus status) throws Exception {
