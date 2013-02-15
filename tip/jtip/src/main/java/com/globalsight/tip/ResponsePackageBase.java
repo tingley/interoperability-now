@@ -2,8 +2,8 @@ package com.globalsight.tip;
 
 class ResponsePackageBase extends PackageBase implements ResponseTIPP {
 
-	ResponsePackageBase(PackageSource packageSource) {
-		super(packageSource);
+	ResponsePackageBase(PackageStore store) {
+		super(store);
 	}
 
 	public boolean isRequest() {

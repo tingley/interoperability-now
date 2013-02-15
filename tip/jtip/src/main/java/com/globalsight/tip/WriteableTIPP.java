@@ -23,7 +23,7 @@ public interface WriteableTIPP extends TIPP {
 	 * within a given section, starting with 1 and increasing in the order
 	 * that objects are added to that section.
 	 * 
-	 * @param sectionTypeUri The type URI of the section to which the object
+	 * @param sectionType The type of the section to which the object
 	 *  		should be added.
 	 * @param objectName The name of the resource, as it should be preserved
 	 * 			in the package.  The name may optionally be a relative path.
@@ -35,7 +35,7 @@ public interface WriteableTIPP extends TIPP {
 	 * @param objectData Object data stream.
 	 * @return TIPObjectFile that is added to the package
 	 */
-	TIPPObjectFile addSectionObject(String sectionTypeUri, String objectName,
+	TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, String objectName,
 								   InputStream objectData) 
 										   throws IOException, TIPPException;
 	
@@ -46,7 +46,7 @@ public interface WriteableTIPP extends TIPP {
 	 * within a given section, starting with 1 and increasing in the order
 	 * that objects are added to that section.
 	 * 
-	 * @param sectionTypeUri The type URI of the section to which the object
+	 * @param sectionType The type of the section to which the object
 	 *  		should be added.
 	 * @param objectName The name of the resource, as it should be preserved
 	 * 			in the package.  The name may optionally be a relative path.
@@ -58,7 +58,7 @@ public interface WriteableTIPP extends TIPP {
 	 * @param objectData Object data file.
 	 * @return TIPObjectFile that is added to the package
 	 */
-	TIPPObjectFile addSectionObject(String sectionTypeUri, String objectName, 
+	TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, String objectName, 
 								   File objectData) 
 										   throws IOException, TIPPException;
 }

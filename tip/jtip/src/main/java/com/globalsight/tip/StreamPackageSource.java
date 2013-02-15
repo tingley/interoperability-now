@@ -1,51 +1,90 @@
 package com.globalsight.tip;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
+/**
+ * PackageSource that reads contents from a zipped package archive.
+ */
 class StreamPackageSource extends PackageSource {
 
     private InputStream inputStream;
-    private File packageDir;
-    private File packageObjectsDir;
-    
+    private TIPPLoadStatus status;
+
     StreamPackageSource(InputStream inputStream) {
         this.inputStream = inputStream;
     }
     
     @Override
-    File getPackageObjectFile(String path) {
-        return new File(packageObjectsDir, path);
+    boolean close() throws IOException {
+        return true;
     }
 
     @Override
-    File getPackageFile(String path) {
-        return new File(packageDir, path);
+    void copyToStore(PackageStore store) throws IOException {
+        try {
+            ZipInputStream zis = FileUtil.getZipInputStream(inputStream);
+            for (ZipEntry entry = zis.getNextEntry(); entry != null; 
+                    entry = zis.getNextEntry()) {
+                if (entry.isDirectory()) {
+                    continue;
+                }
+                String name = entry.getName();
+                if (name.equals(PackageBase.MANIFEST)) {
+                    FileUtil.copyStreamToStreamAndCloseDest(zis, store.storeManifestData());
+                }
+                else if (name.equals(PackageBase.PAYLOAD_FILE)) {
+                    copyPayloadToStore(zis, store);
+                }
+                else {
+                    status.addError(TIPPError.Type.UNEXPECTED_PACKAGE_CONTENTS, 
+                            "Unexpected package contents: " + name);
+                }
+                zis.closeEntry();
+            }
+            zis.close();
+        }
+        catch (ZipException e) {
+            // This exception is not called when you expect due to the 
+            // odd behavior of the Java zip library.  For example, if the
+            // ZIP file is not actually a ZIP, no error is thrown!  The stream
+            // will just produce zero entries instead.
+            status.addError(TIPPError.Type.INVALID_PACKAGE_ZIP,
+                            "Could not read package zip", e);
+            throw new ReportedException(e);
+        }
+    }
+    
+    private void copyPayloadToStore(InputStream is, PackageStore store) throws IOException {
+        // There's a bug in the Java zip implementation -- I can't actually open 
+        // a zip stream within another stream without buffering it.  As a result, I need 
+        // to dump the contents of the payload object into a temporary location and then
+        // read it back as a zip archive.
+        // 
+        // I also need to do this so I can retrieve the raw payload bytes for 
+        // signature validation.
+        FileUtil.copyStreamToStreamAndCloseDest(is, 
+                            store.storeRawPayloadData());
+        ZipInputStream zis = FileUtil.getZipInputStream(store.getRawPayloadData());
+        for (ZipEntry entry = zis.getNextEntry(); entry != null; 
+                entry = zis.getNextEntry()) {
+            if (entry.isDirectory()) {
+                continue;
+            }
+            FileUtil.copyStreamToStreamAndCloseDest(zis, 
+                    store.storeObjectFileData(entry.getName()));
+            zis.closeEntry();
+        }
+        zis.close();
     }
     
     @Override
-    void open() throws IOException {
-        ZipInputStream zis = FileUtil.getZipInputStream(inputStream);
-        packageDir = FileUtil.createTempDir("tipPkg");
-        FileUtil.expandZipArchive(zis, packageDir);
-        
-        // Expand package objects 
-        File objectsFile = findObjectsFile();
-        packageObjectsDir = FileUtil.createTempDir("tipObj");
-        FileUtil.expandZipArchive(
-                FileUtil.getZipInputStream(new BufferedInputStream(
-                        new FileInputStream(objectsFile))), 
-                packageObjectsDir);
+    void open(TIPPLoadStatus status) throws IOException {
+        this.status = status;
     }
-    
-    @Override
-    boolean close() throws IOException {
-        boolean success = FileUtil.recursiveDelete(packageObjectsDir);
-        return FileUtil.recursiveDelete(packageDir) && success;
-    }
+
 
 }

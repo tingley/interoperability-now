@@ -3,41 +3,44 @@ package com.globalsight.tip;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.globalsight.tip.StandardTaskTypeConstants.PrepareSpecifications;
-import com.globalsight.tip.StandardTaskTypeConstants.TranslateGenericBitext;
-import com.globalsight.tip.StandardTaskTypeConstants.TranslateNativeFormat;
-import com.globalsight.tip.StandardTaskTypeConstants.TranslateStrictBitext;
-
-import static com.globalsight.tip.StandardTaskTypeConstants.*;
+import static com.globalsight.tip.TIPPObjectSectionType.*;
 
 @SuppressWarnings("serial")
 public enum StandardTaskType implements TIPPTaskType {
-	
-	TRANSLATE_STRICT_BITEXT(TRANSLATE_STRICT_BITEXT_URI, new HashSet<String>() {{
-				add(TranslateStrictBitext.BILINGUAL);
-				add(TranslateStrictBitext.PREVIEW);
-				add(TranslateStrictBitext.STS);
-				add(TranslateStrictBitext.TMX);
-				add(TranslateStrictBitext.REFERENCE); 
-			}}),
-	TRANSLATE_GENERIC_BITEXT(TRANSLATE_GENERIC_BITEXT_URI, new HashSet<String>() {{
-				add(TranslateGenericBitext.BILINGUAL);
-				add(TranslateGenericBitext.STS);
-				add(TranslateGenericBitext.TMX);
-				add(TranslateGenericBitext.REFERENCE);
-			}}),
-	TRANSLATE_NATIVE_FORMAT(TRANSLATE_NATIVE_FORMAT_URI, new HashSet<String>() {{
-				add(TranslateNativeFormat.INPUT);
-				add(TranslateNativeFormat.OUTPUT);
-				add(TranslateNativeFormat.STS);
-				add(TranslateNativeFormat.TMX);
-				add(TranslateNativeFormat.REFERENCE);
-			}}),
-	PREPARE_SPECIFICATIONS(PREPARE_SPECIFICATIONS_URI, new HashSet<String>() {{
-				add(PrepareSpecifications.CONTENT);
-				add(PrepareSpecifications.STS);
-			}});
 
+	TRANSLATE_STRICT_BITEXT("http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-strict-bitext", 
+	        new HashSet<TIPPObjectSectionType>() {{
+				add(BILINGUAL);
+				add(PREVIEW);
+				add(STS);
+				add(TM);
+				add(REFERENCE);
+				add(METRICS);
+			}}),
+	TRANSLATE_GENERIC_BITEXT("http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-generic-bitext",
+	        new HashSet<TIPPObjectSectionType>() {{
+				add(BILINGUAL);
+				add(STS);
+				add(TM);
+				add(REFERENCE);
+                add(METRICS);
+                add(TERMINOLOGY);
+			}}),
+	TRANSLATE_NATIVE_FORMAT("http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-native-format",
+	        new HashSet<TIPPObjectSectionType>() {{
+				add(INPUT);
+				add(OUTPUT);
+				add(STS);
+				add(TM);
+				add(REFERENCE);
+                add(METRICS);
+                add(TERMINOLOGY);
+			}}),
+	PREPARE_SPECIFICATIONS("http://schema.interoperability-now.org/tipp/v1.5/tasks/prepare-specifications",
+	        new HashSet<TIPPObjectSectionType>() {{
+				add(INPUT);
+				add(STS);
+			}});
 	
 	public static TIPPTaskType forTypeUri(String typeUri) {
 		for (TIPPTaskType t : values()) {
@@ -49,18 +52,19 @@ public enum StandardTaskType implements TIPPTaskType {
 	}
 	
 	private String uri;
-	private Set<String> sectionUris;
+	private Set<TIPPObjectSectionType> sectionUris;
 	
-	StandardTaskType(String typeUri, Set<String> sectionUris) {
+	StandardTaskType(String typeUri, Set<TIPPObjectSectionType> sectionUris) {
 		this.uri = typeUri;
 		this.sectionUris = sectionUris;
 	}
 
+	// TODO: rename to getUri()?
 	public String getType() {
 		return uri;
 	}
 
-	public Set<String> getSupportedSectionTypes() {
+	public Set<TIPPObjectSectionType> getSupportedSectionTypes() {
 		return sectionUris;
 	}
 	

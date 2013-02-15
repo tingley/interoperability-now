@@ -24,28 +24,33 @@ class ManifestDOMBuilder {
     
     Document makeDocument() throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        // Namespaces are required for xml-dsig
+        factory.setNamespaceAware(true);
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         document = docBuilder.newDocument();
         Element root = document.createElement(MANIFEST);
         document.appendChild(root);
         root.setAttribute(ATTR_VERSION, SCHEMA_VERSION);
-        root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
-                "noNamespaceSchemaLocation", SCHEMA_LOCATION);
+        // QUESTIONABLE: I'm disabling writing out the schema location, because
+        // a) it is causes havoc with the xml-dsig signing, for some reason, and
+        // b) it's only meant to be a hint anyways.
+        // root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
+        //      "noNamespaceSchemaLocation", SCHEMA_LOCATION);
         root.appendChild(makeDescriptor());
+        root.appendChild(makeTaskRequestOrResponse(manifest.getTask()));
         root.appendChild(makePackageObjects());
         return document;
     }
     
-    Element makeDescriptor() {
+    private Element makeDescriptor() {
         Element descriptor = document.createElement(GLOBAL_DESCRIPTOR);
         appendElementChildWithText(document, 
                 descriptor, UNIQUE_PACKAGE_ID, manifest.getPackageId());
         descriptor.appendChild(makePackageCreator(manifest.getCreator()));
-        descriptor.appendChild(makeTaskRequestOrResponse(manifest.getTask()));
         return descriptor;
     }
     
-    Element makePackageCreator(TIPPCreator creator) {
+    private Element makePackageCreator(TIPPCreator creator) {
         Element creatorEl = document.createElement(PACKAGE_CREATOR);
         appendElementChildWithText(document, 
                 creatorEl, Creator.NAME, creator.getName());
@@ -57,7 +62,7 @@ class ManifestDOMBuilder {
         return creatorEl;
     }
     
-    Element makeContributorTool(TIPPTool tool) {
+    private Element makeContributorTool(TIPPTool tool) {
         Element toolEl = document.createElement(TOOL);
         appendElementChildWithText(document,
                 toolEl, ContributorTool.NAME, tool.getName());
@@ -68,7 +73,7 @@ class ManifestDOMBuilder {
         return toolEl;
     }
     
-    Element makeTaskRequestOrResponse(TIPPTask task) {
+    private Element makeTaskRequestOrResponse(TIPPTask task) {
         if (task instanceof TIPPTaskRequest) {
             return makeTaskRequest((TIPPTaskRequest)task);
         }
@@ -77,26 +82,24 @@ class ManifestDOMBuilder {
         }
     }
     
-    Element makeTaskRequest(TIPPTaskRequest request) {
+    private Element makeTaskRequest(TIPPTaskRequest request) {
         Element requestEl = document.createElement(TASK_REQUEST);
-        requestEl.appendChild(makeTask(request));
+        appendTaskData(request, requestEl);
         return requestEl;
     }
     
-    Element makeTask(TIPPTask task) {
-        Element taskEl = document.createElement(TASK);
-        appendElementChildWithText(document, taskEl, 
+    private Element appendTaskData(TIPPTask task, Element parent) {
+        appendElementChildWithText(document, parent, 
                 Task.TYPE, task.getTaskType());
-        appendElementChildWithText(document, taskEl, 
+        appendElementChildWithText(document, parent, 
                 Task.SOURCE_LANGUAGE, task.getSourceLocale());        
-        appendElementChildWithText(document, taskEl, 
+        appendElementChildWithText(document, parent, 
                 Task.TARGET_LANGUAGE, task.getTargetLocale());
-        return taskEl;
+        return parent;
     }
     
-    Element makeTaskResponse(TIPPTaskResponse response) {
+    private Element makeTaskResponse(TIPPTaskResponse response) {
         Element responseEl = document.createElement(TASK_RESPONSE);
-        responseEl.appendChild(makeTask(response));
         responseEl.appendChild(makeInResponseTo(response));
         appendElementChildWithText(document, responseEl,
                 TaskResponse.MESSAGE, response.getMessage().toString());
@@ -107,8 +110,9 @@ class ManifestDOMBuilder {
         return responseEl;
     }
     
-    Element makeInResponseTo(TIPPTaskResponse response) {
+    private Element makeInResponseTo(TIPPTaskResponse response) {
         Element inReEl = document.createElement(TaskResponse.IN_RESPONSE_TO);
+        appendTaskData(response, inReEl);
         appendElementChildWithText(document, inReEl,
                 UNIQUE_PACKAGE_ID, response.getRequestPackageId());
         inReEl.appendChild(makePackageCreator(response.getRequestCreator()));
@@ -116,7 +120,7 @@ class ManifestDOMBuilder {
     }
     
     
-    Element makePackageObjects() {
+    private Element makePackageObjects() {
         Element objects = document.createElement(PACKAGE_OBJECTS);
         for (TIPPObjectSection section : manifest.getObjectSections()) {
             objects.appendChild(makeObjectSection(section));
@@ -124,20 +128,30 @@ class ManifestDOMBuilder {
         return objects;
     }
     
-    Element makeObjectSection(TIPPObjectSection section) {
-        Element sectionEl = document.createElement(PACKAGE_OBJECT_SECTION);
+    private Element makeObjectSection(TIPPObjectSection section) {
+        Element sectionEl = document.createElement(section.getType().getElementName());
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getName());
-        sectionEl.setAttribute(ATTR_SECTION_TYPE, section.getType());
         for (TIPPObjectFile file : section.getObjectFiles()) {
             sectionEl.appendChild(makeObjectFile(file));
         }
         return sectionEl;
     }
     
-    Element makeObjectFile(TIPPObjectFile file) {
-        Element fileEl = document.createElement(OBJECT_FILE);
-        // TODO: is sequence optional?
+    private Element makeObjectFile(TIPPObjectFile file) {
+        Element fileEl = null;
+        // TODO: it would be nice if there were a better way to do this
+        if (file instanceof TIPPReferenceObject) {
+            fileEl = document.createElement(REFERENCE_FILE_RESOURCE);
+            TIPPReferenceObject refObj = (TIPPReferenceObject)file;
+            if (refObj.getLanguageChoice() != null) {
+                fileEl.setAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE, 
+                        refObj.getLanguageChoice().name());
+            }
+        }
+        else {
+            fileEl = document.createElement(FILE_RESOURCE);
+        }
         fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));
         appendElementChildWithText(document, fileEl, ObjectFile.NAME,
                                    file.getName());
