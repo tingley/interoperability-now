@@ -1,28 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Created:       2011-05-06 joerg     -->
-<!-- Last edited:   2011-08-23 tingley   -->
-<!-- Amendments:    2011-05-16 Attribute sectionname gots values starting with a lower case character -->
-<!--                           Introducing attribute localizable for ObjectFile and removing the Localizable element -->
-<!--                           Changing version attribute to 1.1 -->
-<!--                2011-05-29 Additonal comment section ResponseComment added to OrderResponse -->
-<!--                           ContributorTool added to OrderResponse                           -->
-<!--                           Changing version attribute to 1.2 -->
-<!--                2011-05-30 Eliminating BOM -->
-<!--                2011-08-23 Updates for 1.3 -->
-<!--                2011-11-03 Draft 1.4 -->
-<!--                2012-03-02 Revised draft 1.4 -->
-<!--                           Open-ended task system, replace hardcoded enums with URIs -->
-<!--                           Add Name to to ObjectFile -->
-<!--						   Remove @localize and @type attributes -->
-<!--						   General streamlining and cleanup -->
-<!--                2012-07-22 Draft 1.5 -->
-<!--                           For now, this is unchanged from 1.4 -->
-<!--                2012-10-26 Revised Draft 1.5 -->
-<!--                           Updated section type mechanism. -->
-<!--                           Introduction of XML-DSIG and <Signature>. -->
-<!--                           Revised ResponseMessage values. -->
-<!--                2012-11-29 Further 1.5 draft revisions. -->
-<!--                           Split off common descriptor to TIPPCommon.xsd -->
 <xs:schema
         elementFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
@@ -35,7 +11,7 @@
     </xs:annotation>
     <xs:element name="TIPPManifest">
         <xs:annotation>
-            <xs:documentation xml:lang="en">Root element for a TIPP Request.</xs:documentation>
+            <xs:documentation xml:lang="en">Root element for a TIPP.</xs:documentation>
         </xs:annotation>
         <xs:complexType>
             <xs:sequence>
@@ -105,8 +81,9 @@
     
     <xs:complexType name="InResponseTo">
         <xs:annotation>
-            <xs:documentation xml:lang="en">Information about the task to which a TIPP Response is
-                responding, including identifying information about the specific TIPP Request.</xs:documentation>
+            <xs:documentation xml:lang="en">Information about the task to which a TIPP response is
+                responding, including identifying information about the specific TIPP request to which
+                it is a response.</xs:documentation>
         </xs:annotation>
         <xs:complexContent>
             <xs:extension base="Task">
@@ -121,7 +98,7 @@
     <xs:simpleType name="Response">
          <xs:annotation>
             <xs:documentation xml:lang="en">An enumeration of accepted success and failure values for a 
-                TIPP Response.</xs:documentation>
+                TIPP response.</xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
             <xs:enumeration value="Success" />
@@ -136,7 +113,7 @@
     <xs:complexType name="Resources">
         <xs:annotation>
             <xs:documentation xml:lang="en">Resources contains all resources that are necessary
-              to fulfill the associated order action plus resources which might additionally support
+              to process the specified task type plus resources which might additionally support
               this action.
             </xs:documentation>
         </xs:annotation>
@@ -149,7 +126,7 @@
     
     <xs:complexType name="ResourceSectionType">
         <xs:annotation>
-            <xs:documentation xml:lang="en">A collection of Resources.
+            <xs:documentation xml:lang="en">A collection of resources.
             </xs:documentation>
         </xs:annotation>
         <xs:choice>
@@ -182,8 +159,8 @@
     
     <xs:complexType name="FileResourceType">
         <xs:annotation>
-            <xs:documentation xml:lang="en">A FileResource is the actual resource that is employed by
-                the task specified as order action. The resource's location within the package 
+            <xs:documentation xml:lang="en">A FileResource describes an embedded resource that is 
+                used in processing a task. The resource's location within the package 
                 (relative to the containing section) is identified by the value of the Location 
                 element.  The package location may be normalized as mandated by the spec.  The 
                 resource's original file path is contained in the optional Name element.  If
