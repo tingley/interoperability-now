@@ -133,7 +133,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:choice>
-            <xs:element ref="FileResource" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element ref="Resource" minOccurs="0" maxOccurs="unbounded" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string" use="required" />
     </xs:complexType>
@@ -152,28 +152,21 @@
         <xs:complexContent>
             <xs:extension base="ResourceSectionType">
                 <xs:choice>
-                    <xs:element ref="ReferenceFileResource" minOccurs="0" maxOccurs="unbounded" />
+                    <xs:element ref="ReferenceFile" minOccurs="0" maxOccurs="unbounded" />
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     
-    <xs:element name="FileResource" type="FileResourceType" />
-    
-    <xs:complexType name="FileResourceType">
+    <xs:element name="Resource" type="ResourceType" abstract="true" />
+    <xs:complexType name="ResourceType">
         <xs:annotation>
-            <xs:documentation xml:lang="en">A FileResource describes an embedded resource that is 
-                used in processing a task. The resource's location within the package 
-                (relative to the containing section) is identified by the value of the Location 
-                element.  The package location may be normalized as mandated by the spec.  The 
-                resource's original file path is contained in the optional Name element.  If
-                Name is not present, it defaults to the value of Location.  There is also an
-                optional Description element describing the file.
+            <xs:documentation xml:lang="en">A Resource is an abstract resource that is
+                used in processing a task.                
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
             <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1" />
-            <xs:element name="Location" type="xs:string" />
             <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="sequence">
@@ -185,16 +178,37 @@
         </xs:attribute>
     </xs:complexType>
     
-    <xs:element name="ReferenceFileResource" type="ReferenceFileResourceType" />
-    <xs:complexType name="ReferenceFileResourceType">
+    <xs:element name="File" type="FileType" substitutionGroup="Resource" />
+    <xs:complexType name="FileType">
         <xs:annotation>
-            <xs:documentation xml:lang="en">A specialized FileResource for reference 
+            <xs:documentation xml:lang="en">A File is a Resource that is embedded within
+                the package directly.  The resource's location within the package element
+                (relative to the containing section) is identified by the value of the Location
+                The package location may be normalized as mandated by the spec.  The 
+                resource's original file path is contained in the optional Name element.  If
+                Name is not present, it defaults to the value of Location.  There is also an
+                optional Description element describing the file.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Location" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="ReferenceFile" type="ReferenceFileType" />
+    <xs:complexType name="ReferenceFileType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A specialized File for reference 
                 documents.  This adds the optional languageChoice attribute to indicate
                 whether the resource is related to the source language, target language,
                 or both.</xs:documentation>
         </xs:annotation>
         <xs:complexContent>
-            <xs:extension base="FileResourceType">
+            <xs:extension base="FileType">
                 <xs:attribute name="languageChoice" use="optional">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
