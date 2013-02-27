@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xs:schema
-        elementFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<xs:schema elementFormDefault="qualified" 
+           version="1.5"
+           targetNamespace="http://schema.interoperability-now.org/tipp/v1.5/"
+           xmlns="http://schema.interoperability-now.org/tipp/v1.5/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <xs:include schemaLocation="TIPPCommon-1_5.xsd" />
     <xs:annotation>
         <xs:documentation xml:lang="en">
@@ -114,7 +117,7 @@
         <xs:annotation>
             <xs:documentation xml:lang="en">Resources contains all resources that are necessary
               to process the specified task type plus resources which might additionally support
-              this action.
+              the task.
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>
