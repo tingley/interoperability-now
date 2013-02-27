@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xs:schema elementFormDefault="unqualified"
-        xmlns:xs="http://www.w3.org/2001/XMLSchema"
-        xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<xs:schema elementFormDefault="qualified"
+           version="1.5"
+           targetNamespace="http://schema.interoperability-now.org/tipp/v1.5/"
+           xmlns="http://schema.interoperability-now.org/tipp/v1.5/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
             schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
     <xs:annotation>
@@ -24,8 +27,9 @@
     <xs:simpleType name="TaskType">
         <xs:annotation>
             <xs:documentation xml:lang="en">A URI that represents the task type for a TIPP.
-                TIPP currently defines four built-in task types, but implementations may 
-                define additional custom task types.
+                TIPP currently defines four built-in task types: translate-strict-bitext, 
+                translate-generic-bitext, translate-native-format, and prepare-specifications.
+                Implementations may define additional custom task types.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:anyURI" />
