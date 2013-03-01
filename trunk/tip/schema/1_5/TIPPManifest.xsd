@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <xs:schema elementFormDefault="qualified" 
            version="1.5"
-           targetNamespace="http://schema.interoperability-now.org/tipp/v1.5/"
-           xmlns="http://schema.interoperability-now.org/tipp/v1.5/"
+           targetNamespace="http://schema.interoperability-now.org/tipp/1_5/"
+           xmlns="http://schema.interoperability-now.org/tipp/1_5/"
            xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-    <xs:include schemaLocation="TIPPCommon-1_5.xsd" />
+    <xs:include schemaLocation="TIPPCommon.xsd" />
     <xs:annotation>
         <xs:documentation xml:lang="en">
            XML Schema of the TIPP Manifest. The Manifest specifies the entire content of an
