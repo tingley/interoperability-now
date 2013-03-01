@@ -8,8 +8,8 @@
     <xs:include schemaLocation="TIPPCommon.xsd" />
     <xs:annotation>
         <xs:documentation xml:lang="en">
-           XML Schema of the TIPP Manifest. The Manifest specifies the entire content of an
-           Interoperability Package.
+            XML Schema of the TIPP Manifest. The manifest describes the entire contents
+            of a TIPP.
         </xs:documentation>
     </xs:annotation>
     <xs:element name="TIPPManifest">
