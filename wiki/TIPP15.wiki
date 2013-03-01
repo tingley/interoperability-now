@@ -14,15 +14,9 @@ Version 1.5 of the TIPP format was released on March 1, 2013.
 = What's new in TIPP 1.5 =
 
 Most of the changes in TIPP 1.5 are the result of our ongoing work with the [http://linport.org Linport Project].
-  * The completely free-form section model of version 1.4 has been dialed back to a more restrained approach.  Valid section types are now enumerated by the schema; custom task types should either use an existing section type, or place files within a reserved "Custom".  Task types can still specify whether a given section type is required or optional for a that task, as well as what behavior is expected concerning its contents.
+  * The completely free-form section model of version 1.4 has been dialed back to a more restrained approach.  Valid section types are now enumerated by the schema as distinct elements.  Custom task types should either use an existing section type, or place files within a reserved "Extras".  Task types can still specify whether a given section type is required or optional for a that task, as well as what behavior is expected concerning its contents.
   * Additional response messages have been added, replacing the single "Failure" value with several possible failure modes.
   * New section types for terminology and metrics data.
   * Rewritten language on compliance.
+  * Optional XML-DSIG support for digitally signing the manifest and payload contents.
   * Many clarifications and corrections to the text of the specification itself.
-
-= What's left to do? =
-
-There are a few things we're still trying to tackle in the 1.5 timeframe.
-  * A system for referencing remote resources from a package Manifest, rather than requiring all objects to be stored inline.
-  * Answering unresolved questions about TIPPs with multiple target languages.
-  * Fully specify the use of XML-DSIG to authenticate packages.
