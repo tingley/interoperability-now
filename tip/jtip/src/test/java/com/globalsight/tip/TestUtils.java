@@ -1,6 +1,9 @@
 package com.globalsight.tip;
 
 import java.util.List;
+
+import com.globalsight.tip.TIPPError.Type;
+
 import static org.junit.Assert.*;
 
 public class TestUtils {
@@ -14,6 +17,9 @@ public class TestUtils {
                     " errors, max severity " + expectedSeverity);
             for (TIPPError e : errors) {
                 System.err.println("+ " + e);
+                if (e.getException() != null) {
+                    System.err.println("++ " + e.getException().getMessage());
+                }
             }
             assertEquals(expectedSize, errors.size());
             assertEquals(expectedSeverity, status.getSeverity());

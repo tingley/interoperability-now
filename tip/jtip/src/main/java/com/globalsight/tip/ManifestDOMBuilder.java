@@ -22,6 +22,9 @@ class ManifestDOMBuilder {
         this.manifest = manifest;
     }
     
+    public static final String TIPP_NAMESPACE = 
+            "http://schema.interoperability-now.org/tipp/1_5/";
+    
     Document makeDocument() throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         // Namespaces are required for xml-dsig
@@ -29,16 +32,17 @@ class ManifestDOMBuilder {
         DocumentBuilder docBuilder = factory.newDocumentBuilder();
         document = docBuilder.newDocument();
         Element root = document.createElement(MANIFEST);
-        document.appendChild(root);
-        root.setAttribute(ATTR_VERSION, SCHEMA_VERSION);
         // QUESTIONABLE: I'm disabling writing out the schema location, because
         // a) it is causes havoc with the xml-dsig signing, for some reason, and
         // b) it's only meant to be a hint anyways.
         // root.setAttributeNS("http://www.w3.org/2001/XMLSchema-instance", 
-        //      "noNamespaceSchemaLocation", SCHEMA_LOCATION);
+        //      "schemaLocation", SCHEMA_LOCATION);
         root.appendChild(makeDescriptor());
         root.appendChild(makeTaskRequestOrResponse(manifest.getTask()));
         root.appendChild(makePackageObjects());
+        root.setAttribute("xmlns", TIPP_NAMESPACE);
+        root.setAttribute(ATTR_VERSION, SCHEMA_VERSION);
+        document.appendChild(root);
         return document;
     }
     
