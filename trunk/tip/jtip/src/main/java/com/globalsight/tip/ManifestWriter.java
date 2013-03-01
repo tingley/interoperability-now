@@ -50,12 +50,12 @@ class ManifestWriter {
             }
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            //transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             // Can't use these or it messes up xml-dsig
             //transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             //transformer.setOutputProperty(
             //        "{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.transform(new DOMSource(document), 
+            transformer.transform(new DOMSource(document),
                     new StreamResult(saveStream));
         }
         catch (TIPPException e) {

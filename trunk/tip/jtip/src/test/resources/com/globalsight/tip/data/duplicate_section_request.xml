@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd" version="1.5">
+    xmlns="http://schema.interoperability-now.org/tipp/1_5/"
+    xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
+    xsi:schemaLocation="http://schema.interoperability-now.org/tipp/1_5/TIPPManifest.xsd" version="1.5">
   <GlobalDescriptor>
     <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
     <Creator>
@@ -21,17 +23,17 @@
     </TaskRequest>
   <Resources>
     <Bilingual name="bilingual">
-      <FileResource sequence="1">
+      <File sequence="1">
         <Name>Peanut_Butter.xlf</Name>
         <Location>Peanut_Butter.xlf</Location>
-      </FileResource>
+      </File>
     </Bilingual>
 
     <Bilingual name="bilingual">
-      <FileResource sequence="1">
+      <File sequence="1">
         <Name>foo.xlf</Name>
         <Location>foo.xlf</Location>
-      </FileResource>
+      </File>
     </Bilingual>
     
   </Resources>

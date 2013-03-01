@@ -248,7 +248,7 @@ public class TestTIPPackage {
         tip.close();
     }
     
-    @Test
+    //@Test
     public void testNewSignedPackage() throws Exception {
         PackageStore store = new InMemoryBackingStore();
         WriteableRequestTIPP tip = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT, store);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TIPPManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://schema.interoperability-now.org/tipp/1_5/"
     xmlns:ds="http://www.w3.org/2000/09/xmldsig#"
-    xsi:noNamespaceSchemaLocation="http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd" 
-    version="1.5">
+    xsi:schemaLocation="http://schema.interoperability-now.org/tipp/1_5/TIPPManifest.xsd" version="1.5">
   <GlobalDescriptor>
     <UniquePackageID>urn:uuid:12345-abc-6789-aslkjd-19193la-as9911</UniquePackageID>
     <Creator>
@@ -24,48 +24,48 @@
   </TaskRequest>
   <Resources>
     <Bilingual name="bilingual">
-      <FileResource sequence="1">
+      <File sequence="1">
         <Name>Peanut_Butter.xlf</Name>
         <Location>Peanut_Butter.xlf</Location>
-      </FileResource>
+      </File>
     </Bilingual>
     <Reference name="reference">
-      <ReferenceFileResource sequence="1" languageChoice="source">
-        <Location>Sample.pdf</Location>
+      <ReferenceFile sequence="1" languageChoice="source">
         <Description>Source Language PDF</Description>
-      </ReferenceFileResource>
-      <ReferenceFileResource sequence="2">
-        <Location>PreviousTranslation.xlf</Location>
+        <Location>Sample.pdf</Location>
+      </ReferenceFile>
+      <ReferenceFile sequence="2">
         <Description>Previous translation (XLIFF:doc format)</Description>
-      </ReferenceFileResource>
-      <ReferenceFileResource sequence="3">
-        <Location>Style.pdf</Location>
+        <Location>PreviousTranslation.xlf</Location>
+      </ReferenceFile>
+      <ReferenceFile sequence="3">
         <Description>Style guide.</Description>
-      </ReferenceFileResource>
-      <ReferenceFileResource sequence="4" languageChoice="target">
-        <Location>PreviousTargetFile.xml</Location>
+        <Location>Style.pdf</Location>
+      </ReferenceFile>
+      <ReferenceFile sequence="4" languageChoice="target">
         <Description>Previous target file (french).</Description>
-      </ReferenceFileResource>
+        <Location>PreviousTargetFile.xml</Location>
+      </ReferenceFile>
     </Reference>
     <Preview name="preview">
-      <FileResource sequence="1">
+      <File sequence="1">
         <Location>Peanut_Butter.html.skl</Location>
-      </FileResource>
-      <FileResource sequence="2">
+      </File>
+      <File sequence="2">
         <Location>resources/20px-Padlock-silver.svg.png</Location>
-      </FileResource>
-      <FileResource sequence="3">
+      </File>
+      <File sequence="3">
         <Location>resources/load.php</Location>
-      </FileResource>
-      <FileResource sequence="4">
+      </File>
+      <File sequence="4">
         <Location>resources/290px-PeanutButter.jpg</Location>
-      </FileResource>
-      <FileResource sequence="5">
+      </File>
+      <File sequence="5">
         <Location>resources/load(1).php</Location>
-      </FileResource>
-      <FileResource sequence="6">
+      </File>
+      <File sequence="6">
         <Location>resources/magnify-clip.png</Location>
-      </FileResource>
+      </File>
     </Preview>
   </Resources>
 </TIPPManifest>

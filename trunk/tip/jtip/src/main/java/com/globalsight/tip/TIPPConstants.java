@@ -4,9 +4,9 @@ interface TIPPConstants {
 
     public static final String SCHEMA_VERSION = "1.5";
     public static final String SCHEMA_LOCATION =
-                "http://schema.interoperability-now.org/tipp/TIPPManifest-1_5.xsd";
+                "http://schema.interoperability-now.org/tipp/1_5/TIPPManifest.xsd";
     public static final String COMMON_SCHEMA_LOCATION =
-                "http://schema.interoperability-now.org/tipp/TIPPCommon-1_5.xsd";
+                "http://schema.interoperability-now.org/tipp/1_5/TIPPCommon.xsd";
 
     public static final String MANIFEST = "TIPPManifest";
     public static final String ATTR_VERSION = "version";
@@ -49,11 +49,10 @@ interface TIPPConstants {
     
     // PackageObjectSection
     public static final String ATTR_SECTION_NAME = "name";
-    public static final String ATTR_SECTION_TYPE = "type";
-    public static final String FILE_RESOURCE = "FileResource";
+    public static final String FILE_RESOURCE = "File";
     
     // Specialized reference resources
-    public static final String REFERENCE_FILE_RESOURCE = "ReferenceFileResource";
+    public static final String REFERENCE_FILE_RESOURCE = "ReferenceFile";
     
     static class ObjectFile {
         public static final String LOCATION = "Location";

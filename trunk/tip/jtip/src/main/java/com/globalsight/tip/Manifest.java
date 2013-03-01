@@ -131,9 +131,13 @@ class Manifest {
 	            return false;
 	        }
 	        // Validate the schema
-	        validate(document, status);
+	        if (!validate(document, status)) {
+	            return false;
+	        }
 	        // Validate the XML Signature if we are given a key
-            validateSignature(document, status, keySelector, payloadStream);
+            if (!validateSignature(document, status, keySelector, payloadStream)) {
+                return false;
+            }
 	        loadManifest(document, status);
 	        return true;
     	}
@@ -332,7 +336,7 @@ class Manifest {
         }
     }
     
-    void validate(final Document dom, TIPPLoadStatus status) {
+    boolean validate(final Document dom, TIPPLoadStatus status) {
         try {
             InputStream is = 
                 getClass().getResourceAsStream("/TIPPManifest-1_5.xsd");
@@ -343,7 +347,7 @@ class Manifest {
                         String publicId, String systemId, String baseURI)  {
                     LSInput input = ((DOMImplementationLS)dom
                             .getImplementation()).createLSInput();
-                    if (("TIPPCommon-1_5.xsd".equals(systemId) && W3C_XML_SCHEMA_NS_URI.equals(type)) ||
+                    if (("TIPPCommon.xsd".equals(systemId) && W3C_XML_SCHEMA_NS_URI.equals(type)) ||
                          COMMON_SCHEMA_LOCATION.equalsIgnoreCase(baseURI)) {
                         input.setByteStream(getClass().getResourceAsStream("/TIPPCommon-1_5.xsd"));
                     }
@@ -369,15 +373,15 @@ class Manifest {
             Validator validator = schema.newValidator();
             validator.validate(new DOMSource(dom));
             is.close();
+            return true;
         }
         catch (Exception e) {
             status.addError(TIPPError.Type.INVALID_MANIFEST, "Invalid manifest", e);
-            e.printStackTrace();
-            throw new ReportedException(e);
+            return false;
         }
     }
 
-    void validateSignature(final Document doc, TIPPLoadStatus status,
+    boolean validateSignature(final Document doc, TIPPLoadStatus status,
                            KeySelector keySelector,
                            InputStream payloadStream) {
         ManifestSigner signer = new ManifestSigner();
@@ -386,14 +390,17 @@ class Manifest {
                 if (!signer.validateSignature(doc, keySelector,
                             payloadStream)) {
                     status.addError(Type.INVALID_SIGNATURE);
+                    return false;
                 }
             }
             else {
                 // The manifest has a signature, but we're not able to 
                 // validate it because no key was provided by the user.
                 status.addError(Type.UNABLE_TO_VERIFY_SIGNATURE);
+                return false;
             }
         }
+        return true;
     }
     
     public String getPackageId() {

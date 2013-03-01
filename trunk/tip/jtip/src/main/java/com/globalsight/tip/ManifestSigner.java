@@ -1,6 +1,8 @@
 package com.globalsight.tip;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,12 +52,12 @@ class ManifestSigner {
             // <GlobalDescriptor>
             DOMSignContext dsc = new DOMSignContext
                     (kp.getPrivate(), findGlobalDescriptorNode(manifest));
-//                    (kp.getPrivate(), manifest.getDocumentElement());
+            List<Transform> transforms = new ArrayList<Transform>();
+            transforms.add(factory.newTransform(Transform.ENVELOPED, (TransformParameterSpec)null));
+            transforms.add(factory.newTransform(CanonicalizationMethod.EXCLUSIVE, (TransformParameterSpec)null));
             Reference ref = factory.newReference
                     ("", factory.newDigestMethod(DigestMethod.SHA1, null),
-                      Collections.singletonList
-                        (factory.newTransform(Transform.ENVELOPED,
-                          (TransformParameterSpec) null)), null, null); 
+                      transforms, null, null); 
             List<Reference> refs = new ArrayList<Reference>();
             refs.add(ref);
             if (payload != null) {
@@ -69,7 +71,7 @@ class ManifestSigner {
             }
             SignedInfo si = factory.newSignedInfo
                     (factory.newCanonicalizationMethod
-                      (CanonicalizationMethod.INCLUSIVE_WITH_COMMENTS,
+                        (CanonicalizationMethod.EXCLUSIVE,
                         (C14NMethodParameterSpec) null),
                         factory.newSignatureMethod(SignatureMethod.DSA_SHA1, null),
                       refs);
@@ -85,7 +87,6 @@ class ManifestSigner {
         }
         catch (Exception e) {
             // TODO
-            e.printStackTrace();
             throw new RuntimeException(e);
         }
     }
