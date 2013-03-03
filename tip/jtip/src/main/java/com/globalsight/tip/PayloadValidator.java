@@ -21,18 +21,22 @@ class PayloadValidator {
         int originalErrorCount = status.getAllErrors().size();
         Set<String> objectPaths = store.getObjectFilePaths();
         Set<String> pathsInManifest = new HashSet<String>();
-        for (TIPPObjectSection section : manifest.getObjectSections()) {
-            for (TIPPObjectFile obj : section.getObjectFiles()) {
-                String expectedPath = obj.getCanonicalObjectPath();
-                if (pathsInManifest.contains(expectedPath)) {
-                    status.addError(TIPPError.Type.DUPLICATE_RESOURCE_IN_MANIFEST,
-                            "Duplicate resource in manifest: " + expectedPath);
+        for (TIPPSection section : manifest.getObjectSections()) {
+            for (TIPPResource obj : section.getResources()) {
+                // TODO: some form of validation needs to be factored into 
+                // the resource class.. or into the section somehow.
+                if (obj instanceof TIPPFile) {
+                    String expectedPath = ((TIPPFile)obj).getCanonicalObjectPath();
+                    if (pathsInManifest.contains(expectedPath)) {
+                        status.addError(TIPPError.Type.DUPLICATE_RESOURCE_IN_MANIFEST,
+                                "Duplicate resource in manifest: " + expectedPath);
+                    }
+                    if (!objectPaths.contains(expectedPath)) {
+                        status.addError(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, 
+                                "Missing resource: " + expectedPath);
+                    }
+                    pathsInManifest.add(expectedPath);
                 }
-                if (!objectPaths.contains(expectedPath)) {
-                    status.addError(TIPPError.Type.MISSING_PAYLOAD_RESOURCE, 
-                            "Missing resource: " + expectedPath);
-                }
-                pathsInManifest.add(expectedPath);
             }
         }
         // Now check in the other direction

@@ -3,7 +3,7 @@ package com.globalsight.tip;
 /**
  * Represents one of the section types allowed by the specification.
  */
-public enum TIPPObjectSectionType {
+public enum TIPPSectionType {
     BILINGUAL("Bilingual", "bilingual"),
     INPUT("Input", "input"),
     OUTPUT("Output", "output"),
@@ -18,7 +18,7 @@ public enum TIPPObjectSectionType {
     private String elementName;
     private String defaultName;
     
-    TIPPObjectSectionType(String elementName, String defaultName) {
+    TIPPSectionType(String elementName, String defaultName) {
         this.elementName = elementName;
         this.defaultName = defaultName;
     }
@@ -40,8 +40,8 @@ public enum TIPPObjectSectionType {
         return defaultName;
     }
     
-    public static TIPPObjectSectionType byElementName(String elementName) {
-        for (TIPPObjectSectionType t : values()) {
+    public static TIPPSectionType byElementName(String elementName) {
+        for (TIPPSectionType t : values()) {
             if (t.elementName.equals(elementName)) {
                 return t;
             }

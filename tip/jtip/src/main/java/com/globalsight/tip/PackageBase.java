@@ -84,39 +84,39 @@ abstract class PackageBase implements WriteableTIPP {
 	}
 
 	// For now, this sorts every time
-	public List<TIPPObjectFile> getSectionObjects(TIPPObjectSectionType sectionType) {
-		TIPPObjectSection section = 
+	public List<TIPPResource> getSectionObjects(TIPPSectionType sectionType) {
+		TIPPSection section = 
 				getManifest().getObjectSection(sectionType);
 		if (section == null) {
 			return Collections.emptyList();
 		}
-		List<TIPPObjectFile> list = 
-				new ArrayList<TIPPObjectFile>(section.getObjectFiles());
-		Collections.sort(list, new Comparator<TIPPObjectFile>() {
-			public int compare(TIPPObjectFile f1, TIPPObjectFile f2) {
+		List<TIPPResource> list = 
+				new ArrayList<TIPPResource>(section.getResources());
+		Collections.sort(list, new Comparator<TIPPResource>() {
+			public int compare(TIPPResource f1, TIPPResource f2) {
 				return f1.getSequence() - f2.getSequence();
 			}
 		});
 		return list;
 	}
 	
-	public Set<TIPPObjectSectionType> getSections() {
-		Set<TIPPObjectSectionType> sections = new HashSet<TIPPObjectSectionType>();
-		for (TIPPObjectSection s : getManifest().getObjectSections()) {
+	public Set<TIPPSectionType> getSections() {
+		Set<TIPPSectionType> sections = new HashSet<TIPPSectionType>();
+		for (TIPPSection s : getManifest().getObjectSections()) {
 			sections.add(s.getType());
 		}
 		return sections;
 	}
 	
-	public String getSectionName(TIPPObjectSectionType sectionType) {
-		TIPPObjectSection section = 
+	public String getSectionName(TIPPSectionType sectionType) {
+		TIPPSection section = 
 				getManifest().getObjectSection(sectionType);
 		return (section == null) ? null : section.getName();
 	}
 
-	public TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, 
+	public TIPPResource addFile(TIPPSectionType sectionType, 
 			String objectName, InputStream objectData) throws IOException, TIPPException {
-		TIPPObjectSection section = manifest.getObjectSection(sectionType);
+		TIPPSection section = manifest.getObjectSection(sectionType);
 		if (section == null) {
 			// Create the section.  Derive the section name from the uri.
 			section = manifest.addObjectSection(sectionType.getDefaultName(),
@@ -124,19 +124,19 @@ abstract class PackageBase implements WriteableTIPP {
 		}
 		// TODO: path normalization, etc
 		// TODO: handle reference special case, and refactor with the Manifest code
-		TIPPObjectFile objectFile = new TIPPObjectFile(objectName, objectName);
-		section.addObject(objectFile);
+		TIPPFile resource = new TIPPFile(objectName);
+		section.addResource(resource);
 		// Copy the data
-		OutputStream os = objectFile.getOutputStream();
+		OutputStream os = resource.getOutputStream();
 		FileUtil.copyStreamToStream(objectData, os);
 		objectData.close();
 		os.close();
-		return objectFile;
+		return resource;
 	}
-	
-	public TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, 
+
+	public TIPPResource addFile(TIPPSectionType sectionType, 
 			String objectName, File objectData) throws IOException, TIPPException {
-		return addSectionObject(sectionType, objectName, 
+		return addFile(sectionType, objectName, 
 				new BufferedInputStream(new FileInputStream(objectData)));
 	}
 	
@@ -171,7 +171,7 @@ abstract class PackageBase implements WriteableTIPP {
         // zip stream gives me strange zip corruption errors.  Write
         // pobjects.zip out to a temp file and copy it over.
         OutputStream tempOutputStream = store.storeTransientData("output-stream");
-        writeObjects(tempOutputStream);
+        writePayload(tempOutputStream);
         tempOutputStream.close();
         
         // Write out all the parts as an inner archive
@@ -195,9 +195,9 @@ abstract class PackageBase implements WriteableTIPP {
      * Create a zip archive of the package objects as a file on disk.
      * @return 
      */
-    void writeObjects(OutputStream os) throws IOException {
+    void writePayload(OutputStream os) throws IOException {
         ZipOutputStream zos = new ZipOutputStream(os);
-        writeZipObjects(zos);
+        writeZipPayload(zos);
         zos.close();
     }
     
@@ -207,15 +207,17 @@ abstract class PackageBase implements WriteableTIPP {
      * @param outputStream
      * @throws IOException
      */
-    void writeZipObjects(ZipOutputStream zos) throws IOException {
-        for (TIPPObjectSection section : manifest.getObjectSections()) {
-            for (TIPPObjectFile file : section.getObjectFiles()) {
-                String path = file.getCanonicalObjectPath();
-                zos.putNextEntry(new ZipEntry(path));
-                InputStream is = file.getInputStream();
-                FileUtil.copyStreamToStream(is, zos);
-                zos.closeEntry();
-                is.close();
+    void writeZipPayload(ZipOutputStream zos) throws IOException {
+        for (TIPPSection section : manifest.getObjectSections()) {
+            for (TIPPResource file : section.getResources()) {
+                if (file instanceof TIPPFile) {
+                    String path = ((TIPPFile)file).getCanonicalObjectPath();
+                    zos.putNextEntry(new ZipEntry(path));
+                    InputStream is = file.getInputStream();
+                    FileUtil.copyStreamToStream(is, zos);
+                    zos.closeEntry();
+                    is.close();
+                }
             }
         }
         zos.flush();

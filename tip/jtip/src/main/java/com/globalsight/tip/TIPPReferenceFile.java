@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-public class TIPPReferenceObject extends TIPPObjectFile {
+public class TIPPReferenceFile extends TIPPFile {
 
     public enum LanguageChoice {
         source,
@@ -9,7 +9,7 @@ public class TIPPReferenceObject extends TIPPObjectFile {
     
     private LanguageChoice languageChoice;
     
-    TIPPReferenceObject() {
+    TIPPReferenceFile() {
         super();
     }
     
@@ -32,10 +32,10 @@ public class TIPPReferenceObject extends TIPPObjectFile {
         if (o == this) {
             return true;
         }
-        if (o == null || !(o instanceof TIPPReferenceObject)) {
+        if (o == null || !(o instanceof TIPPReferenceFile)) {
             return false;
         }
-        TIPPReferenceObject f = (TIPPReferenceObject)o;
+        TIPPReferenceFile f = (TIPPReferenceFile)o;
         if (((f.languageChoice == null && languageChoice == null) ||
              (f.languageChoice != null && f.languageChoice.equals(languageChoice))) &&
             super.equals(o)) {

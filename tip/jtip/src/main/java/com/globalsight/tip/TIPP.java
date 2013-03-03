@@ -58,7 +58,7 @@ public interface TIPP {
 	 * Return the types of all sections in this package.
 	 * @return set of section types
 	 */
-	Set<TIPPObjectSectionType> getSections();
+	Set<TIPPSectionType> getSections();
 	
 	/**
 	 * Return the name used to identify the specified section in this
@@ -66,7 +66,7 @@ public interface TIPP {
 	 * @return section name, or null if there is no section of the specified 
 	 * 		type
 	 */
-	String getSectionName(TIPPObjectSectionType sectionType);
+	String getSectionName(TIPPSectionType sectionType);
 	
 	/**
 	 * Return a list of all the objects in the specified section, ordered 
@@ -76,6 +76,6 @@ public interface TIPP {
 	 * @param sectionType the type of the section to fetch objects for
 	 * @return list of package objects, or an empty list.
 	 */
-	List<TIPPObjectFile> getSectionObjects(TIPPObjectSectionType sectionType);
+	List<TIPPResource> getSectionObjects(TIPPSectionType sectionType);
 
 }

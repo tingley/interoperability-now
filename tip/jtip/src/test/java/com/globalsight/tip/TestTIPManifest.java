@@ -247,13 +247,13 @@ public class TestTIPManifest {
         manifest.getTask().setSourceLocale("en-US");
         manifest.getTask().setTargetLocale("jp-JP");
         // Add a section
-        final TIPPObjectFile file = 
-                new TIPPObjectFile("test.xlf", "test.xlf");
+        final TIPPFile file = 
+                new TIPPFile("test.xlf", "test.xlf");
         // XXX How to improve this?  Maybe I need to have some 
         // sort of section factory that returns the right type...?
-        TIPPObjectSection section = manifest.addObjectSection("bilingual",
-                TIPPObjectSectionType.BILINGUAL);
-        section.addObject(file);
+        TIPPSection section = manifest.addObjectSection("bilingual",
+                TIPPSectionType.BILINGUAL);
+        section.addResource(file);
         TIPPLoadStatus status = new TIPPLoadStatus();
         Manifest roundtrip = roundtripManifest(manifest, status);
         assertEquals(0, status.getAllErrors().size());
@@ -261,7 +261,7 @@ public class TestTIPManifest {
         assertEquals(manifest.getCreator(), roundtrip.getCreator());
         assertEquals(manifest.getTask(), roundtrip.getTask());
         expectObjectSection(roundtrip, 
-                TIPPObjectSectionType.BILINGUAL,
+                TIPPSectionType.BILINGUAL,
                 Collections.singletonList(file));
     }
     
@@ -308,22 +308,22 @@ public class TestTIPManifest {
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(manifest, TIPPObjectSectionType.BILINGUAL,
+        expectObjectSection(manifest, TIPPSectionType.BILINGUAL,
                 Collections.singletonList(
-                        new TIPPObjectFile("Peanut_Butter.xlf")));
-        expectObjectSection(manifest, TIPPObjectSectionType.PREVIEW,
-                new ArrayList<TIPPObjectFile>() {
+                        new TIPPFile("Peanut_Butter.xlf")));
+        expectObjectSection(manifest, TIPPSectionType.PREVIEW,
+                new ArrayList<TIPPFile>() {
                     {
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "Peanut_Butter.html.skl", 1));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "resources/20px-Padlock-silver.svg.png", 2));
-                        add(new TIPPObjectFile("resources/load.php", 3));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile("resources/load.php", 3));
+                        add(new TIPPFile(
                                 "resources/290px-PeanutButter.jpg", 4));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "resources/load(1).php", 5));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "resources/magnify-clip.png", 6));
                     }
                 });
@@ -375,12 +375,12 @@ public class TestTIPManifest {
     }
 
     private static void expectObjectSection(Manifest manifest,
-            TIPPObjectSectionType type, List<TIPPObjectFile> files) {
-        TIPPObjectSection section = manifest.getObjectSection(type);
+            TIPPSectionType type, List<TIPPFile> files) {
+        TIPPSection section = manifest.getObjectSection(type);
         assertNotNull(section);
         assertEquals(type, section.getType());
         assertEquals(files,
-                new ArrayList<TIPPObjectFile>(section.getObjectFiles()));
+                new ArrayList<TIPPResource>(section.getResources()));
     }
     
     private TIPP getSamplePackage(String path, TIPPLoadStatus status) throws Exception {

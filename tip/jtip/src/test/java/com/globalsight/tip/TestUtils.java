@@ -2,8 +2,6 @@ package com.globalsight.tip;
 
 import java.util.List;
 
-import com.globalsight.tip.TIPPError.Type;
-
 import static org.junit.Assert.*;
 
 public class TestUtils {

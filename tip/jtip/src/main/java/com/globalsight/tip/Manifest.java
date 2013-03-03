@@ -51,8 +51,8 @@ class Manifest {
     private TIPPTask task; // Either request or response
     private TIPPCreator creator = new TIPPCreator();
     
-    private Map<TIPPObjectSectionType, TIPPObjectSection> objectSections = 
-        new HashMap<TIPPObjectSectionType, TIPPObjectSection>();
+    private Map<TIPPSectionType, TIPPSection> objectSections = 
+        new HashMap<TIPPSectionType, TIPPSection>();
     
     
     Manifest(PackageBase tipPackage) {
@@ -157,7 +157,7 @@ class Manifest {
         // Perform additional validation that isn't covered by the schema
         TIPPTaskType taskType = getTaskType();
         if (taskType != null) {
-            for (TIPPObjectSection section : getObjectSections()) {
+            for (TIPPSection section : getObjectSections()) {
                 if (!taskType.getSupportedSectionTypes().contains(section.getType())) {
                     status.addError(TIPPError.Type.INVALID_SECTION_FOR_TASK, 
                             "Invalid section for task type: " + 
@@ -243,7 +243,7 @@ class Manifest {
             if (children.item(i).getNodeType() != Node.ELEMENT_NODE) {
                 continue;
             }
-            TIPPObjectSection section = 
+            TIPPSection section = 
                 loadPackageObjectSection((Element)children.item(i), status);
             if (section == null) {
                 continue;
@@ -258,53 +258,53 @@ class Manifest {
         }
     }
     
-    private TIPPObjectSection loadPackageObjectSection(Element section,
+    private TIPPSection loadPackageObjectSection(Element section,
             TIPPLoadStatus status) {
-        TIPPObjectSectionType type = 
-                TIPPObjectSectionType.byElementName(section.getNodeName());
+        TIPPSectionType type = 
+                TIPPSectionType.byElementName(section.getNodeName());
         if (type == null) {
             return null; // Should never happen
         }
         String sectionName = section.getAttribute(ATTR_SECTION_NAME);
-        if (type.equals(TIPPObjectSectionType.REFERENCE)) {
+        if (type.equals(TIPPSectionType.REFERENCE)) {
             TIPPReferenceSection refSection = new TIPPReferenceSection(sectionName);
             NodeList children = section.getElementsByTagName(FILE_RESOURCE);
             for (int i = 0; i < children.getLength(); i++) {
-                refSection.addObject(loadReferenceFile((Element)children.item(i),
+                refSection.addResource(loadReferenceFile((Element)children.item(i),
                         status));
             }
             return refSection;
         }
         else {
-            TIPPObjectSection objSection = new TIPPObjectSection(sectionName, type);
+            TIPPSection objSection = new TIPPSection(sectionName, type);
             objSection.setPackage(tipPackage);
             NodeList children = section.getElementsByTagName(FILE_RESOURCE);
             for (int i = 0; i < children.getLength(); i++) {
-                objSection.addObject(loadObjectFile((Element)children.item(i),
+                objSection.addResource(loadResource((Element)children.item(i),
                         status));
             }
             return objSection;
         }
     }
     
-    private TIPPObjectFile loadObjectFile(Element file,
+    private TIPPReferenceFile loadReferenceFile(Element file,
                             TIPPLoadStatus status) {
-        TIPPObjectFile object = new TIPPObjectFile();
-        loadObjectFile(object, file, status);
-        return object;
-    }
-    
-    private TIPPReferenceObject loadReferenceFile(Element file,
-                            TIPPLoadStatus status) {
-        TIPPReferenceObject object = new TIPPReferenceObject();
-        loadObjectFile(object, file, status);
+        TIPPReferenceFile object = new TIPPReferenceFile();
+        loadFileResource(object, file, status);
         object.setLanguageChoice( 
-                TIPPReferenceObject.LanguageChoice.valueOf(
+                TIPPReferenceFile.LanguageChoice.valueOf(
                         file.getAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE)));
         return object;
     }
     
-    private void loadObjectFile(TIPPObjectFile object, Element file,
+    private TIPPResource loadResource(Element file,
+                            TIPPLoadStatus status) {
+        TIPPFile object = new TIPPFile();
+        loadFileResource(object, file, status);
+        return object;
+    }
+    
+    private void loadFileResource(TIPPFile object, Element file,
                                 TIPPLoadStatus status) {  
         object.setPackage(tipPackage);
         String rawSequence = file.getAttribute(ObjectFile.ATTR_SEQUENCE);
@@ -437,7 +437,7 @@ class Manifest {
      * @return object section for the specified section type, or
      *         null if no section with that type exists in the TIPP
      */
-    public TIPPObjectSection getObjectSection(TIPPObjectSectionType type) {
+    public TIPPSection getObjectSection(TIPPSectionType type) {
         return objectSections.get(type);
     }
     
@@ -445,15 +445,15 @@ class Manifest {
      * Return a collection of all object sections.
      * @return (possibly empty) collection of object sections
      */
-    public Collection<TIPPObjectSection> getObjectSections() {
+    public Collection<TIPPSection> getObjectSections() {
         return objectSections.values();
     }
     
     public TIPPReferenceSection getReferenceSection() {
-        return (TIPPReferenceSection)objectSections.get(TIPPObjectSectionType.REFERENCE);
+        return (TIPPReferenceSection)objectSections.get(TIPPSectionType.REFERENCE);
     }
     
-    public TIPPObjectSection addObjectSection(String name, TIPPObjectSectionType type) {
+    public TIPPSection addObjectSection(String name, TIPPSectionType type) {
     	// If we were created with a task type object, restrict the 
     	// section type to one of the choices for this task type.
     	if (taskType != null) {
@@ -462,12 +462,12 @@ class Manifest {
 					" is not supported for task type " + taskType.getType());
     		}
     	}
-    	TIPPObjectSection section = null;
-    	if (type == TIPPObjectSectionType.REFERENCE) {
+    	TIPPSection section = null;
+    	if (type == TIPPSectionType.REFERENCE) {
     	    section = new TIPPReferenceSection(name);
     	}
     	else {
-    	    section = new TIPPObjectSection(name, type);
+    	    section = new TIPPSection(name, type);
     	}
         section.setPackage(tipPackage);
         objectSections.put(type, section);

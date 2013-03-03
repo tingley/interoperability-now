@@ -35,7 +35,7 @@ public interface WriteableTIPP extends TIPP {
 	 * @param objectData Object data stream.
 	 * @return TIPObjectFile that is added to the package
 	 */
-	TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, String objectName,
+	TIPPResource addFile(TIPPSectionType sectionType, String objectName,
 								   InputStream objectData) 
 										   throws IOException, TIPPException;
 	
@@ -58,7 +58,6 @@ public interface WriteableTIPP extends TIPP {
 	 * @param objectData Object data file.
 	 * @return TIPObjectFile that is added to the package
 	 */
-	TIPPObjectFile addSectionObject(TIPPObjectSectionType sectionType, String objectName, 
-								   File objectData) 
-										   throws IOException, TIPPException;
+	TIPPResource addFile(TIPPSectionType sectionType, String objectName, 
+			  		     File objectData) throws IOException, TIPPException;
 }

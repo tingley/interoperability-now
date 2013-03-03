@@ -3,13 +3,13 @@ package com.globalsight.tip;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.globalsight.tip.TIPPObjectSectionType.*;
+import static com.globalsight.tip.TIPPSectionType.*;
 
 @SuppressWarnings("serial")
 public enum StandardTaskType implements TIPPTaskType {
 
 	TRANSLATE_STRICT_BITEXT("http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-strict-bitext", 
-	        new HashSet<TIPPObjectSectionType>() {{
+	        new HashSet<TIPPSectionType>() {{
 				add(BILINGUAL);
 				add(PREVIEW);
 				add(STS);
@@ -18,7 +18,7 @@ public enum StandardTaskType implements TIPPTaskType {
 				add(METRICS);
 			}}),
 	TRANSLATE_GENERIC_BITEXT("http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-generic-bitext",
-	        new HashSet<TIPPObjectSectionType>() {{
+	        new HashSet<TIPPSectionType>() {{
 				add(BILINGUAL);
 				add(STS);
 				add(TM);
@@ -27,7 +27,7 @@ public enum StandardTaskType implements TIPPTaskType {
                 add(TERMINOLOGY);
 			}}),
 	TRANSLATE_NATIVE_FORMAT("http://schema.interoperability-now.org/tipp/v1.5/tasks/translate-native-format",
-	        new HashSet<TIPPObjectSectionType>() {{
+	        new HashSet<TIPPSectionType>() {{
 				add(INPUT);
 				add(OUTPUT);
 				add(STS);
@@ -37,7 +37,7 @@ public enum StandardTaskType implements TIPPTaskType {
                 add(TERMINOLOGY);
 			}}),
 	PREPARE_SPECIFICATIONS("http://schema.interoperability-now.org/tipp/v1.5/tasks/prepare-specifications",
-	        new HashSet<TIPPObjectSectionType>() {{
+	        new HashSet<TIPPSectionType>() {{
 				add(INPUT);
 				add(STS);
 			}});
@@ -52,9 +52,9 @@ public enum StandardTaskType implements TIPPTaskType {
 	}
 	
 	private String uri;
-	private Set<TIPPObjectSectionType> sectionUris;
+	private Set<TIPPSectionType> sectionUris;
 	
-	StandardTaskType(String typeUri, Set<TIPPObjectSectionType> sectionUris) {
+	StandardTaskType(String typeUri, Set<TIPPSectionType> sectionUris) {
 		this.uri = typeUri;
 		this.sectionUris = sectionUris;
 	}
@@ -64,7 +64,7 @@ public enum StandardTaskType implements TIPPTaskType {
 		return uri;
 	}
 
-	public Set<TIPPObjectSectionType> getSupportedSectionTypes() {
+	public Set<TIPPSectionType> getSupportedSectionTypes() {
 		return sectionUris;
 	}
 	
