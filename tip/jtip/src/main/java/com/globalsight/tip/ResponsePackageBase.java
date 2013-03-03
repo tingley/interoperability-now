@@ -38,11 +38,11 @@ class ResponsePackageBase extends PackageBase implements ResponseTIPP {
 				.setRequestCreator(requestCreator);
 	}
 
-	public TIPPResponseMessage getMessage() {
+	public TIPPResponseCode getCode() {
 		return ((TIPPTaskResponse)getManifest().getTask()).getMessage();
 	}
 	
-	void setMessage(TIPPResponseMessage message) {
+	void setCode(TIPPResponseCode message) {
 		((TIPPTaskResponse)getManifest().getTask()).setMessage(message);
 	}
 

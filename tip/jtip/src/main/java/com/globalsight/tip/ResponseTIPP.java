@@ -18,7 +18,7 @@ public interface ResponseTIPP extends TIPP {
 	 * Get the success/failure message for this package.
 	 * @return TIPResponseMessage value
 	 */
-	TIPPResponseMessage getMessage();
+	TIPPResponseCode getCode();
 	
 	/**
 	 * Get the response package comment, if any.

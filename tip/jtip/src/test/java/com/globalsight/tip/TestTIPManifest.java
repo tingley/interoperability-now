@@ -348,7 +348,7 @@ public class TestTIPManifest {
                                         "http://127.0.0.1/test",
                                         getDate(2011, 4, 9, 22, 45, 0),
                                         new TIPPTool("TestTool", "http://interoperability-now.org/", "1.0")),
-                        TIPPResponseMessage.Success, ""),
+                        TIPPResponseCode.Success, ""),
                      manifest.getTask());
         assertEquals(new TIPPCreator("Test Testerson", 
                                 "http://interoperability-now.org", 
@@ -357,7 +357,7 @@ public class TestTIPManifest {
                                         "http://interoperability-now.org", "2.0")),
                      manifest.getCreator());
         TIPPTaskResponse response = ((TIPPTaskResponse)manifest.getTask());
-        assertEquals(TIPPResponseMessage.Success, 
+        assertEquals(TIPPResponseCode.Success, 
                 response.getMessage());
         assertEquals("", response.getComment());
         // TODO: verify response

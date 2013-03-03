@@ -3,7 +3,7 @@ package com.globalsight.tip;
 class TIPPTaskResponse extends TIPPTask {
     private String requestPackageId;
     private TIPPCreator requestCreator;
-    private TIPPResponseMessage message;
+    private TIPPResponseCode message;
     private String comment;
     
 
@@ -11,7 +11,7 @@ class TIPPTaskResponse extends TIPPTask {
     
     public TIPPTaskResponse(String taskType, String sourceLocale, String targetLocale,
                             String requestPackageId, TIPPCreator requestCreator,
-                            TIPPResponseMessage message, String comment) {
+                            TIPPResponseCode message, String comment) {
         super(taskType, sourceLocale, targetLocale);
         this.requestPackageId = requestPackageId;
         this.requestCreator = requestCreator;
@@ -47,11 +47,11 @@ class TIPPTaskResponse extends TIPPTask {
         this.requestCreator = requestCreator;
     }
 
-    public TIPPResponseMessage getMessage() {
+    public TIPPResponseCode getMessage() {
         return message;
     }
 
-    public void setMessage(TIPPResponseMessage message) {
+    public void setMessage(TIPPResponseCode message) {
         this.message = message;
     }
 
