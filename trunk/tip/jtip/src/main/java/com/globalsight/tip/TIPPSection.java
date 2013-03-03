@@ -5,38 +5,35 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Represents a TIP object section.  Object sections are identified by
- * a name and a type.  (There may be more than one section 
- * for a given type, distinguished by sequence number.)  An object 
- * section contains one or more objects of the specified type.
+ * Represents a TIPP section.  Sections are identified by
+ * type.  A section contains one or more resources of the specified type.
  */
-// TODO eventually factor out TIPObject from TIPObjectFile
-class TIPPObjectSection {
-    private PackageBase tip;
-    private TIPPObjectSectionType type;
+class TIPPSection {
+    private PackageBase tipp;
+    private TIPPSectionType type;
     private String name;
-    List<TIPPObjectFile> objects = new ArrayList<TIPPObjectFile>();
+    List<TIPPResource> resources = new ArrayList<TIPPResource>();
     
-    TIPPObjectSection() { }
+    TIPPSection() { }
 
-    TIPPObjectSection(String name, TIPPObjectSectionType type) {
+    TIPPSection(String name, TIPPSectionType type) {
         this.name = name;
         this.type = type;
     }
     
-    public TIPPObjectSectionType getType() {
+    public TIPPSectionType getType() {
         return type;
     }
     
     void setPackage(PackageBase tip) {
-        this.tip = tip;
+        this.tipp = tip;
     }
     
     TIPP getPackage() {
-        return tip;
+        return tipp;
     }
     
-    public void setType(TIPPObjectSectionType type) {
+    public void setType(TIPPSectionType type) {
         this.type = type;
     }
     
@@ -48,15 +45,15 @@ class TIPPObjectSection {
         this.name = name;
     }
     
-    public Collection<TIPPObjectFile> getObjectFiles() {
-        return objects;
+    public Collection<TIPPResource> getResources() {
+        return resources;
     }
 
     // TODO: need to strip off unsupported types/properties
-    public TIPPObjectFile addObject(TIPPObjectFile object) {
-        objects.add(object);
-        object.setSequence(objects.size());
-        object.setPackage(tip);
+    public TIPPResource addResource(TIPPResource object) {
+        resources.add(object);
+        object.setSequence(resources.size());
+        object.setPackage(tipp);
         object.setSection(this);
         return object;
     }
@@ -71,13 +68,13 @@ class TIPPObjectSection {
         if (o == this) {
             return true;
         }
-        if (o == null || !(o instanceof TIPPObjectSection)) {
+        if (o == null || !(o instanceof TIPPSection)) {
             return false;
         }
-        TIPPObjectSection s = (TIPPObjectSection)o;
+        TIPPSection s = (TIPPSection)o;
         return type.equals(s.getType()) && 
                 name.equals(s.getName()) &&
-                objects.equals(s.getObjectFiles());
+                resources.equals(s.getResources());
     }
     
     @Override
@@ -85,7 +82,7 @@ class TIPPObjectSection {
         final int prime = 31;
         int result = 1;
         result = prime * result + type.hashCode();
-        result = prime * result + objects.hashCode();
+        result = prime * result + resources.hashCode();
         return result;
     }
 }

@@ -22,7 +22,7 @@ import javax.xml.crypto.KeySelector;
 
 import org.junit.*;
 
-import com.globalsight.tip.TIPPObjectFile;
+import com.globalsight.tip.TIPPResource;
 import com.globalsight.tip.TIPP;
 
 import static org.junit.Assert.*;
@@ -46,8 +46,8 @@ public class TestTIPPackage {
         TIPP tip = getSamplePackage("data/test_package.zip", status);
         checkErrors(status, 0);
         verifyRequestPackage(tip);
-        for (TIPPObjectFile file : 
-        	 tip.getSectionObjects(TIPPObjectSectionType.BILINGUAL)) {
+        for (TIPPResource file : 
+        	 tip.getSectionObjects(TIPPSectionType.BILINGUAL)) {
             // Just instantiating the input stream is the real test..
             InputStream is = file.getInputStream();
             assertNotNull(is);
@@ -225,7 +225,7 @@ public class TestTIPPackage {
         tip.setSourceLocale("en-US");
         tip.setTargetLocale("fr-FR");
                
-        tip.addSectionObject(TIPPObjectSectionType.BILINGUAL,
+        tip.addFile(TIPPSectionType.BILINGUAL,
         		"test1.xlf", 
         		new ByteArrayInputStream("test".getBytes("UTF-8"))); 
         
@@ -264,7 +264,7 @@ public class TestTIPPackage {
         tip.setSourceLocale("en-US");
         tip.setTargetLocale("fr-FR");
                
-        tip.addSectionObject(TIPPObjectSectionType.BILINGUAL,
+        tip.addFile(TIPPSectionType.BILINGUAL,
                 "test1.xlf", 
                 new ByteArrayInputStream("test".getBytes("UTF-8"))); 
         
@@ -302,24 +302,24 @@ public class TestTIPPackage {
     }
     
     private void comparePackageParts(TIPP p1, TIPP p2) throws Exception {
-        Set<TIPPObjectSectionType> s1 = p1.getSections();
-        Set<TIPPObjectSectionType> s2 = p2.getSections();
+        Set<TIPPSectionType> s1 = p1.getSections();
+        Set<TIPPSectionType> s2 = p2.getSections();
         assertNotNull(s1);
         assertNotNull(s2);
         assertEquals(s1, s2);
-        for (TIPPObjectSectionType type : s1) {
-        	List<TIPPObjectFile> o1 = p1.getSectionObjects(type);
-        	List<TIPPObjectFile> o2 = p2.getSectionObjects(type);
+        for (TIPPSectionType type : s1) {
+        	List<TIPPResource> o1 = p1.getSectionObjects(type);
+        	List<TIPPResource> o2 = p2.getSectionObjects(type);
         	assertNotNull(o1);
         	assertNotNull(o2);
         	assertEquals(o1, o2);
 	        // XXX Again, this cheats slightly by assuming a particular order
-            Iterator<TIPPObjectFile> fit1 = o1.iterator();
-            Iterator<TIPPObjectFile> fit2 = o2.iterator();
+            Iterator<TIPPResource> fit1 = o1.iterator();
+            Iterator<TIPPResource> fit2 = o2.iterator();
             while (fit1.hasNext()) {
-                TIPPObjectFile f1 = fit1.next();
+                TIPPResource f1 = fit1.next();
                 assertTrue(fit2.hasNext());
-                TIPPObjectFile f2 = fit2.next();
+                TIPPResource f2 = fit2.next();
                 assertEquals(f1, f2);
                 InputStream is1 = f1.getInputStream();
                 InputStream is2 = f2.getInputStream();
@@ -349,22 +349,22 @@ public class TestTIPPackage {
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(tip, TIPPObjectSectionType.BILINGUAL,
-                Collections.singletonList(
-                        new TIPPObjectFile("Peanut_Butter.xlf", 1)));
-        expectObjectSection(tip, TIPPObjectSectionType.PREVIEW,
-                new ArrayList<TIPPObjectFile>() {
+        expectObjectSection(tip, TIPPSectionType.BILINGUAL,
+                new ArrayList<TIPPResource>() { {
+                        add(new TIPPFile("Peanut_Butter.xlf", 1)); }});
+        expectObjectSection(tip, TIPPSectionType.PREVIEW,
+                new ArrayList<TIPPResource>() {
                     {
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "Peanut_Butter.html.skl", 1));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "resources/20px-Padlock-silver.svg.png", 2));
-                        add(new TIPPObjectFile("resources/load.php", 3));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile("resources/load.php", 3));
+                        add(new TIPPFile(
                                 "resources/290px-PeanutButter.jpg", 4));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "resources/load(1).php", 5));
-                        add(new TIPPObjectFile(
+                        add(new TIPPFile(
                                 "resources/magnify-clip.png", 6));
                     }
                 });
@@ -389,16 +389,16 @@ public class TestTIPPackage {
 
         // XXX This test is cheating by assuming a particular order,
         // which is not guaranteed
-        expectObjectSection(tip, TIPPObjectSectionType.BILINGUAL,
-                Collections.singletonList(
-                        new TIPPObjectFile("Peanut_Butter.xlf", 1)));
+        expectObjectSection(tip, TIPPSectionType.BILINGUAL,
+                new ArrayList<TIPPResource>() { {
+                        add(new TIPPFile("Peanut_Butter.xlf", 1)); }});
     }
     
     private static void expectObjectSection(TIPP tip,
-            TIPPObjectSectionType type, List<TIPPObjectFile> files) {
+            TIPPSectionType type, List<TIPPResource> files) {
         assertNotNull(tip.getSectionName(type));
         assertEquals(files,
-                new ArrayList<TIPPObjectFile>(tip.getSectionObjects(type)));
+                new ArrayList<TIPPResource>(tip.getSectionObjects(type)));
     }
     
     private void verifyBytes(InputStream is1, InputStream is2) throws IOException {

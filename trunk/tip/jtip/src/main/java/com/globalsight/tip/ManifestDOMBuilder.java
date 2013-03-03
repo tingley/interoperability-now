@@ -126,28 +126,28 @@ class ManifestDOMBuilder {
     
     private Element makePackageObjects() {
         Element objects = document.createElement(PACKAGE_OBJECTS);
-        for (TIPPObjectSection section : manifest.getObjectSections()) {
+        for (TIPPSection section : manifest.getObjectSections()) {
             objects.appendChild(makeObjectSection(section));
         }
         return objects;
     }
     
-    private Element makeObjectSection(TIPPObjectSection section) {
+    private Element makeObjectSection(TIPPSection section) {
         Element sectionEl = document.createElement(section.getType().getElementName());
         sectionEl.setAttribute(ATTR_SECTION_NAME, 
                                section.getName());
-        for (TIPPObjectFile file : section.getObjectFiles()) {
+        for (TIPPResource file : section.getResources()) {
             sectionEl.appendChild(makeObjectFile(file));
         }
         return sectionEl;
     }
     
-    private Element makeObjectFile(TIPPObjectFile file) {
+    private Element makeObjectFile(TIPPResource file) {
         Element fileEl = null;
         // TODO: it would be nice if there were a better way to do this
-        if (file instanceof TIPPReferenceObject) {
+        if (file instanceof TIPPReferenceFile) {
             fileEl = document.createElement(REFERENCE_FILE_RESOURCE);
-            TIPPReferenceObject refObj = (TIPPReferenceObject)file;
+            TIPPReferenceFile refObj = (TIPPReferenceFile)file;
             if (refObj.getLanguageChoice() != null) {
                 fileEl.setAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE, 
                         refObj.getLanguageChoice().name());
@@ -159,8 +159,10 @@ class ManifestDOMBuilder {
         fileEl.setAttribute(ObjectFile.ATTR_SEQUENCE, String.valueOf(file.getSequence()));
         appendElementChildWithText(document, fileEl, ObjectFile.NAME,
                                    file.getName());
-        appendElementChildWithText(document, fileEl, ObjectFile.LOCATION,
-                file.getLocation());
+        if (file instanceof TIPPFile) {
+            appendElementChildWithText(document, fileEl, ObjectFile.LOCATION,
+                    ((TIPPFile)file).getLocation());
+        }
         return fileEl;
     }
 }

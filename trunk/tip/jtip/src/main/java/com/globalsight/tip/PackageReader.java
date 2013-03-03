@@ -33,8 +33,8 @@ class PackageReader {
             // creating the package from a stream, the manifest is created
             // first and the package doesn't exist yet.  So I need to go back
             // and re-inject the package once it has been created.
-            for (TIPPObjectSectionType sectionType : tip.getSections()) {
-                for (TIPPObjectFile file : tip.getSectionObjects(sectionType)) {
+            for (TIPPSectionType sectionType : tip.getSections()) {
+                for (TIPPResource file : tip.getSectionObjects(sectionType)) {
                     file.setPackage(tip);
                 }
             }
