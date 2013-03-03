@@ -50,8 +50,6 @@ public class TIPPFactory {
      * @throws IOException 
      * @throws TIPPException if some other type of error occurred
      */
-    // TODO - split the expand and the open operations up, so I can open just
-    // from the store.  This involves change to the PackageReader.
     public static TIPP openFromStream(InputStream inputStream, 
             PackageStore store, TIPPLoadStatus status,
             KeySelector keySelector) throws IOException {
@@ -101,6 +99,15 @@ public class TIPPFactory {
         }
     }
 
+    /**
+     * Create a new TIPP request with the specified task type and storage.
+     * 
+     * @param type task type for the new TIPP
+     * @param store backing store for any data added to the TIPP
+     * @return TIPP
+     * @throws TIPPException
+     * @throws IOException
+     */
     public static WriteableRequestTIPP newRequestPackage(TIPPTaskType type, PackageStore store) 
             throws TIPPException, IOException {
         WriteableRequestTIPP tipPackage = new WriteableRequestTIPP(store);
@@ -108,6 +115,15 @@ public class TIPPFactory {
         return tipPackage;
     }
 
+    /**
+     * Create a new TIPP response with the specified task type and storage.
+     * 
+     * @param type task type for the new TIPP
+     * @param store backing store for any data added to the TIPP
+     * @return TIPP
+     * @throws TIPPException
+     * @throws IOException
+     */
     public static WriteableResponseTIPP newResponsePackage(TIPPTaskType type, PackageStore store)
             throws TIPPException, IOException {
         WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(store);
@@ -115,6 +131,19 @@ public class TIPPFactory {
         return tipPackage;
     }
 
+    /**
+     * Create a new TIPP response based on an existing request TIPP, using the specified storage.
+     * <br>
+     * The task type from the request TIPP will also become the task type for the response TIPP.
+     * Additionally, the GlobalDescriptor information from the request TIPP (package id, tool, 
+     * creator, etc) will be used to populate the InResponseTo information in the response.
+     * @param requestPackage an existing request TIPP that will be used to populate the
+     *        response metadata for the new TIPP.
+     * @param store backing store for any data added to the TIPP
+     * @return TIPP
+     * @throws TIPPException
+     * @throws IOException
+     */
     public static WriteableResponseTIPP newResponsePackage(RequestTIPP requestPackage, PackageStore store)
             throws TIPPException, IOException {
         WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(store);
