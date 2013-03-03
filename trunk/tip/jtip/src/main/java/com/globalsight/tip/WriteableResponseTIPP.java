@@ -17,8 +17,8 @@ public class WriteableResponseTIPP extends ResponsePackageBase implements Respon
 	}
 
 	@Override
-	public void setMessage(TIPPResponseMessage message) {
-		super.setMessage(message);
+	public void setCode(TIPPResponseCode message) {
+		super.setCode(message);
 	}
 	
 	@Override

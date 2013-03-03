@@ -1,6 +1,6 @@
 package com.globalsight.tip;
 
-public enum TIPPResponseMessage {
+public enum TIPPResponseCode {
     Success("Success"),
     InvalidManifest("Invalid Manifest"),
     InvalidPayload("Invalid Payload"),
@@ -10,7 +10,7 @@ public enum TIPPResponseMessage {
     
     private String value;
     
-    TIPPResponseMessage(String schemaValue) {
+    TIPPResponseCode(String schemaValue) {
         this.value = schemaValue;
     }
     
@@ -18,8 +18,8 @@ public enum TIPPResponseMessage {
         return value;
     }
     
-    public static TIPPResponseMessage fromSchemaValue(String value) {
-        for (TIPPResponseMessage msg : values()) {
+    public static TIPPResponseCode fromSchemaValue(String value) {
+        for (TIPPResponseCode msg : values()) {
             if (msg.value.equals(value)) {
                 return msg;
             }

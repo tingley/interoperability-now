@@ -219,7 +219,7 @@ class Manifest {
                             TaskResponse.COMMENT));
         String rawMessage = getChildTextByName(responseEl, 
                             TaskResponse.MESSAGE);
-        TIPPResponseMessage msg = TIPPResponseMessage.valueOf(rawMessage);
+        TIPPResponseCode msg = TIPPResponseCode.valueOf(rawMessage);
         response.setMessage(msg);
         return response;
     }
