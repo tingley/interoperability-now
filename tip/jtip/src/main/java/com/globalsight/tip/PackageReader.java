@@ -19,28 +19,28 @@ class PackageReader {
                 return null;
             }
             // What kind of manifest was it?
-            PackageBase tip = null;
+            PackageBase tipp = null;
             if (manifest.isRequest()) {
-                tip = new WriteableRequestTIPP(store);
+                tipp = new RequestPackageBase(store);
             }
             else {
-                tip = new WriteableResponseTIPP(store);
+                tipp = new ResponsePackageBase(store);
             }
-            tip.setManifest(manifest);
+            tipp.setManifest(manifest);
             // HACK: Doing this to resolve an ugly chicken-and-egg
             // situation.  The package is injected by the manifest into
             // the package objects when they are created, but when we are
             // creating the package from a stream, the manifest is created
             // first and the package doesn't exist yet.  So I need to go back
             // and re-inject the package once it has been created.
-            for (TIPPSectionType sectionType : tip.getSections()) {
-                for (TIPPResource file : tip.getSectionObjects(sectionType)) {
-                    file.setPackage(tip);
+            for (TIPPSection section : tipp.getSections()) {
+                for (TIPPResource file : section.getResources()) {
+                    file.setPackage(tipp);
                 }
             }
             // Verify the manifest against the package contents
             new PayloadValidator().validate(manifest, store, status);
-            return tip;
+            return tipp;
         }
         catch (FileNotFoundException e) {
             status.addError(TIPPError.Type.MISSING_MANIFEST);

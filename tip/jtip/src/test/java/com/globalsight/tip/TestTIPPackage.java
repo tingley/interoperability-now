@@ -13,6 +13,7 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -212,61 +213,66 @@ public class TestTIPPackage {
     @Test
     public void testNewPackage() throws Exception {
         PackageStore store = new InMemoryBackingStore();
-        WriteableRequestTIPP tip = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT, store);
-        tip.setCreator(
+        RequestTIPP tipp = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT, store);
+        tipp.setCreator(
             new TIPPCreator("testname", "testid", 
                            TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12), 
                            new TIPPTool("jtip", 
                                    "http://code.google.com/p/interoperability-now", "0.15"))
         );
-        String requestPackageId = tip.getPackageId();
+        String requestPackageId = tipp.getPackageId();
         assertNotNull(requestPackageId);
         assertTrue(requestPackageId.startsWith("urn:uuid"));
-        tip.setSourceLocale("en-US");
-        tip.setTargetLocale("fr-FR");
-               
-        tip.addFile(TIPPSectionType.BILINGUAL,
-        		"test1.xlf", 
-        		new ByteArrayInputStream("test".getBytes("UTF-8"))); 
+        tipp.setSourceLocale("en-US");
+        tipp.setTargetLocale("fr-FR");
+
+        // Failing because the section doesn't have a pointer to the tipp
+        TIPPFile f = tipp.getBilingualSection().addFile("test1.xlf");
+        OutputStream fos = f.getOutputStream();
+        FileUtil.copyStreamToStream(new ByteArrayInputStream("test".getBytes("UTF-8")), 
+                                    fos);
+        fos.close();
         
         File temp = File.createTempFile("tiptest", ".zip");
         OutputStream os = new FileOutputStream(temp);
-        tip.saveToStream(os);
+        tipp.saveToStream(os);
         os.close();
         TIPPLoadStatus status = new TIPPLoadStatus();
         TIPP roundTrip = 
             TIPPFactory.openFromStream(new FileInputStream(temp), new InMemoryBackingStore(), status);
         assertEquals(0, status.getAllErrors().size());
         assertNotNull(roundTrip);
-        assertEquals(tip.getPackageId(), roundTrip.getPackageId());
-        assertEquals(tip.getCreator(), roundTrip.getCreator());
-        assertEquals(tip.getTaskType(), roundTrip.getTaskType());
-        assertEquals(tip.getSourceLocale(), roundTrip.getSourceLocale());
-        assertEquals(tip.getTargetLocale(), roundTrip.getTargetLocale());
-        comparePackageParts(tip, roundTrip);        
+        assertEquals(tipp.getPackageId(), roundTrip.getPackageId());
+        assertEquals(tipp.getCreator(), roundTrip.getCreator());
+        assertEquals(tipp.getTaskType(), roundTrip.getTaskType());
+        assertEquals(tipp.getSourceLocale(), roundTrip.getSourceLocale());
+        assertEquals(tipp.getTargetLocale(), roundTrip.getTargetLocale());
+        comparePackageParts(tipp, roundTrip);        
         temp.delete();
-        tip.close();
+        tipp.close();
     }
     
     //@Test
     public void testNewSignedPackage() throws Exception {
         PackageStore store = new InMemoryBackingStore();
-        WriteableRequestTIPP tip = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT, store);
-        tip.setCreator(
+        RequestTIPP tipp = TIPPFactory.newRequestPackage(StandardTaskType.TRANSLATE_STRICT_BITEXT, store);
+        tipp.setCreator(
             new TIPPCreator("testname", "testid", 
                            TestTIPManifest.getDate(2011, 7, 12, 20, 35, 12), 
                            new TIPPTool("jtip", 
                                    "http://code.google.com/p/interoperability-now", "0.15"))
         );
-        String requestPackageId = tip.getPackageId();
+        String requestPackageId = tipp.getPackageId();
         assertNotNull(requestPackageId);
         assertTrue(requestPackageId.startsWith("urn:uuid"));
-        tip.setSourceLocale("en-US");
-        tip.setTargetLocale("fr-FR");
+        tipp.setSourceLocale("en-US");
+        tipp.setTargetLocale("fr-FR");
                
-        tip.addFile(TIPPSectionType.BILINGUAL,
-                "test1.xlf", 
-                new ByteArrayInputStream("test".getBytes("UTF-8"))); 
+        TIPPFile f = tipp.getBilingualSection().addFile("test1.xlf");
+        OutputStream fos = f.getOutputStream();
+        FileUtil.copyStreamToStream(new ByteArrayInputStream("test".getBytes("UTF-8")), 
+                                    fos);
+        fos.close();
         
         File temp = File.createTempFile("tiptest", ".zip");
         OutputStream os = new FileOutputStream(temp);
@@ -275,7 +281,7 @@ public class TestTIPPackage {
         kpg.initialize(512);
         KeyPair kp = kpg.generateKeyPair();
         
-        tip.saveToStream(os, kp);
+        tipp.saveToStream(os, kp);
         os.close();
         System.out.println("Wrote package to " + temp);
         TIPPLoadStatus status = new TIPPLoadStatus();
@@ -285,14 +291,14 @@ public class TestTIPPackage {
                     KeySelector.singletonKeySelector(kp.getPublic()));
         TestUtils.expectLoadStatus(status, 0, TIPPErrorSeverity.NONE);
         assertNotNull(roundTrip);
-        assertEquals(tip.getPackageId(), roundTrip.getPackageId());
-        assertEquals(tip.getCreator(), roundTrip.getCreator());
-        assertEquals(tip.getTaskType(), roundTrip.getTaskType());
-        assertEquals(tip.getSourceLocale(), roundTrip.getSourceLocale());
-        assertEquals(tip.getTargetLocale(), roundTrip.getTargetLocale());
-        comparePackageParts(tip, roundTrip);
+        assertEquals(tipp.getPackageId(), roundTrip.getPackageId());
+        assertEquals(tipp.getCreator(), roundTrip.getCreator());
+        assertEquals(tipp.getTaskType(), roundTrip.getTaskType());
+        assertEquals(tipp.getSourceLocale(), roundTrip.getSourceLocale());
+        assertEquals(tipp.getTargetLocale(), roundTrip.getTargetLocale());
+        comparePackageParts(tipp, roundTrip);
         temp.delete();
-        tip.close();
+        tipp.close();
     }
     
     private TIPP getSamplePackage(String path, TIPPLoadStatus status) throws Exception {
@@ -302,12 +308,13 @@ public class TestTIPPackage {
     }
     
     private void comparePackageParts(TIPP p1, TIPP p2) throws Exception {
-        Set<TIPPSectionType> s1 = p1.getSections();
-        Set<TIPPSectionType> s2 = p2.getSections();
+        Collection<TIPPSection> s1 = p1.getSections();
+        Collection<TIPPSection> s2 = p2.getSections();
         assertNotNull(s1);
         assertNotNull(s2);
         assertEquals(s1, s2);
-        for (TIPPSectionType type : s1) {
+        for (TIPPSection s : s1) {
+            TIPPSectionType type = s.getType();
         	List<TIPPResource> o1 = p1.getSectionObjects(type);
         	List<TIPPResource> o2 = p2.getSectionObjects(type);
         	assertNotNull(o1);
@@ -394,11 +401,11 @@ public class TestTIPPackage {
                         add(new TIPPFile("Peanut_Butter.xlf", 1)); }});
     }
     
-    private static void expectObjectSection(TIPP tip,
+    private static void expectObjectSection(TIPP tipp,
             TIPPSectionType type, List<TIPPResource> files) {
-        assertNotNull(tip.getSectionName(type));
-        assertEquals(files,
-                new ArrayList<TIPPResource>(tip.getSectionObjects(type)));
+        List<TIPPResource> found = tipp.getSectionObjects(type);
+        assertNotNull(found);
+        assertEquals(files, found);
     }
     
     private void verifyBytes(InputStream is1, InputStream is2) throws IOException {

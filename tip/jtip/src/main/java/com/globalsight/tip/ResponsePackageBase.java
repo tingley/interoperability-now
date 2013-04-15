@@ -28,12 +28,12 @@ class ResponsePackageBase extends PackageBase implements ResponseTIPP {
 		return ((TIPPTaskResponse)getManifest().getTask()).getRequestCreator();
 	}
 
-	void setRequestPackageId(String requestPackageId) {
+	public void setRequestPackageId(String requestPackageId) {
 		((TIPPTaskResponse)getManifest().getTask())
 				.setRequestPackageId(requestPackageId);
 	}
 	
-	void setRequestCreator(TIPPCreator requestCreator) {
+	public void setRequestCreator(TIPPCreator requestCreator) {
 		((TIPPTaskResponse)getManifest().getTask())
 				.setRequestCreator(requestCreator);
 	}
@@ -42,7 +42,7 @@ class ResponsePackageBase extends PackageBase implements ResponseTIPP {
 		return ((TIPPTaskResponse)getManifest().getTask()).getMessage();
 	}
 	
-	void setCode(TIPPResponseCode message) {
+	public void setCode(TIPPResponseCode message) {
 		((TIPPTaskResponse)getManifest().getTask()).setMessage(message);
 	}
 
@@ -50,7 +50,7 @@ class ResponsePackageBase extends PackageBase implements ResponseTIPP {
 		return ((TIPPTaskResponse)getManifest().getTask()).getComment();
 	}
 	
-	void setComment(String comment) {
+	public void setComment(String comment) {
 		((TIPPTaskResponse)getManifest().getTask()).setComment(comment);
 	}
 

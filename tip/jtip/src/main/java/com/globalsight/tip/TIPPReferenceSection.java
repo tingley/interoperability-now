@@ -2,10 +2,15 @@ package com.globalsight.tip;
 
 public class TIPPReferenceSection extends TIPPSection {
 
-    public TIPPReferenceSection(String name) {
-        super(name, TIPPSectionType.REFERENCE);
+    public TIPPReferenceSection() {
+        super(TIPPSectionType.REFERENCE);
     }
     
-    // TODO: some special handling for reference sections
-
+    protected TIPPFile createFile(String name) {
+        return new TIPPReferenceFile(name, name);
+    }
+    
+    public TIPPReferenceFile addFile(String name) {
+        return (TIPPReferenceFile)super.addFile(name);
+    }
 }

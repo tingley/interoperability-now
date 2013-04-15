@@ -11,13 +11,11 @@ import java.util.List;
 class TIPPSection {
     private PackageBase tipp;
     private TIPPSectionType type;
-    private String name;
     List<TIPPResource> resources = new ArrayList<TIPPResource>();
     
     TIPPSection() { }
 
-    TIPPSection(String name, TIPPSectionType type) {
-        this.name = name;
+    TIPPSection(TIPPSectionType type) {
         this.type = type;
     }
     
@@ -37,30 +35,29 @@ class TIPPSection {
         this.type = type;
     }
     
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
     public Collection<TIPPResource> getResources() {
         return resources;
     }
 
-    // TODO: need to strip off unsupported types/properties
-    public TIPPResource addResource(TIPPResource object) {
-        resources.add(object);
-        object.setSequence(resources.size());
-        object.setPackage(tipp);
-        object.setSection(this);
-        return object;
+    protected TIPPFile createFile(String name) {
+        return new TIPPFile(name, name);
+    }
+    
+    public TIPPFile addFile(String name) {
+        return addFile(createFile(name));
+    }
+    
+    TIPPFile addFile(TIPPFile file) {
+        resources.add(file);
+        file.setSequence(resources.size());
+        file.setPackage(tipp);
+        file.setSection(this);
+        return file;
     }
     
     @Override
     public String toString() {
-        return name + "(" + type + ")";
+        return type.toString();
     }
     
     @Override
@@ -72,8 +69,7 @@ class TIPPSection {
             return false;
         }
         TIPPSection s = (TIPPSection)o;
-        return type.equals(s.getType()) && 
-                name.equals(s.getName()) &&
+        return type.equals(s.getType()) &&
                 resources.equals(s.getResources());
     }
     

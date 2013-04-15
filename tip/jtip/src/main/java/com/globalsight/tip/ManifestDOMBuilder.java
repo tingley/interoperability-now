@@ -126,7 +126,7 @@ class ManifestDOMBuilder {
     
     private Element makePackageObjects() {
         Element objects = document.createElement(PACKAGE_OBJECTS);
-        for (TIPPSection section : manifest.getObjectSections()) {
+        for (TIPPSection section : manifest.getSections()) {
             objects.appendChild(makeObjectSection(section));
         }
         return objects;
@@ -134,8 +134,7 @@ class ManifestDOMBuilder {
     
     private Element makeObjectSection(TIPPSection section) {
         Element sectionEl = document.createElement(section.getType().getElementName());
-        sectionEl.setAttribute(ATTR_SECTION_NAME, 
-                               section.getName());
+        sectionEl.setAttribute(ATTR_SECTION_NAME, section.getType().getElementName());
         for (TIPPResource file : section.getResources()) {
             sectionEl.appendChild(makeObjectFile(file));
         }

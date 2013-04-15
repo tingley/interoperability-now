@@ -49,7 +49,7 @@ public class TIPPFile extends TIPPResource {
     }
 
     public String getCanonicalObjectPath() {
-        return getSection().getName() + PackageSource.SEPARATOR + location;
+        return getSection().getType().getDefaultName() + PackageSource.SEPARATOR + location;
     }
     
     public String getLocation() {
