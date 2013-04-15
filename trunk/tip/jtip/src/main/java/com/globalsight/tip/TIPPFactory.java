@@ -108,9 +108,9 @@ public class TIPPFactory {
      * @throws TIPPException
      * @throws IOException
      */
-    public static WriteableRequestTIPP newRequestPackage(TIPPTaskType type, PackageStore store) 
+    public static RequestTIPP newRequestPackage(TIPPTaskType type, PackageStore store) 
             throws TIPPException, IOException {
-        WriteableRequestTIPP tipPackage = new WriteableRequestTIPP(store);
+        RequestPackageBase tipPackage = new RequestPackageBase(store);
         tipPackage.setManifest(Manifest.newRequestManifest(tipPackage, type));
         return tipPackage;
     }
@@ -124,9 +124,9 @@ public class TIPPFactory {
      * @throws TIPPException
      * @throws IOException
      */
-    public static WriteableResponseTIPP newResponsePackage(TIPPTaskType type, PackageStore store)
+    public static ResponseTIPP newResponsePackage(TIPPTaskType type, PackageStore store)
             throws TIPPException, IOException {
-        WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(store);
+        ResponsePackageBase tipPackage = new ResponsePackageBase(store);
         tipPackage.setManifest(Manifest.newResponseManifest(tipPackage, type));
         return tipPackage;
     }
@@ -144,9 +144,9 @@ public class TIPPFactory {
      * @throws TIPPException
      * @throws IOException
      */
-    public static WriteableResponseTIPP newResponsePackage(RequestTIPP requestPackage, PackageStore store)
+    public static ResponseTIPP newResponsePackage(RequestTIPP requestPackage, PackageStore store)
             throws TIPPException, IOException {
-        WriteableResponseTIPP tipPackage = new WriteableResponseTIPP(store);
+        ResponsePackageBase tipPackage = new ResponsePackageBase(store);
         tipPackage.setManifest(Manifest.newResponseManifest(tipPackage, 
                 requestPackage));
         return tipPackage;	

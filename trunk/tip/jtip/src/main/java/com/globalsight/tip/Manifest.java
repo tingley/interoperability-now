@@ -6,9 +6,12 @@ import static javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -51,8 +54,8 @@ class Manifest {
     private TIPPTask task; // Either request or response
     private TIPPCreator creator = new TIPPCreator();
     
-    private Map<TIPPSectionType, TIPPSection> objectSections = 
-        new HashMap<TIPPSectionType, TIPPSection>();
+    private EnumMap<TIPPSectionType, TIPPSection> sections = 
+            new EnumMap<TIPPSectionType, TIPPSection>(TIPPSectionType.class);
     
     
     Manifest(PackageBase tipPackage) {
@@ -83,7 +86,7 @@ class Manifest {
     	return manifest;
     }
     
-    static Manifest newResponseManifest(WriteableResponseTIPP tipPackage, 
+    static Manifest newResponseManifest(ResponsePackageBase tipPackage, 
     									   TIPP requestPackage) {
     	if (!requestPackage.isRequest()) {
     		throw new IllegalArgumentException(
@@ -157,7 +160,7 @@ class Manifest {
         // Perform additional validation that isn't covered by the schema
         TIPPTaskType taskType = getTaskType();
         if (taskType != null) {
-            for (TIPPSection section : getObjectSections()) {
+            for (TIPPSection section : getSections()) {
                 if (!taskType.getSupportedSectionTypes().contains(section.getType())) {
                     status.addError(TIPPError.Type.INVALID_SECTION_FOR_TASK, 
                             "Invalid section for task type: " + 
@@ -249,12 +252,12 @@ class Manifest {
                 continue;
             }
             // Don't allow duplicate sections
-            if (objectSections.containsKey(section.getType())) {
+            if (sections.containsKey(section.getType())) {
                 status.addError(TIPPError.Type.DUPLICATE_SECTION_IN_MANIFEST, 
                         "Duplicate section: " + section.getType());
                 continue;
             }
-            objectSections.put(section.getType(), section);
+            sections.put(section.getType(), section);
         }
     }
     
@@ -267,20 +270,20 @@ class Manifest {
         }
         String sectionName = section.getAttribute(ATTR_SECTION_NAME);
         if (type.equals(TIPPSectionType.REFERENCE)) {
-            TIPPReferenceSection refSection = new TIPPReferenceSection(sectionName);
-            NodeList children = section.getElementsByTagName(FILE_RESOURCE);
+            TIPPReferenceSection refSection = new TIPPReferenceSection();
+            NodeList children = section.getElementsByTagName(REFERENCE_FILE_RESOURCE);
             for (int i = 0; i < children.getLength(); i++) {
-                refSection.addResource(loadReferenceFile((Element)children.item(i),
+                refSection.addFile(loadReferenceFile((Element)children.item(i),
                         status));
             }
             return refSection;
         }
         else {
-            TIPPSection objSection = new TIPPSection(sectionName, type);
+            TIPPSection objSection = new TIPPSection(type);
             objSection.setPackage(tipPackage);
             NodeList children = section.getElementsByTagName(FILE_RESOURCE);
             for (int i = 0; i < children.getLength(); i++) {
-                objSection.addResource(loadResource((Element)children.item(i),
+                objSection.addFile(loadFile((Element)children.item(i),
                         status));
             }
             return objSection;
@@ -291,14 +294,15 @@ class Manifest {
                             TIPPLoadStatus status) {
         TIPPReferenceFile object = new TIPPReferenceFile();
         loadFileResource(object, file, status);
-        object.setLanguageChoice( 
-                TIPPReferenceFile.LanguageChoice.valueOf(
-                        file.getAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE)));
+        if (file.hasAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE)) {
+            object.setLanguageChoice( 
+                    TIPPReferenceFile.LanguageChoice.valueOf(
+                            file.getAttribute(ObjectFile.ATTR_LANGUAGE_CHOICE)));
+        }
         return object;
     }
     
-    private TIPPResource loadResource(Element file,
-                            TIPPLoadStatus status) {
+    private TIPPFile loadFile(Element file, TIPPLoadStatus status) {
         TIPPFile object = new TIPPFile();
         loadFileResource(object, file, status);
         return object;
@@ -432,28 +436,40 @@ class Manifest {
     }
 
     /**
-     * Return the object section with a given type, if it exists.  
+     * Return the object section for a given type.  
      * @param type section type
      * @return object section for the specified section type, or
      *         null if no section with that type exists in the TIPP
      */
-    public TIPPSection getObjectSection(TIPPSectionType type) {
-        return objectSections.get(type);
+    public TIPPSection getSection(TIPPSectionType type) {
+        TIPPSection s = sections.get(type);
+        if (s == null) {
+            s = createSection(type);
+            sections.put(type, s);
+            s.setPackage(tipPackage);
+        }
+        return s;
     }
     
     /**
-     * Return a collection of all object sections.
-     * @return (possibly empty) collection of object sections
+     * Return a collection of all non-empty sections.
+     * @return (possibly empty) collection of sections that each contain at least one resource
      */
-    public Collection<TIPPSection> getObjectSections() {
-        return objectSections.values();
+    public Collection<TIPPSection> getSections() {
+        List<TIPPSection> s = new ArrayList<TIPPSection>();
+        for (TIPPSection section : sections.values()) {
+            if (!section.getResources().isEmpty()) {
+                s.add(section);
+            }
+        }
+        return s;
     }
     
     public TIPPReferenceSection getReferenceSection() {
-        return (TIPPReferenceSection)objectSections.get(TIPPSectionType.REFERENCE);
+        return (TIPPReferenceSection)sections.get(TIPPSectionType.REFERENCE);
     }
     
-    public TIPPSection addObjectSection(String name, TIPPSectionType type) {
+    public TIPPSection addSection(TIPPSectionType type) {
     	// If we were created with a task type object, restrict the 
     	// section type to one of the choices for this task type.
     	if (taskType != null) {
@@ -462,16 +478,18 @@ class Manifest {
 					" is not supported for task type " + taskType.getType());
     		}
     	}
-    	TIPPSection section = null;
-    	if (type == TIPPSectionType.REFERENCE) {
-    	    section = new TIPPReferenceSection(name);
-    	}
-    	else {
-    	    section = new TIPPSection(name, type);
-    	}
+    	TIPPSection section = createSection(type);
         section.setPackage(tipPackage);
-        objectSections.put(type, section);
+        sections.put(type, section);
         return section;
+    }
+    
+    // TODO: Clean this up?
+    private TIPPSection createSection(TIPPSectionType type) {
+        if (type == TIPPSectionType.REFERENCE) {
+            return new TIPPReferenceSection();
+        }
+        return new TIPPSection(type);
     }
     
     @Override
@@ -482,13 +500,13 @@ class Manifest {
         return m.getPackageId().equals(getPackageId()) &&
                 m.getCreator().equals(getCreator()) &&
                 m.getTask().equals(getTask()) &&
-                m.getObjectSections().equals(getObjectSections());
+                m.getSections().equals(getSections());
     }
     
     @Override
     public String toString() {
         return "TIPManifest(id=" + getPackageId() + ", creator=" + getCreator()
-                + ", task=" + getTask() + ", sections=" + getObjectSections() 
+                + ", task=" + getTask() + ", sections=" + getSections() 
                 + ")";
     }
 }

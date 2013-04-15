@@ -7,6 +7,8 @@ public interface ResponseTIPP extends TIPP {
 	 */
 	String getRequestPackageId();
 	
+	void setRequestPackageId(String requestPackageId);
+	
 	/**
 	 * Get information about the creator of the package to which this is
 	 * a response.
@@ -14,15 +16,21 @@ public interface ResponseTIPP extends TIPP {
 	 */
 	TIPPCreator getRequestCreator();
 	
+	void setRequestCreator(TIPPCreator creator);
+	
 	/**
 	 * Get the success/failure message for this package.
 	 * @return TIPResponseMessage value
 	 */
 	TIPPResponseCode getCode();
 	
+	void setCode(TIPPResponseCode code);
+	
 	/**
 	 * Get the response package comment, if any.
 	 * @return comment string
 	 */
 	String getComment();
+	
+	void setComment(String comment);
 }

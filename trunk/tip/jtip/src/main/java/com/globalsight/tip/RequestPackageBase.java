@@ -1,7 +1,7 @@
 package com.globalsight.tip;
 
 class RequestPackageBase extends PackageBase implements RequestTIPP {
-
+    
 	RequestPackageBase(PackageStore store) {
 		super(store);
 	}

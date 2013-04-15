@@ -26,7 +26,7 @@ public class TestTIPManifest {
 		Manifest manifest = Manifest.newManifest(null);
 		assertNotNull(manifest.getCreator());
 		assertNotNull(manifest.getCreator().getTool());
-		assertNotNull(manifest.getObjectSections());
+		assertNotNull(manifest.getSections());
 	}
 	
     @Test
@@ -249,11 +249,11 @@ public class TestTIPManifest {
         // Add a section
         final TIPPFile file = 
                 new TIPPFile("test.xlf", "test.xlf");
-        // XXX How to improve this?  Maybe I need to have some 
-        // sort of section factory that returns the right type...?
-        TIPPSection section = manifest.addObjectSection("bilingual",
+        // This is ugly, but it's also not something the average user
+        // ever has to do.  Maybe I can improve it eventually.
+        TIPPSection section = manifest.addSection(
                 TIPPSectionType.BILINGUAL);
-        section.addResource(file);
+        section.addFile(file);
         TIPPLoadStatus status = new TIPPLoadStatus();
         Manifest roundtrip = roundtripManifest(manifest, status);
         assertEquals(0, status.getAllErrors().size());
@@ -376,7 +376,7 @@ public class TestTIPManifest {
 
     private static void expectObjectSection(Manifest manifest,
             TIPPSectionType type, List<TIPPFile> files) {
-        TIPPSection section = manifest.getObjectSection(type);
+        TIPPSection section = manifest.getSection(type);
         assertNotNull(section);
         assertEquals(type, section.getType());
         assertEquals(files,

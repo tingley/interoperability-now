@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.KeyPair;
 import java.util.List;
-import java.util.Set;
+import java.util.Collection;
 
 public interface TIPP {
 
@@ -54,20 +54,33 @@ public interface TIPP {
 	
 	String getTargetLocale();
 	
-	/**
-	 * Return the types of all sections in this package.
-	 * @return set of section types
-	 */
-	Set<TIPPSectionType> getSections();
+	void setPackageId(String id);
+
+	void setCreator(TIPPCreator creator);
+
+	void setTaskType(String taskTypeUri);
+
+	void setSourceLocale(String sourceLocale);
+
+	void setTargetLocale(String targetLocale);
+	
+	TIPPSection getBilingualSection();
+	TIPPSection getInputSection();
+	TIPPSection getOutputSection();
+	TIPPSection getSpecificationsSection();
+	TIPPSection getTmSection();
+	TIPPSection getTerminologySection();
+	TIPPReferenceSection getReferenceSection();
+	TIPPSection getPreviewSection();
+	TIPPSection getMetricsSection();
+	TIPPSection getExtrasSection();
 	
 	/**
-	 * Return the name used to identify the specified section in this
-	 * package.
-	 * @return section name, or null if there is no section of the specified 
-	 * 		type
+	 * Return all the sections in this package.
+	 * @return collection of sections
 	 */
-	String getSectionName(TIPPSectionType sectionType);
-	
+	Collection<TIPPSection> getSections();
+
 	/**
 	 * Return a list of all the objects in the specified section, ordered 
 	 * according to the sequence values of the objects.  If the section does not
@@ -76,6 +89,7 @@ public interface TIPP {
 	 * @param sectionType the type of the section to fetch objects for
 	 * @return list of package objects, or an empty list.
 	 */
+	// TODO: put this in the section?
 	List<TIPPResource> getSectionObjects(TIPPSectionType sectionType);
 
 }

@@ -13,6 +13,10 @@ public class TIPPReferenceFile extends TIPPFile {
         super();
     }
     
+    TIPPReferenceFile(String location, String name) {
+        super(location, name);
+    }
+    
     public LanguageChoice getLanguageChoice() {
         return languageChoice;
     }

@@ -21,7 +21,7 @@ class PayloadValidator {
         int originalErrorCount = status.getAllErrors().size();
         Set<String> objectPaths = store.getObjectFilePaths();
         Set<String> pathsInManifest = new HashSet<String>();
-        for (TIPPSection section : manifest.getObjectSections()) {
+        for (TIPPSection section : manifest.getSections()) {
             for (TIPPResource obj : section.getResources()) {
                 // TODO: some form of validation needs to be factored into 
                 // the resource class.. or into the section somehow.

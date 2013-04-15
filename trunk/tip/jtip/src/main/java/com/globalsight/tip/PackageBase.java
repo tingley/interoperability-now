@@ -10,8 +10,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyPair;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,7 +25,7 @@ import java.util.zip.ZipOutputStream;
  * readable/writeable stuff is enforced by the interfaces.  Shhh, 
  * don't tell anybody.
  */
-abstract class PackageBase implements WriteableTIPP {
+abstract class PackageBase implements TIPP {
 
     private PackageStore store;
     private Manifest manifest;
@@ -86,7 +88,7 @@ abstract class PackageBase implements WriteableTIPP {
 	// For now, this sorts every time
 	public List<TIPPResource> getSectionObjects(TIPPSectionType sectionType) {
 		TIPPSection section = 
-				getManifest().getObjectSection(sectionType);
+				getManifest().getSection(sectionType);
 		if (section == null) {
 			return Collections.emptyList();
 		}
@@ -100,32 +102,54 @@ abstract class PackageBase implements WriteableTIPP {
 		return list;
 	}
 	
-	public Set<TIPPSectionType> getSections() {
-		Set<TIPPSectionType> sections = new HashSet<TIPPSectionType>();
-		for (TIPPSection s : getManifest().getObjectSections()) {
-			sections.add(s.getType());
-		}
-		return sections;
+	public TIPPSection getBilingualSection() {
+	    return getManifest().getSection(TIPPSectionType.BILINGUAL);
+	}
+	public TIPPSection getInputSection() {
+	    return getManifest().getSection(TIPPSectionType.INPUT);
+	}
+	public TIPPSection getOutputSection() {
+	    return getManifest().getSection(TIPPSectionType.OUTPUT);
+	}
+	public TIPPSection getSpecificationsSection() {
+	    return getManifest().getSection(TIPPSectionType.STS);    
+	}
+	public TIPPSection getTmSection() {
+	    return getManifest().getSection(TIPPSectionType.TM);
+	}
+	public TIPPSection getTerminologySection() {
+	    return getManifest().getSection(TIPPSectionType.TERMINOLOGY);
+	}
+	public TIPPReferenceSection getReferenceSection() {
+	    return (TIPPReferenceSection)getManifest().getSection(TIPPSectionType.REFERENCE);
+	}
+	public TIPPSection getPreviewSection() {
+	    return getManifest().getSection(TIPPSectionType.PREVIEW);
+	}
+	public TIPPSection getMetricsSection() {
+	    return getManifest().getSection(TIPPSectionType.METRICS);
+	}
+	public TIPPSection getExtrasSection() {
+	    return getManifest().getSection(TIPPSectionType.EXTRAS);
 	}
 	
-	public String getSectionName(TIPPSectionType sectionType) {
-		TIPPSection section = 
-				getManifest().getObjectSection(sectionType);
-		return (section == null) ? null : section.getName();
+	/**
+	 * Return only the non-empty sections.
+	 */
+	public Collection<TIPPSection> getSections() {
+	    return getManifest().getSections();
 	}
 
+	@Deprecated
 	public TIPPResource addFile(TIPPSectionType sectionType, 
 			String objectName, InputStream objectData) throws IOException, TIPPException {
-		TIPPSection section = manifest.getObjectSection(sectionType);
+		TIPPSection section = manifest.getSection(sectionType);
 		if (section == null) {
 			// Create the section.  Derive the section name from the uri.
-			section = manifest.addObjectSection(sectionType.getDefaultName(),
-					sectionType);
+			section = manifest.addSection(sectionType);
 		}
-		// TODO: path normalization, etc
-		// TODO: handle reference special case, and refactor with the Manifest code
-		TIPPFile resource = new TIPPFile(objectName);
-		section.addResource(resource);
+		TIPPFile resource = section.addFile(objectName);
+		section.addFile(resource);
 		// Copy the data
 		OutputStream os = resource.getOutputStream();
 		FileUtil.copyStreamToStream(objectData, os);
@@ -208,7 +232,7 @@ abstract class PackageBase implements WriteableTIPP {
      * @throws IOException
      */
     void writeZipPayload(ZipOutputStream zos) throws IOException {
-        for (TIPPSection section : manifest.getObjectSections()) {
+        for (TIPPSection section : manifest.getSections()) {
             for (TIPPResource file : section.getResources()) {
                 if (file instanceof TIPPFile) {
                     String path = ((TIPPFile)file).getCanonicalObjectPath();

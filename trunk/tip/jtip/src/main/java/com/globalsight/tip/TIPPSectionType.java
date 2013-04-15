@@ -13,7 +13,7 @@ public enum TIPPSectionType {
     REFERENCE("Reference", "reference"),
     PREVIEW("Preview", "preview"),
     METRICS("Metrics", "metrics"),
-    CUSTOM("Extras", "extras");
+    EXTRAS("Extras", "extras");
 
     private String elementName;
     private String defaultName;
