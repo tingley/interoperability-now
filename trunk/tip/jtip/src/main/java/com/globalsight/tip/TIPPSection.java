@@ -8,7 +8,7 @@ import java.util.List;
  * Represents a TIPP section.  Sections are identified by
  * type.  A section contains one or more resources of the specified type.
  */
-class TIPPSection {
+public class TIPPSection {
     private PackageBase tipp;
     private TIPPSectionType type;
     List<TIPPResource> resources = new ArrayList<TIPPResource>();
