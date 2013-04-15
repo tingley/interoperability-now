@@ -41,6 +41,9 @@ public class TIPExplode {
             System.out.println("Errors were encountered:");
             for (TIPPError e : errors) {
                 System.out.println(e);
+                if (e.getException() != null) {
+                    e.getException().printStackTrace();
+                }
             }
         }
         tip.close();
