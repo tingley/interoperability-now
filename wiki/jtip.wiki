@@ -23,7 +23,7 @@ The `jtip` JAR will be built in the `target` directory.
 = Testing with `tipexplode` =
 `tipexplode` is a simple sample program written using `jtip` that will open a TIP package, validate it, and write out the contents to a directory.  You can run it like this:
 {{{
-java -cp target/jtip-0.14-snapshot.jar com.globalsight.tip.samples.TIPExplode [tip-package] [target-directory]
+java -cp target/jtip-0.15-snapshot.jar com.globalsight.tip.samples.TIPExplode [tip-package] [target-directory]
 }}}
 There is also a linux wrapper for this in `bin/tipexplode`:
 {{{
