@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dx="http://schema.interoperability-now.org" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 http://schema.interoperability-now.org/xliff-doc-1_5.xsd" dx:version="1.0">
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dx="http://schema.interoperability-now.org" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-doc-1_5.xsd" dx:version="1.0">
 <file datatype="x-application/dita+xml" original="d2e9.xml" source-language="en-US" target-language="fr-FR" xml:space="preserve" dx:allow-tu-join="yes">
 	<header>
 		<skl>
@@ -183,16 +183,15 @@
 				<source>Chapter 1<x id="0" dx:orig-markup="&lt;/ph&gt;" dx:equiv-markup="&lt;/h1&gt;" ctype="x-other" /> <g id="1" dx:orig-markup-open="&lt;ph class=&quot;h3&quot;&gt;" dx:equiv-markup-open="&lt;h3&gt;" ctype="x-header" dx:orig-markup-close="&lt;/ph&gt;" dx:equiv-markup-close="&lt;/h3&gt;">A Runaway Reef</g></source>
 				<target state="translated">Chapitre 1<x id="0" dx:orig-markup="&lt;/ph&gt;" dx:equiv-markup="&lt;/h1&gt;" ctype="x-other"/> <g id="1" dx:orig-markup-open="&lt;ph class=&quot;h3&quot;&gt;" dx:equiv-markup-open="&lt;h3&gt;" ctype="x-header" dx:orig-markup-close="&lt;/ph&gt;" dx:equiv-markup-close="&lt;/h3&gt;">Un écueil fuyant</g></target>
 				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:23:00Z">French "translations" provided by Google. I'm sure they are fantastically accurate to the original French.</dx:note>
-				<dx:note dx:modified-by="Jane Translator" dx:modified-at="2011-03-04T14:25:00Z" annotates="target">Is "écueil" is the right word for "Reef"?</dx:note>
-				<dx:note dx:modified-by="Joe Reviewer" dx:modified-at="2011-03-04T15:03:00Z" annotates="target">Yes, that's accurate.</dx:note>
+				<dx:note dx:modified-by="Jane Translator" dx:modified-at="2011-03-04T14:25:00Z" dx:annotates="target">Is "écueil" is the right word for "Reef"?</dx:note>
+				<dx:note dx:modified-by="Joe Reviewer" dx:modified-at="2011-03-04T15:03:00Z" dx:annotates="target">Yes, that's accurate.</dx:note>
 			</trans-unit>
 		</group>
 		<group id="2">
 			<trans-unit id="2-2" dx:match-quality="100" dx:origin="MT" dx:origin-shorttext="Google MT" dx:modified-by="GoogleBot01" dx:modified-at="2011-03-04T05:00:00Z">
 				<source><g id="0" dx:orig-markup-open="&lt;ph class=&quot;- topic/ph &quot; outputclass=&quot;size: +2&quot;&gt;" dx:equiv-markup-open="&lt;span style=&quot;font-variant: small-caps;&quot;&gt;" ctype="x-other-format" dx:orig-markup-close="&lt;/ph&gt;" dx:equiv-markup-close="&lt;/span&gt;">THE YEAR</g> 1866 was marked by a bizarre development, an unexplained and downright inexplicable phenomenon that surely no one has forgotten.</source>
 				<target state="translated"><g id="0" dx:orig-markup-open="&lt;ph class=&quot;- topic/ph &quot; outputclass=&quot;size: +2&quot;&gt;" dx:equiv-markup-open="&lt;span style=&quot;font-variant: small-caps;&quot;&gt;" ctype="x-other-format" dx:orig-markup-close="&lt;/ph&gt;" dx:equiv-markup-close="&lt;/span&gt;">L'année</g> 1866 a été marquée par un développement bizarre, un phénomène inexpliqué et inexplicable que sûrement carrément personne n'a oublié.</target>
-				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z" annotates="target">Original French, as found online: L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</dx:note>
-				<dx:note dx:modified-by="John Smith" dx:modified-at="2011-09-25T00:00:00Z">Match from TM is exact text match, but tags don't match. Looks l ike context is the same as well. </dx:note>
+				
 				<alt-trans alttranstype="proposal" match-quality="99" origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
 					<source>THE YEAR 1866 was marked by a bizarre development, an unexplained and downright inexplicable phenomenon that surely no one has forgotten.</source>
 					<target state="signed-off">L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</target>
@@ -211,13 +210,14 @@
 						<dx:attribute dx:name="Project ID">Project0002,Project0005</dx:attribute>
 					</dx:attributes>
 				</alt-trans>
+				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z" dx:annotates="target">Original French, as found online: L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</dx:note>
+				<dx:note dx:modified-by="John Smith" dx:modified-at="2011-09-25T00:00:00Z">Match from TM is exact text match, but tags don't match. Looks l ike context is the same as well. </dx:note>
 			</trans-unit>
 
 			<trans-unit id="2-3" dx:match-quality="100" dx:origin="MT" dx:origin-shorttext="Google MT" dx:modified-by="GoogleBot01" dx:modified-at="2011-03-04T05:00:00Z">
 				<source>Without getting into those rumors that upset <mrk mtype="term" dx:term-id="0">civilians</mrk> in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</source>
 				<target state="translated">Sans entrer dans les rumeurs selon lesquelles des <mrk mtype="term" dx:term-id="1">civils</mrk> bouleversé dans les ports maritimes et dérangé l'esprit du public, même loin dans les terres, il faut dire que les marins professionnels ont été particulièrement alarmé.</target>
-				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z">First alt-trans match has a 1/2 percent penalty for a tag mismatch.</dx:note>
-				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z">2nd alt-trans match is a Machine Translation</dx:note>
+				
 
 				<alt-trans alttranstype="proposal" match-quality="100" dx:match-penalty="0.5" origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
 					<source>Without getting into those rumors that upset <mrk mtype="term" dx:term-id="0">civilians</mrk> in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</source>
@@ -235,12 +235,14 @@
 					<source>Without getting into those rumors that upset <mrk mtype="term" dx:term-id="0">civilians</mrk> in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</source>
 					<target state="signed-off">Sans parler des rumeurs qui agitaient les <mrk mtype="term" dx:term-id="0">populations</mrk> des ports et surexcitaient l’esprit public à l’intérieur des continents les gens de mer furent particulièrement émus.</target>
 				</alt-trans>
+				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z">First alt-trans match has a 1/2 percent penalty for a tag mismatch.</dx:note>
+				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z">2nd alt-trans match is a Machine Translation</dx:note>
 			</trans-unit>
 			
 			<trans-unit id="2-4" dx:match-quality="100" dx:origin="MT" dx:origin-shorttext="Google MT" dx:modified-by="GoogleBot01" dx:modified-at="2011-03-04T05:00:00Z">
 				<source>Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.</source>
 				<target state="translated">Traders, les armateurs, les capitaines de navires, capitaines, et les capitaines de l'Europe et l'Amérique, officiers de marine de tous les pays, et sur leurs talons les différents gouvernements nationaux sur ces deux continents, ont tous été extrêmement troublé par l'entreprise.</target>
-				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z">alt-trans match is exact, in-context match (dx:glorious-match=yes)</dx:note>
+				
 				<alt-trans alttranstype="proposal" match-quality="100" dx:glorious-match="yes" origin="TM" dx:origin-shorttext="Master TM for French Fiction" dx:modified-by="smithj1" dx:modified-at="2007-12-26T18:08:20Z">
 					<source>Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.</source>
 					<target state="signed-off">Traders, les armateurs, les capitaines de navires, capitaines, et les capitaines de l'Europe et l'Amérique, officiers de marine de tous les pays, et sur leurs talons les différents gouvernements nationaux sur ces deux continents, ont tous été extrêmement troublé par l'entreprise.</target>
@@ -253,6 +255,7 @@
 						<dx:attribute dx:name="Project ID">Project0002,Project0005</dx:attribute>
 					</dx:attributes>
 				</alt-trans>
+				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:24:00Z">alt-trans match is exact, in-context match (dx:glorious-match=yes)</dx:note>
 			</trans-unit>
 		</group>
 		<group id="3">
@@ -290,10 +293,12 @@
 			<trans-unit id="2-11" dx:match-quality="0" dx:origin="manual" dx:origin-shorttext="Manual Translation" dx:modified-by="Joe Translator" dx:modified-at="2011-03-04T15:24:00Z">
 				<source>As for relegating it to the realm of fiction, that charge had to be dropped.</source>
 				<target state="translated">Quant à la rejeter au rang des fables, il fallait y renoncer.</target>
-				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T15:25:00Z">This TU was translated manually (by copying from web page in this case). note the alt-trans which provides version history.</dx:note>
+				
 				<alt-trans alttranstype="previous-version" dx:match-quality="0" dx:origin="MT" dx:origin-shorttext="Pseudo Translation" dx:modified-by="l10n-tool" dx:modified-at="2011-03-04T05:30:00Z">
+					<source>sfsd</source>
 					<target>XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX.</target>
 				</alt-trans>
+				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T15:25:00Z">This TU was translated manually (by copying from web page in this case). note the alt-trans which provides version history.</dx:note>
 			</trans-unit>
 		</group>
 		<group id="7">
@@ -305,6 +310,7 @@
 					<dx:qa-hit dx:qa-origin="source" dx:qa-code="004" dx:qa-ignorable="no" dx:qa-shorttext="Date found in source, not found in target: &quot;1866/07/20&quot;" dx:qa-category="date" dx:qa-level="error" dx:qa-src-startpos="16" dx:qa-src-length="14" />
 					<dx:qa-hit dx:qa-origin="target" dx:qa-code="003" dx:qa-ignorable="yes" dx:qa-shorttext="Leading whitespace in target" dx:qa-category="pattern" dx:qa-level="warning" dx:qa-tgt-startpos="1" dx:qa-tgt-length="1" />
 				</dx:qa-hits>
+				
 			</trans-unit>
 		</group>
 		<group id="8">
