@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" xmlns:dx="http://schema.interoperability-now.org" xmlns:xyz="urn:appInfo:Items" xmlns:ns1="http://schema.interoperability-now.org" targetNamespace="urn:oasis:names:tc:xliff:document:1.2" elementFormDefault="qualified">
 	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
-	<xsd:import namespace="http://schema.interoperability-now.org" schemaLocation="xliff-doc-1_5_types.xsd"/>
-	<xsd:redefine schemaLocation="xliff-doc-xliff-core-restricted_1_5.xsd">
+	<xsd:import namespace="http://schema.interoperability-now.org" schemaLocation="xliff-doc-1_0_types.xsd"/>
+	<xsd:redefine schemaLocation="http://schema.interoperability-now.org/xliff-doc-xliff-core-restricted_1_0.xsd">
 		<xsd:complexType name="xliff">
 			<xsd:complexContent>
 				<xsd:extension base="xlf:xliff">
