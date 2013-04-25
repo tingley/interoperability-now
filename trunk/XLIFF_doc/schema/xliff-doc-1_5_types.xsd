@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dx="http://schema.interoperability-now.org" xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" targetNamespace="http://schema.interoperability-now.org" elementFormDefault="qualified" attributeFormDefault="qualified">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:dx="http://schema.interoperability-now.org" xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://schema.interoperability-now.org" elementFormDefault="qualified" attributeFormDefault="qualified">
 	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
 	<xsd:attribute name="version">
 		<xsd:simpleType>
@@ -8,6 +8,25 @@
 			</xsd:restriction>
 		</xsd:simpleType>
 	</xsd:attribute>
+	<xsd:complexType name="context">
+			<xsd:all>
+				<xsd:element name="context-source-after" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="context-source-before" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="context-target-after" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+				<xsd:element name="context-target-before" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+			</xsd:all>
+	</xsd:complexType>
+	<xsd:complexType name="note">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute ref="xml:lang" use="optional"/>
+				<xsd:attribute name="modified-by" type="xsd:string" use="optional"/>
+				<xsd:attribute name="modified-at" type="xsd:string" use="optional"/>
+				<xsd:attribute name="from" type="xsd:string" use="optional"/>
+				<xsd:attribute name="annotates" type="xsd:string" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
 	<xsd:simpleType name="AttrType_YesNo">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="yes"/>
@@ -29,6 +48,8 @@
 	</xsd:complexType>
 	<xsd:element name="internal-preview" type="dx:internal-preview"/>
 	<xsd:element name="external-preview" type="xsd:anyURI"/>
+	<xsd:element name="note" type="dx:note"/>
+	<xsd:element name="context" type="dx:context"/>
 	<xsd:element name="external-xsl" type="xsd:anyURI"/>
 	<xsd:attribute name="allow-tu-join" type="dx:AttrType_YesNo"/>
 	<xsd:attribute name="allow-tu-split" type="dx:AttrType_YesNo"/>
@@ -243,6 +264,7 @@ failed to find a match, depending on usage)</xsd:documentation>
 			<xsd:enumeration value="x-font"/>
 			<xsd:enumeration value="x-fontsize"/>
 			<xsd:enumeration value="x-header"/>
+			<xsd:enumeration value="x-note"/>
 			<xsd:enumeration value="x-title"/>
 			<xsd:enumeration value="x-other-format"/>
 			<xsd:enumeration value="x-other"/>
