@@ -1614,7 +1614,8 @@ Jan-10-2006
 			<xsd:element ref="xlf:ept"/>
 			<xsd:element ref="xlf:ph"/>
 			<xsd:element ref="xlf:it"/>-->
-			<xsd:element ref="xlf:mrk"/> <!-- allowed again with xliff:doc 1.5 -->
+			<xsd:element ref="xlf:mrk"/>
+			<!-- allowed again with xliff:doc 1.5 -->
 			<xsd:element ref="xlf:x"/>
 			<!--<xsd:element ref="xlf:bx"/>
 			<xsd:element ref="xlf:ex"/>-->
@@ -1747,17 +1748,16 @@ Extracted type definition to complexType to for further redefinition
 		</xsd:complexType>
 	</xsd:element>
 	<xsd:complexType name="note">
-	<xsd:simpleContent>
-				<xsd:extension base="xsd:string">
-					<xsd:attribute ref="xml:lang" use="optional"/>
-					<xsd:attribute name="priority" type="xlf:AttrType_priority" use="optional" default="1"/>
-					<xsd:attribute name="from" type="xsd:string" use="optional"/>
-					<xsd:attribute name="annotates" type="xlf:AttrType_annotates" use="optional" default="general"/>
-				</xsd:extension>
-			</xsd:simpleContent>
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute ref="xml:lang" use="optional"/>
+				<xsd:attribute name="priority" type="xlf:AttrType_priority" use="optional" default="1"/>
+				<xsd:attribute name="from" type="xsd:string" use="optional"/>
+				<xsd:attribute name="annotates" type="xlf:AttrType_annotates" use="optional" default="general"/>
+			</xsd:extension>
+		</xsd:simpleContent>
 	</xsd:complexType>
-	<xsd:element name="note" type="xlf:note">
-	</xsd:element>
+	<xsd:element name="note" type="xlf:note"/>
 	<xsd:element name="phase-group">
 		<xsd:complexType>
 			<xsd:sequence maxOccurs="unbounded">
@@ -1990,7 +1990,6 @@ Extracted type definition to complexType to for further redefinition
 	<!--Modified for xliff:doc:
 Type Definition extracted to complex:Type for further redefinition as part of xliff:doc Schema
 -->
-
 	<xsd:simpleType name="AttrType_Origin">
 		<xsd:restriction base="xsd:string">
 			<xsd:enumeration value="TM"/>
@@ -2012,11 +2011,11 @@ Type Definition extracted to complex:Type for further redefinition as part of xl
 		</xsd:sequence>
 		<xsd:attribute name="match-quality" type="xsd:string" use="optional"/>
 		<xsd:attribute name="origin" type="xlf:AttrType_Origin" use="optional"/>
+		<xsd:attribute name="alttranstype" type="xlf:AttrType_alttranstype" use="optional" default="proposal"/>
 		<!-- Unclear if we should use origin or dx:origin 
 			<xsd:attribute name="origin" type="xsd:string" use="optional"/>
 
 		-->
-		<xsd:attribute name="alttranstype" type="xlf:AttrType_alttranstype" use="optional" default="proposal"/>
 		<!-- 25092011 -->
 		<!--<xsd:attribute name="tool-id" type="xsd:string" use="optional"/>
 		<xsd:attribute name="crc" type="xsd:NMTOKEN" use="optional"/>
@@ -2190,11 +2189,11 @@ Type Definition extracted to complex:Type for further redefinition as part of xl
 Type Definition extracted to complex:Type for further redefinition as part of xliff:doc Schema
 -->
 	<xsd:complexType name="mrk" mixed="true">
-			<xsd:group ref="xlf:ElemGroup_TextContent" minOccurs="0" maxOccurs="unbounded"/>
-			<xsd:attribute name="mtype" type="xlf:AttrType_mtype" use="required"/>
-			<!--<xsd:attribute name="mid" type="xsd:NMTOKEN" use="optional"/>
+		<xsd:group ref="xlf:ElemGroup_TextContent" minOccurs="0" maxOccurs="unbounded"/>
+		<xsd:attribute name="mtype" type="xlf:AttrType_mtype" use="required"/>
+		<!--<xsd:attribute name="mid" type="xsd:NMTOKEN" use="optional"/>
 			<xsd:attribute name="comment" type="xsd:string" use="optional"/>-->
-			<!--<xsd:anyAttribute namespace="##other" processContents="strict"/>-->
+		<!--<xsd:anyAttribute namespace="##other" processContents="strict"/>-->
 	</xsd:complexType>
 	<xsd:element name="mrk" type="xlf:mrk"/>
 </xsd:schema>
