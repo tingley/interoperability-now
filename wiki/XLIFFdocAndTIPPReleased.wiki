@@ -1,0 +1,30 @@
+#labels Featured,Phase-Implementation
+#Interoperability Now! Announces Release of XLIFF:doc and TIPP Translation Interoperability Formats
+
+= Interoperability Now! Announces Release of XLIFF:doc and TIPP Translation Interoperability Formats =
+
+Friday April 26, 2013
+
+Interoperability Now! (IN!) is pleased to announce that the XLIFF:doc and TIPP translation interoperability formats have been finalized. IN! is an industry-driven initiative to finally provide real interoperability between translation systems and tools, something that has been woefully missing in the Localization Industry.
+
+XLIFF:doc was born of frustration on the part of tools developers, translation buyers, LSPs, and translators related to the inability to actually exchange data meaningfully between tools with the existing XLIFF translation interchange format. XLIFF:doc is a 100% compatible subset of XLIFF 1.2, based on real world practical implementations. XLIFF:doc removes the ambiguities and possible misinterpretations of the original XLIFF 1.2 standard by concentrating on the core requirements for data interchange for translation.
+
+Translation Interoperability Protocol Package (TIPP) is an information container that allows the exchange of information between two or more Translation Management Systems (TMS) or other translation tools. When combined with an XLIFF:doc payload, the TIPP format provides a lossless mechanism for exchanging the full spectrum of translation data between systems, from high level information about the project, down to individual translated words. TIPP is also extensible, creating an infrastructure that enables new forms of interoperability and data exchange. 
+
+[http://www.spartansoftwareinc.com/ Spartan Software's] *Chase Tingley*, the chief designer of the TIPP format, notes, "TIPP works in conjunction with XLIFF:doc to provide a strong interoperability guarantee, while also acting as a more generic translation package in circumstances where full interoperability is not possible."
+
+Industry adoption of these new formats is going to be rapid, according to *Sven Andrä*, CEO of [http://www.andrae-ag.de/index.php Andrä AG], a key provider of translation management systems (TMS) for enterprise. "We are here to empower enterprise customers to control their own translations. TIPP and XLIFF:doc allow corporations to use the TMS that best fits their requirements, without worrying about what formats and tools their translation suppliers use. For 99% of use cases, these new formats obliterate tool incompatibility."
+
+*Andrzej Zydroń*, CTO of [http://xtm-intl.com/ XTM International], a leading provider of cloud-based translation technology, states that "TIPP and XLIFF:doc are the way forward to guarantee true interoperability between CAT tools and TMS software. Our industry has suffered for too long from proprietary software and incompatible implementations which have driven up the costs of software unnecessarily and have hampered the growth of the global translation market. We look forward to providing full support for XLIFF:doc and TIPP later this Spring."
+
+[http://kilgray.com Kilgray], developers of the award-winning memoQ translation environment, announced today that the next version of memoQ, to be released in Q2 2013, will provide full support for translating XLIFF:doc and TIPP packages. "Organizations that internally use another CAT product but want to empower their translators with the sophisticated experience offered by memoQ can now deploy XLIFF:doc and TIPP to achieve that goal. IN! is leveling the TMS playing field, offering more freedom to translation buyers and translators, and less busy work for tool developers," added *István Lengyel*, Kilgray's CEO.
+
+"Finally, the language industry gets a fully-interoperable, ready-to-ship container format for localization and translation tasks. This represents an important breakthrough for automating, managing and optimizing language related enterprise processes in an open, transparent, and agile way", states Prof. Dr. *Jörg Schütz* of [http://www.bioloom.de/index_en.html bioloom group].
+
+"Now that IN! has finalized the XLIFF:doc and TIPP formats, we are ready to hand off the work to the Linport project, which will develop them into international standards," notes IN! leader Andrä. Last summer, IN! and the [http://www.linport.org Linport project], led by Professor *Alan Melby* of Brigham Young University, agreed to merge their work into a single package format standard. "The next step is to finalize the portfolio format for an entire translation project and define a mechanism for splitting a complex multilingual portfolio into several TIPPs and then merging the response TIPPs, resulting in a modified portfolio," remarked Melby.
+
+IN! is backed by leading innovating CAT tool implementers and developers, including Medtronic, Inc., Spartan Software, XTM International, Kilgray and Andrä AG. Linport is backed by a number of organizations, including: Brigham Young University Translation Research Group (TRG); Directorate-General for Translation of the European Commission (DGT); the Globalization and Localization Association; Multiling; DGT of the Court of Justice of the European Union; FIT - International Federation of Translators; Lingotek; Multicorpora; Terminotix; XTM International.
+
+Specifications for each format, as well as a reference implementation for TIPP can be found in the [https://code.google.com/p/interoperability-now/downloads/list Downloads] section of this web site.
+
+More information about the Linport project is available on the [http://www.mt-archive.info/Aslib-2012-Melby-ppt.pdf Machine Translation Archive].
