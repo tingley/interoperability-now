@@ -35,7 +35,7 @@ abstract class PackageBase implements TIPP {
     }
     
     static final String MANIFEST = "manifest.xml";
-    static final String PAYLOAD_FILE = "pobjects.zip";
+    static final String PAYLOAD_FILE = "resources.zip";
 
     Manifest getManifest() {
         return manifest;
@@ -193,7 +193,7 @@ abstract class PackageBase implements TIPP {
 
         // For some reason writing the zip stream out within another
         // zip stream gives me strange zip corruption errors.  Write
-        // pobjects.zip out to a temp file and copy it over.
+        // resources.zip out to a temp file and copy it over.
         OutputStream tempOutputStream = store.storeTransientData("output-stream");
         writePayload(tempOutputStream);
         tempOutputStream.close();

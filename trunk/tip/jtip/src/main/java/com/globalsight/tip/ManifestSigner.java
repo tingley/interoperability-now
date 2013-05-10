@@ -61,7 +61,7 @@ class ManifestSigner {
             List<Reference> refs = new ArrayList<Reference>();
             refs.add(ref);
             if (payload != null) {
-                Reference payloadRef = factory.newReference("pobjects.zip",
+                Reference payloadRef = factory.newReference(PackageBase.PAYLOAD_FILE,
                         factory.newDigestMethod(DigestMethod.SHA1, null),
                         new ArrayList<Transform>(),
 //                        Collections.singletonList(
@@ -78,7 +78,7 @@ class ManifestSigner {
             KeyInfoFactory kif = factory.getKeyInfoFactory(); 
             KeyValue kv = kif.newKeyValue(kp.getPublic());
             KeyInfo ki = kif.newKeyInfo(Collections.singletonList(kv)); 
-            // Set up a custom URI dereferencer so "pobjects.zip" means something
+            // Set up a custom URI dereferencer so "resources.zip" means something
             // to the xml-dsig process
             dsc.setURIDereferencer(new TIPPUriDereferencer(payload));
             // Create the signature itself
