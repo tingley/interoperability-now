@@ -15,6 +15,6 @@ fi
 cd $BUILD_DIR
 cp -a ../bilingual .
 find . -name \.svn|xargs rm -Rf
-zip -r pobjects.zip bilingual
+zip -r resources.zip bilingual
 cp ../manifest.xml .
-zip -r sample-response.tipp manifest.xml pobjects.zip
+zip -r sample-response.tipp manifest.xml resources.zip

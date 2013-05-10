@@ -18,6 +18,6 @@ cp -a ../bilingual .
 cp -a ../preview .
 cp -a ../sts .
 find . -name \.svn|xargs rm -Rf
-zip -r pobjects.zip reference bilingual preview sts
+zip -r resources.zip reference bilingual preview sts
 cp ../manifest.xml .
-zip -r sample-request.tipp manifest.xml pobjects.zip
+zip -r sample-request.tipp manifest.xml resources.zip
