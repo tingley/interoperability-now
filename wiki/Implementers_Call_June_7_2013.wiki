@@ -1,4 +1,5 @@
 #summary Information about the Implementers' call, June 7 2013
+#labels Featured
 
 All current and prospective implementers are welcome to attend.
 
