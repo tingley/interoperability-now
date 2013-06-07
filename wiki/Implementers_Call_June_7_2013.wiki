@@ -1,6 +1,8 @@
 #summary Information about the Implementers' call, June 7 2013
 #labels Featured
 
+_Presentation now available for download:_ [https://interoperability-now.googlecode.com/files/20130607%20TIPP-XLIFFdoc%20Implementers.pdf June 7, 2013 Implementers' Call Presentation]
+
 All current and prospective implementers are welcome to attend.
 
 = Agenda =
