@@ -11,7 +11,7 @@
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
 &lt;HTML&gt;
 &lt;HEAD&gt;
-&lt;TITLE&gt;The Project Gutenberg eBook of Twenty Thousand Leagues Under the Sea, by Jules Verne&lt;/TITLE&gt;
+&lt;TITLE&gt;<dx:content dx:id="1-1"/>&lt;/TITLE&gt;
 &lt;META HTTP-EQUIV="content-Type" CONTENT="text/html; charset=utf-8"&gt;
 &lt;/HEAD&gt;
 &lt;BODY&gt;
@@ -35,7 +35,7 @@
 	<body>
 		<group id="1">
 			<trans-unit id="1-1" translate="no">
-				<source>Title Page</source>
+				<source>The Project Gutenberg eBook of Twenty Thousand Leagues Under the Sea, by Jules Verne</source>
 				<target state="new"></target>
 			</trans-unit>
 			</group>
@@ -170,7 +170,7 @@
 &lt;p&gt;&lt;a name="F1.1"&gt;[[FOOTNOTE 1]] &lt;/a&gt;<dx:content dx:id="2-19"/>&lt;/p&gt;
 &lt;p&gt;<dx:content dx:id="2-22"/> <dx:content dx:id="2-23"/> <dx:content dx:id="2-24"/>&lt;/p&gt;
 &lt;p&gt;<dx:content dx:id="2-25"/> <dx:content dx:id="2-26"/> <dx:content dx:id="2-27"/> <dx:content dx:id="2-28"/> <dx:content dx:id="2-29"/>&lt;/p&gt;
-&lt;p&gt;<dx:content dx:id="2-30"/> <dx:content dx:id="2-31"/> <dx:content dx:id="2-32"/>&lt;/p&gt;
+&lt;p&gt;<dx:content dx:id="2-30"/> <dx:content dx:id="2-31"/> <dx:content dx:id="2-32"/> <dx:content dx:id="2-33"/>&lt;/p&gt;
 
 &lt;/body&gt;
 &lt;/html&gt;
@@ -197,9 +197,9 @@
 					<target state="signed-off">L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</target>
 					<dx:context>
 						<dx:context-source-before>CHAPTER ONE [struct] A RUNAWAY REEF [struct]</dx:context-source-before>
-						<dx:context-source-after>Without getting into those rumors that upset civilians in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed. Traders, shipowners, captains of vessels, skippers, and master mariners from Europe and America, naval officers from every country, and at their heels the various national governments on these two continents, were all extremely disturbed by the business.</dx:context-source-after>
+						<dx:context-source-after>Without getting into those rumors that upset civilians in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</dx:context-source-after>
 						<dx:context-target-before>CHAPITRE PREMIER [struct] un écueil fuyant. [struct]</dx:context-target-before>
-						<dx:context-target-after>Sans parler des rumeurs qui agitaient les populations des ports et surexcitaient l’esprit public à l’intérieur des continents, les gens de mer furent particulièrement émus. Les négociants, armateurs, capitaines de navires, skippers et masters de l’Europe et de l’Amérique, officiers des marines militaires de tous pays, et, après eux, les gouvernements des divers États des deux continents, se préoccupèrent de ce fait au plus haut point.</dx:context-target-after>
+						<dx:context-target-after>Sans parler des rumeurs qui agitaient les populations des ports et surexcitaient l’esprit public à l’intérieur des continents, les gens de mer furent particulièrement émus.</dx:context-target-after>
 					</dx:context>
 					<dx:attributes>
 						<dx:attribute dx:name="Company">Acme Rocketry Corporation</dx:attribute>
