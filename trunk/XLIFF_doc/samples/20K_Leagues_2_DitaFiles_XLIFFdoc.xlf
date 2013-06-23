@@ -34,107 +34,107 @@
 
 	<body>
 		<group id="1">
-			<trans-unit id="1-1" translate="no">
+			<trans-unit id="1-1" translate="no" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>The Project Gutenberg eBook of Twenty Thousand Leagues Under the Sea, by Jules Verne</source>
 				<target state="new"></target>
 			</trans-unit>
 			</group>
 		<group id="2">
-			<trans-unit id="1-2">
+			<trans-unit id="1-2" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Twenty Thousand Leagues Under the Seas</source>
 				<target state="new"></target>
 			</trans-unit>
 			</group>
 		<group id="3">
-			<trans-unit id="1-3">
+			<trans-unit id="1-3" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>An Underwater Tour of the World</source>
 				<target state="new"></target>
 			</trans-unit>
 			</group>
 		<group id="4">
-			<trans-unit id="1-4">
+			<trans-unit id="1-4" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>JULES VERNE</source>
 				<target state="new"></target>
 			</trans-unit>
 			</group>
 		<group id="5">
-			<trans-unit id="1-5">
+			<trans-unit id="1-5" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Translated from the Original French by F.</source>
 				<target state="new"></target>
 				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:23:00Z">This TU can be merged with the next 2 TUs, because they are in the same group.</dx:note>
 			</trans-unit>
-			<trans-unit id="1-6" dx:repetition="yes">
+			<trans-unit id="1-6" dx:repetition="yes" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>P.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-7">
+			<trans-unit id="1-7" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Walter</source>
 				<target state="new"></target>
 			</trans-unit>
 		</group>
 		<group id="6">
-			<trans-unit id="1-8">
+			<trans-unit id="1-8" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Text Prepared by:</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-9">
+			<trans-unit id="1-9" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>F.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-10" dx:repetition="yes">
+			<trans-unit id="1-10" dx:repetition="yes" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>P.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-11">
+			<trans-unit id="1-11" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Walter, 1433 Cedar Post, No. 31,</source>
 				<target state="new"></target>
 				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T14:23:00Z">This TU cannot be merged with the next TU, because it is not in the same group (due to markup in the original source document).</dx:note>
 			</trans-unit>
 		</group>
 		<group id="7">
-			<trans-unit id="1-12">
+			<trans-unit id="1-12" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Houston, Texas 77055.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-13">
+			<trans-unit id="1-13" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>(713) 827-1345</source>
 				<target state="new"></target>
 			</trans-unit>
 		</group>
 		<group id="8">
-			<trans-unit id="1-14">
+			<trans-unit id="1-14" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>A complete, unabridged translation of Vingt milles lieues sous les mers by Jules Verne, based on the original French texts published in Paris by J.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-15">
+			<trans-unit id="1-15" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Hetzel et Cie.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-16">
+			<trans-unit id="1-16" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>over the period 1869-71.</source>
 				<target state="new"></target>
 			</trans-unit>
 		</group>
 		<group id="9">
-			<trans-unit id="1-17">
+			<trans-unit id="1-17" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>VERNE'S TITLE</source>
 				<target state="new"></target>
 			</trans-unit>
 		</group>
 		<group id="10">
-			<trans-unit id="1-20">
+			<trans-unit id="1-20" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>The French title of this novel is Vingt mille lieues sous les mers.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-22">
+			<trans-unit id="1-22" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>This is accurately translated as Twenty Thousand Leagues Under the SEAS—rather than the SEA, as with many English editions.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-23">
+			<trans-unit id="1-23" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Verne's novel features a tour of the major oceans, and the term Leagues in its title is used as a measure not of depth but distance.</source>
 				<target state="new"></target>
 			</trans-unit>
-			<trans-unit id="1-24">
+			<trans-unit id="1-24" dx:modified-by="myTMserver" dx:modified-at="2011-03-02T05:00:00Z">
 				<source>Ed.</source>
 				<target state="new"></target>
 			</trans-unit>
@@ -197,9 +197,9 @@
 					<target state="signed-off">L’année 1866 fut marquée par un événement bizarre, un phénomène inexpliqué et inexplicable que personne n’a sans doute oublié.</target>
 					<dx:context>
 						<dx:context-source-before>CHAPTER ONE [struct] A RUNAWAY REEF [struct]</dx:context-source-before>
-						<dx:context-source-after>Without getting into those rumors that upset civilians in the seaports and deranged the public mind even far inland, it must be said that professional seamen were especially alarmed.</dx:context-source-after>
+						<dx:context-source-after>Without getting into those rumors that upset civilians in the seaports and deranged the public mind even far inland, it must be said that...</dx:context-source-after>
 						<dx:context-target-before>CHAPITRE PREMIER [struct] un écueil fuyant. [struct]</dx:context-target-before>
-						<dx:context-target-after>Sans parler des rumeurs qui agitaient les populations des ports et surexcitaient l’esprit public à l’intérieur des continents, les gens de mer furent particulièrement émus.</dx:context-target-after>
+						<dx:context-target-after>Sans parler des rumeurs qui agitaient les populations des ports et surexcitaient l’esprit public à l’intérieur des continents, les gens de mer...</dx:context-target-after>
 					</dx:context>
 					<dx:attributes>
 						<dx:attribute dx:name="Company">Acme Rocketry Corporation</dx:attribute>
@@ -294,9 +294,9 @@
 				<source>As for relegating it to the realm of fiction, that charge had to be dropped.</source>
 				<target state="translated">Quant à la rejeter au rang des fables, il fallait y renoncer.</target>
 				
-				<alt-trans alttranstype="previous-version" dx:match-quality="0" dx:origin="MT" dx:origin-shorttext="Pseudo Translation" dx:modified-by="l10n-tool" dx:modified-at="2011-03-04T05:30:00Z">
+				<alt-trans alttranstype="previous-version" dx:match-quality="0" origin="MT" dx:origin-shorttext="Pseudo Translation" dx:modified-by="l10n-tool" dx:modified-at="2011-03-04T05:30:00Z">
 					<source>sfsd</source>
-					<target>XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX.</target>
+					<target state="new">XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX.</target>
 				</alt-trans>
 				<dx:note dx:modified-by="Micah Bly" dx:modified-at="2011-03-04T15:25:00Z">This TU was translated manually (by copying from web page in this case). note the alt-trans which provides version history.</dx:note>
 			</trans-unit>
