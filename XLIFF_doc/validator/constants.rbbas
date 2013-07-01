@@ -1,0 +1,1 @@
+#tag ModuleProtected Module constants	#tag Constant, Name = TAB, Type = String, Dynamic = False, Default = \"\t", Scope = Public	#tag EndConstantEnd Module#tag EndModule

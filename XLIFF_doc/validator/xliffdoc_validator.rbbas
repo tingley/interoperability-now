@@ -1,0 +1,1 @@
+#tag ClassProtected Class xliffdoc_validatorInherits WebApplication	#tag ViewBehavior	#tag EndViewBehaviorEnd Class#tag EndClass
