@@ -1,1 +1,1 @@
-#tag ClassProtected Class xliffdoc_validatorInherits WebApplication	#tag ViewBehavior	#tag EndViewBehaviorEnd Class#tag EndClass
+#tag ClassProtected Class xliffdoc_validatorInherits WebApplication	#tag Event		Sub Open()		  #if TargetLinux then		    Call Daemonize		  #endif		  		End Sub	#tag EndEvent	#tag ViewBehavior	#tag EndViewBehaviorEnd Class#tag EndClass
