@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlf="urn:oasis:names:tc:xliff:document:1.2" xmlns:dx="http://schema.interoperability-now.org" xmlns:xyz="urn:appInfo:Items" xmlns:ns1="http://schema.interoperability-now.org" targetNamespace="urn:oasis:names:tc:xliff:document:1.2" elementFormDefault="qualified">
+	<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+	<xsd:import namespace="http://schema.interoperability-now.org" schemaLocation="xliff-doc-1_0_types.xsd"/>
+	<xsd:redefine schemaLocation="http://schema.interoperability-now.org/xliff-doc-xliff-core-restricted_1_0.xsd">
+		<xsd:complexType name="xliff">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:xliff">
+					<xsd:sequence>
+						<xsd:element ref="dx:utx-glossary" minOccurs="0"/>
+					</xsd:sequence>
+					<xsd:attribute ref="dx:version" use="required"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="file">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:file">
+					<xsd:attribute ref="dx:allow-tu-join" use="optional" default="yes"/>
+					<xsd:attribute ref="dx:allow-tu-split" use="optional" default="yes"/>
+					<xsd:attribute ref="dx:allow-tm-match-addition" use="optional" default="no"/>
+					<xsd:attribute ref="dx:allow-tm-match-deletion" use="optional" default="no"/>
+					<xsd:attribute ref="dx:allow-tb-match-addition" use="optional" default="no"/>
+					<xsd:attribute ref="dx:allow-tb-match-deletion" use="optional" default="no"/>
+					<xsd:attribute ref="dx:allow-qa-match-addition" use="optional" default="no"/>
+					<xsd:attribute ref="dx:allow-qa-match-deletion" use="optional" default="no"/>
+					<xsd:attribute ref="dx:allow-revision-history-deletion" use="optional" default="no"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="header">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:header">
+					<xsd:sequence>
+						<xsd:choice minOccurs="2" maxOccurs="2">
+							<xsd:element ref="xlf:tool"/>
+							<xsd:element ref="dx:note" minOccurs="0"/>
+							<!-- added minOccurs="1"  for tool -->
+						</xsd:choice>
+						<xsd:choice>
+							<xsd:element ref="dx:internal-preview" minOccurs="0"/>
+							<xsd:element ref="dx:external-preview" minOccurs="0"/>
+						</xsd:choice>
+					</xsd:sequence>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="trans-unit">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:trans-unit">
+					<xsd:sequence>
+						<xsd:element ref="dx:note" minOccurs="0" maxOccurs="unbounded"/>
+						<xsd:element ref="dx:qa-hits" minOccurs="0"/>
+						<xsd:element ref="dx:term-hits" minOccurs="0"/>						
+					</xsd:sequence>
+					<xsd:attribute ref="dx:match-quality" use="optional"/>
+					<xsd:attribute ref="dx:glorious-match" use="optional"/>
+					<xsd:attribute ref="dx:repetition" use="optional"/>
+					<xsd:attribute ref="dx:origin" use="optional"/>
+					<xsd:attribute ref="dx:origin-shorttext" use="optional"/>
+					<xsd:attribute ref="dx:match-penalty" use="optional"/>
+					<xsd:attribute ref="dx:modified-by" use="optional"/>
+					<xsd:attribute ref="dx:modified-at" use="optional"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="alt-trans">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:alt-trans">
+					<xsd:sequence>
+						<xsd:element ref="dx:note" minOccurs="0" maxOccurs="1"/>
+						<xsd:element ref="dx:context" minOccurs="0" maxOccurs="1"/>
+						<xsd:element ref="dx:attributes" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+					<xsd:attribute ref="dx:match-quality" use="optional"/>
+					<xsd:attribute ref="dx:glorious-match" use="optional"/>
+					<xsd:attribute ref="dx:repetition" use="optional"/>
+					<xsd:attribute ref="dx:origin" use="optional"/>
+					<xsd:attribute ref="dx:origin-shorttext" use="optional"/>
+					<xsd:attribute ref="dx:match-penalty" use="optional"/>
+					<xsd:attribute ref="dx:modified-by" use="optional"/>
+					<xsd:attribute ref="dx:modified-at" use="optional"/>
+				</xsd:extension>
+				<!-- 25092011 -->
+				<!-- 25092011 -->
+				<!-- 25092011 -->
+				<!-- 25092011 -->
+				<!-- 25092011 -->
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="x">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:x">
+					<xsd:attribute name="ctype" type="dx:AttrType_InlinePlaceholders" use="optional"/>
+					<xsd:attribute ref="dx:orig-markup" use="optional"/>
+					<xsd:attribute ref="dx:equiv-markup" use="optional"/>
+					<xsd:attribute ref="dx:equiv-text" use="optional"/>
+				</xsd:extension>
+				<!-- this replaces the original list -->
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="g">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:g">
+					<xsd:attribute name="ctype" type="dx:AttrType_InlineDelimiters" use="optional"/>
+					<xsd:attribute ref="dx:orig-markup-open" use="optional"/>
+					<xsd:attribute ref="dx:orig-markup-close" use="optional"/>
+					<xsd:attribute ref="dx:equiv-markup-open" use="optional"/>
+					<xsd:attribute ref="dx:equiv-markup-close" use="optional"/>
+					<xsd:attribute ref="dx:equiv-text" use="optional"/>
+				</xsd:extension>
+				<!-- this replaces the original list -->
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="mrk">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:mrk">
+					<xsd:attribute ref="dx:term-id" use="required"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+		<xsd:complexType name="note">
+			<xsd:complexContent>
+				<xsd:extension base="xlf:note">
+					<xsd:attribute ref="dx:modified-at" use="required"/>
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:redefine>
+</xsd:schema>

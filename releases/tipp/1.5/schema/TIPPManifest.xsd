@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema elementFormDefault="qualified" 
+           version="1.5"
+           targetNamespace="http://schema.interoperability-now.org/tipp/1_5/"
+           xmlns="http://schema.interoperability-now.org/tipp/1_5/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <xs:include schemaLocation="TIPPCommon.xsd" />
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+            XML Schema of the TIPP Manifest. The manifest describes the entire contents
+            of a TIPP.
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="TIPPManifest">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Root element for a TIPP.</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="GlobalDescriptor" type="GlobalDescriptor"/>
+                <xs:choice>
+                    <xs:element name="TaskRequest" type="TaskRequest"/>
+                    <xs:element name="TaskResponse" type="TaskResponse"/>
+                </xs:choice>
+                <xs:element name="Resources" type="Resources"/>
+            </xs:sequence>
+            <xs:attribute name="version" use="required">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:enumeration value="1.5" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+        
+    <xs:complexType name="TaskRequest">
+        <xs:complexContent>
+            <xs:extension base="Task" />
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:complexType name="Task">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Information to describe a task.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="TaskType" type="xs:anyURI">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">URI that identifies the task type for this TIPP.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="SourceLanguage" type="xs:language">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Source language for this TIPP.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="TargetLanguage" type="xs:language">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Target language for this TIPP.</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="TaskResponse">
+         <xs:annotation>
+            <xs:documentation xml:lang="en">Information to describe a task response.</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="InResponseTo" type="InResponseTo" />
+            <xs:element name="Response" type="Response" />
+            <xs:element name="Comment" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">Provides additional 
+                        information about the response, such as an error 
+                        message, warnings, etc.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="InResponseTo">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Information about the task to which a TIPP response is
+                responding, including identifying information about the specific TIPP request to which
+                it is a response.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="Task">
+               <xs:sequence>
+                   <xs:element name="UniquePackageID" type="UniquePackageID" />
+                   <xs:element name="Creator" type="Creator" />
+               </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:simpleType name="Response">
+         <xs:annotation>
+            <xs:documentation xml:lang="en">An enumeration of accepted success and failure values for a 
+                TIPP response.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Success" />
+            <xs:enumeration value="Invalid Manifest" />
+            <xs:enumeration value="Invalid Payload" />
+            <xs:enumeration value="Security Failure" />
+            <xs:enumeration value="Unsupported Task Type" />
+            <xs:enumeration value="Task Failure" />
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="Resources">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Resources contains all resources that are necessary
+              to process the specified task type plus resources which might additionally support
+              the task.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element ref="ResourceSection" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:element name="ResourceSection" type="ResourceSectionType" abstract="true"/>
+    
+    <xs:complexType name="ResourceSectionType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A collection of resources.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element ref="Resource" minOccurs="0" maxOccurs="unbounded" />
+        </xs:choice>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+    
+    <xs:element name="Bilingual" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Input" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Output" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Preview" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="STS" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Tm" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Terminology" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Metrics" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Extras" type="ResourceSectionType" substitutionGroup="ResourceSection" />
+    <xs:element name="Reference" type="ReferenceSectionType" substitutionGroup="ResourceSection" />
+    <xs:complexType name="ReferenceSectionType">
+        <xs:complexContent>
+            <xs:extension base="ResourceSectionType">
+                <xs:choice>
+                    <xs:element ref="ReferenceFile" minOccurs="0" maxOccurs="unbounded" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="Resource" type="ResourceType" abstract="true" />
+    <xs:complexType name="ResourceType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A Resource is an abstract resource that is
+                used in processing a task.                
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+        <xs:attribute name="sequence">
+            <xs:simpleType>
+                <xs:restriction base="xs:integer">
+                    <xs:minInclusive value="1" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    
+    <xs:element name="File" type="FileType" substitutionGroup="Resource" />
+    <xs:complexType name="FileType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A File is a Resource that is embedded within
+                the package directly.  The resource's location within the package element
+                (relative to the containing section) is identified by the value of the Location
+                The package location may be normalized as mandated by the spec.  The 
+                resource's original file path is contained in the optional Name element.  If
+                Name is not present, it defaults to the value of Location.  There is also an
+                optional Description element describing the file.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="ResourceType">
+                <xs:sequence>
+                    <xs:element name="Location" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <xs:element name="ReferenceFile" type="ReferenceFileType" />
+    <xs:complexType name="ReferenceFileType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A specialized File for reference 
+                documents.  This adds the optional languageChoice attribute to indicate
+                whether the resource is related to the source language, target language,
+                or both.</xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="FileType">
+                <xs:attribute name="languageChoice" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="source" />
+                            <xs:enumeration value="target" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

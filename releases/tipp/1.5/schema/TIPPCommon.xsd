@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema elementFormDefault="qualified"
+           version="1.5"
+           targetNamespace="http://schema.interoperability-now.org/tipp/1_5/"
+           xmlns="http://schema.interoperability-now.org/tipp/1_5/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <xs:import namespace="http://www.w3.org/2000/09/xmldsig#"
+            schemaLocation="http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd" />
+    <xs:annotation>
+        <xs:documentation xml:lang="en">
+           Common elements for TIPP packages.
+        </xs:documentation>
+    </xs:annotation>
+    
+    <xs:simpleType name="UniquePackageID">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">The UniquePackageID is a URI that uniquely identifies
+                this package.  The simplest way to satisfy this requirement is to assign the 
+                package a UUID and express it as a URN, such as
+                    urn:uuid:ace950d0-73d8-417d-a5c0-b70c2974f244
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI" />
+    </xs:simpleType>
+
+    <xs:simpleType name="TaskType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">A URI that represents the task type for a TIPP.
+                TIPP currently defines four built-in task types: translate-strict-bitext, 
+                translate-generic-bitext, translate-native-format, and prepare-specifications.
+                Implementations may define additional custom task types.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:anyURI" />
+    </xs:simpleType>
+
+    <xs:complexType name="Tool">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">Tool identifies the tool that
+                created the package with name, identifier, and version.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="ToolName" type="xs:string" />
+            <xs:element name="ToolID" type="xs:anyURI" />
+            <xs:element name="ToolVersion" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="Creator">
+		<xs:annotation>
+            <xs:documentation xml:lang="en">Creator describes the organization
+                that created the package and the tool that was used to create it.
+		    </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+            <xs:element name="Name" type="xs:string" />
+            <xs:element name="ID" type="xs:anyURI" />
+            <xs:element name="Date" type="xs:dateTime" />
+            <xs:element name="Tool" type="Tool">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="GlobalDescriptor">
+       <xs:annotation xml:lang="en">
+           <xs:documentation xml:lang="en">The GlobalDescriptor identifies the package with a
+                unique UUID, and provides information about the package creator, as well
+                as an optional digital signature for the manifest and package contents.
+           </xs:documentation>
+       </xs:annotation>
+        <xs:sequence>
+            <xs:element name="UniquePackageID" type="UniquePackageID" />
+            <xs:element name="Creator" type="Creator" />
+            <xs:element ref="ds:Signature" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
